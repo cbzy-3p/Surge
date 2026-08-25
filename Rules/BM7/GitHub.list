@@ -1,10 +1,10 @@
 # NAME: BM7-GitHub
 # AUTHOR: Rongwuyou
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-08-25 16:56:26 UTC
+# UPDATED: 2026-08-25 17:12:22 UTC
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GitHub/GitHub.list
 # MERGED SOURCE: https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/github
-# NOTE: BM7 rules are retained; only directly corresponding domain suffixes are merged and deduplicated.
+# NOTE: BM7 is authoritative; mapped sources add domain-only rules after exact deduplication.
 
 DOMAIN-SUFFIX,atom.io
 DOMAIN-SUFFIX,dependabot.com

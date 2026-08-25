@@ -1,9 +1,9 @@
 # NAME: BM7-PayPal
 # AUTHOR: Rongwuyou
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-08-25 16:56:42 UTC
+# UPDATED: 2026-08-25 17:12:35 UTC
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/PayPal/PayPal.list
-# NOTE: BM7 rules are retained; only directly corresponding domain suffixes are merged and deduplicated.
+# NOTE: BM7 is authoritative; mapped sources add domain-only rules after exact deduplication.
 
 DOMAIN-SUFFIX,account-paypal.info
 DOMAIN-SUFFIX,account-paypal.net

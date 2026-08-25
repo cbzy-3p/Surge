@@ -1,9 +1,10 @@
 # NAME: BM7-AppleTV
 # AUTHOR: Rongwuyou
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-08-25 16:56:29 UTC
+# UPDATED: 2026-08-25 17:12:25 UTC
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/AppleTV/AppleTV.list
-# NOTE: BM7 rules are retained; only directly corresponding domain suffixes are merged and deduplicated.
+# MERGED SOURCE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-tvplus.list
+# NOTE: BM7 is authoritative; mapped sources add domain-only rules after exact deduplication.
 
 DOMAIN,hls-amt.itunes.apple.com
 DOMAIN,hls.itunes.apple.com
@@ -15,3 +16,4 @@ DOMAIN-SUFFIX,tv.apple.com
 USER-AGENT,AppleTV*
 USER-AGENT,com.apple.tv*
 PROCESS-NAME,TV
+DOMAIN-SUFFIX,apple-tv-plus-press.apple.com
