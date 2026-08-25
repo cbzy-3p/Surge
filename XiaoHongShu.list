@@ -1,0 +1,39 @@
+# NAME: XiaoHongShu
+# AUTHOR: Rongwuyou
+# FORMAT: Surge Rule Set
+# UPDATED: 2026-08-25 00:00:00 UTC
+# SOURCE: v2fly/domain-list-community data/xiaohongshu (recursive includes)
+# SOURCE: blackmatrix7/ios_rule_script XiaoHongShu.list
+# SOURCE: wresource/hxmy-proxy app-xiaohongshu.txt
+# NOTE: Domain-only merge to avoid shared-IP collateral damage.
+# DOMAIN-SUFFIX: 28
+# TOTAL: 28
+
+DOMAIN-SUFFIX,askdiandian.com
+DOMAIN-SUFFIX,diandianlife.top
+DOMAIN-SUFFIX,fengkongcloud.com
+DOMAIN-SUFFIX,redbascket.com
+DOMAIN-SUFFIX,redelight.cn
+DOMAIN-SUFFIX,rednote.com
+DOMAIN-SUFFIX,rednote.com.my
+DOMAIN-SUFFIX,rednotecdn.com
+DOMAIN-SUFFIX,xhscdn.cn
+DOMAIN-SUFFIX,xhscdn.com
+DOMAIN-SUFFIX,xhscdn.net
+DOMAIN-SUFFIX,xhsdns.com
+DOMAIN-SUFFIX,xhsdns.net
+DOMAIN-SUFFIX,xhslink.cn
+DOMAIN-SUFFIX,xhslink.com
+DOMAIN-SUFFIX,xhsos.com
+DOMAIN-SUFFIX,xhsrcdn.com
+DOMAIN-SUFFIX,xhssys.cn
+DOMAIN-SUFFIX,xhssys.com
+DOMAIN-SUFFIX,xhssys.net
+DOMAIN-SUFFIX,xhsurl.cn
+DOMAIN-SUFFIX,xhsurl.com
+DOMAIN-SUFFIX,xiaohongshu-mycdn.com
+DOMAIN-SUFFIX,xiaohongshu.cn
+DOMAIN-SUFFIX,xiaohongshu.com
+DOMAIN-SUFFIX,xiaohongshu.net
+DOMAIN-SUFFIX,xiaohongshu.net.cn
+DOMAIN-SUFFIX,xingin.com
