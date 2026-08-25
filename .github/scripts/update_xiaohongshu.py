@@ -22,14 +22,23 @@ SOURCE_LABELS = (
     "v2fly/domain-list-community data/xiaohongshu (recursive includes)",
     "blackmatrix7/ios_rule_script XiaoHongShu.list",
     "wresource/hxmy-proxy app-xiaohongshu.txt",
+    "Xiaohongshu first-party domains verified from ICP records",
 )
 PINNED_DOMAINS = {
+    "cdnxhs.com",
+    "cn-rednotecdn.com",
+    "rednote.life",
+    "rl.ink",
     "rnote.com",
+    "rnotecdn.com",
+    "xhsredcdn.com",
     "xiaohongshu.com",
     "xhscdn.com",
     "xhscdn.net",
     "xhslink.com",
     "xhsrcdn.com",
+    "xingin.cn",
+    "xingin.net",
 }
 DOMAIN_RE = re.compile(
     r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$"
