@@ -24,6 +24,7 @@ SOURCE_LABELS = (
     "wresource/hxmy-proxy app-xiaohongshu.txt",
 )
 PINNED_DOMAINS = {
+    "rnote.com",
     "xiaohongshu.com",
     "xhscdn.com",
     "xhscdn.net",
