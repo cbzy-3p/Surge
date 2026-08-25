@@ -1,0 +1,8 @@
+# NAME: BM7-GoogleVoice
+# AUTHOR: Rongwuyou
+# FORMAT: Surge Rule Set
+# UPDATED: 2026-08-25 16:56:30 UTC
+# SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GoogleVoice/GoogleVoice.list
+# NOTE: BM7 rules are retained; only directly corresponding domain suffixes are merged and deduplicated.
+
+DOMAIN,lens.l.google.com

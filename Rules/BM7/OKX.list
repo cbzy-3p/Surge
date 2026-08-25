@@ -1,0 +1,10 @@
+# NAME: BM7-OKX
+# AUTHOR: Rongwuyou
+# FORMAT: Surge Rule Set
+# UPDATED: 2026-08-25 16:56:42 UTC
+# SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OKX/OKX.list
+# NOTE: BM7 rules are retained; only directly corresponding domain suffixes are merged and deduplicated.
+
+DOMAIN-SUFFIX,okex.com
+DOMAIN-SUFFIX,oklink.com
+DOMAIN-SUFFIX,okx.com
