@@ -181,8 +181,12 @@ def main() -> None:
         if not lines:
             raise RuntimeError(f"empty BM7 rules: {name}")
         output = render(name, lines, additions, sources)
-        (OUT / f"{name}.list").write_text(output, encoding="utf-8")
-        print(f"{name}: BM7={len(lines)} additions={len(additions)} output={len(output.splitlines())}")
+        target = OUT / f"{name}.list"
+        if target.exists() and target.read_text(encoding="utf-8") == output:
+            print(f"{name}: unchanged")
+        else:
+            target.write_text(output, encoding="utf-8")
+            print(f"{name}: BM7={len(lines)} additions={len(additions)} output={len(output.splitlines())}")
 
 
 if __name__ == "__main__":
