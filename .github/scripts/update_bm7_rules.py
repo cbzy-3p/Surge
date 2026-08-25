@@ -182,7 +182,9 @@ def main() -> None:
             raise RuntimeError(f"empty BM7 rules: {name}")
         output = render(name, lines, additions, sources)
         target = OUT / f"{name}.list"
-        if target.exists() and target.read_text(encoding="utf-8") == output:
+        def stable(text: str) -> str:
+            return "\n".join(line for line in text.splitlines() if not line.startswith("# UPDATED:"))
+        if target.exists() and stable(target.read_text(encoding="utf-8")) == stable(output):
             print(f"{name}: unchanged")
         else:
             target.write_text(output, encoding="utf-8")
