@@ -1,13 +1,13 @@
 # NAME: XiaoHongShu
 # AUTHOR: Rongwuyou
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-08-25 00:00:00 UTC
+# UPDATED: 2026-08-25 16:06:52 UTC
 # SOURCE: v2fly/domain-list-community data/xiaohongshu (recursive includes)
 # SOURCE: blackmatrix7/ios_rule_script XiaoHongShu.list
 # SOURCE: wresource/hxmy-proxy app-xiaohongshu.txt
 # NOTE: Domain-only merge to avoid shared-IP collateral damage.
-# DOMAIN-SUFFIX: 28
-# TOTAL: 28
+# DOMAIN-SUFFIX: 29
+# TOTAL: 29
 
 DOMAIN-SUFFIX,askdiandian.com
 DOMAIN-SUFFIX,diandianlife.top
@@ -17,6 +17,7 @@ DOMAIN-SUFFIX,redelight.cn
 DOMAIN-SUFFIX,rednote.com
 DOMAIN-SUFFIX,rednote.com.my
 DOMAIN-SUFFIX,rednotecdn.com
+DOMAIN-SUFFIX,rnote.com
 DOMAIN-SUFFIX,xhscdn.cn
 DOMAIN-SUFFIX,xhscdn.com
 DOMAIN-SUFFIX,xhscdn.net
