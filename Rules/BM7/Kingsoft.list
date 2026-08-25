@@ -1,7 +1,7 @@
 # NAME: BM7-Kingsoft
 # AUTHOR: Rongwuyou
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-08-25 17:12:23 UTC
+# UPDATED: 2026-08-25 17:14:07 UTC
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Kingsoft/Kingsoft.list
 # MERGED SOURCE: https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/kingsoft
 # NOTE: BM7 is authoritative; mapped sources add domain-only rules after exact deduplication.
