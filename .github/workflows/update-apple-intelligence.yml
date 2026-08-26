@@ -1,13 +1,7 @@
 name: Update Apple Intelligence Rules
 
 on:
-  schedule:
-    - cron: "10 20 * * 6"
   workflow_dispatch:
-  push:
-    paths:
-      - ".github/workflows/update-apple-intelligence.yml"
-      - ".github/scripts/update_apple_intelligence.py"
 
 permissions:
   contents: write
