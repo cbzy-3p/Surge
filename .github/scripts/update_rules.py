@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import ipaddress
+import json
 import re
 import time
 import urllib.request
@@ -11,6 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "Rules"
+SNAPSHOT = ROOT / ".github" / "rule-source-snapshot.json"
 BM7_BASE = "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge"
 V2FLY_BASE = "https://raw.githubusercontent.com/v2fly/domain-list-community/master/data"
 RABBIT_BASE = "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules"
@@ -40,9 +42,13 @@ TARGETS = {
 
 DOMAIN_TYPES = {"DOMAIN", "DOMAIN-SUFFIX"}
 RULE_TYPES = DOMAIN_TYPES | {
-    "DOMAIN-KEYWORD", "IP-CIDR", "IP-CIDR6", "IP-ASN", "USER-AGENT",
-    "PROCESS-NAME", "URL-REGEX", "DEST-PORT", "PROTOCOL", "IN-PORT",
-    "RULE-SET", "DOMAIN-SET", "GEOIP", "AND", "OR", "NOT",
+    "DOMAIN-KEYWORD", "DOMAIN-WILDCARD", "DOMAIN-SET",
+    "IP-CIDR", "IP-CIDR6", "IP-ASN", "GEOIP",
+    "USER-AGENT", "URL-REGEX", "PROCESS-NAME",
+    "DEST-PORT", "SRC-PORT", "IN-PORT", "SRC-IP", "DEVICE-NAME",
+    "MAC-ADDRESS", "PROTOCOL", "HOSTNAME-TYPE", "SUBNET",
+    "CELLULAR-RADIO", "CELLULAR-CARRIER", "SCRIPT",
+    "RULE-SET", "AND", "OR", "NOT",
 }
 MIN_BM7_LINES = {
     "GitHub": 25, "Kingsoft": 200, "AppleMusic": 8, "AppleTV": 8,
@@ -78,6 +84,11 @@ DOMAIN_RE = re.compile(
     r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+"
     r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$"
 )
+HOSTNAME_RE = re.compile(
+    r"^(?=.{1,253}$)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?"
+    r"(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$",
+    re.IGNORECASE,
+)
 
 
 def fetch(url: str, attempts: int = 3) -> str:
@@ -108,6 +119,33 @@ def norm_domain(value: str) -> str | None:
     return domain if DOMAIN_RE.fullmatch(domain) else None
 
 
+def strip_surge_comment(raw: str) -> str:
+    line = raw.strip()
+    if not line or line.startswith(("#", "//", ";")):
+        return ""
+    quote: str | None = None
+    escaped = False
+    for index, char in enumerate(raw):
+        if escaped:
+            escaped = False
+            continue
+        if char == "\\":
+            escaped = True
+            continue
+        if char in {'"', "'"}:
+            quote = None if quote == char else char if quote is None else quote
+            continue
+        if quote is not None or (index and not raw[index - 1].isspace()):
+            continue
+        if raw.startswith("//", index) or char in {"#", ";"}:
+            return raw[:index].strip()
+    return line
+
+
+def rule_parts(line: str) -> list[str]:
+    return [part.strip().strip('"\'') for part in line.split(",")]
+
+
 def merge_rule(rules: set[Rule], rule: Rule) -> None:
     rule_type, domain = rule
     if rule_type == "DOMAIN-SUFFIX":
@@ -122,13 +160,13 @@ def parse_bm7(text: str) -> tuple[list[str], set[Rule]]:
     domain_rules: set[Rule] = set()
     seen: set[str] = set()
     for raw in text.replace("\r", "").splitlines():
-        line = raw.strip()
-        if not line or line.startswith("#"):
+        line = strip_surge_comment(raw)
+        if not line:
             continue
         if line not in seen:
             lines.append(line)
             seen.add(line)
-        parts = [part.strip() for part in line.split(",")]
+        parts = rule_parts(line)
         if len(parts) >= 2 and parts[0] in DOMAIN_TYPES:
             domain = norm_domain(parts[1])
             if domain:
@@ -137,14 +175,16 @@ def parse_bm7(text: str) -> tuple[list[str], set[Rule]]:
 
 
 def validate_rule(name: str, index: int, line: str) -> None:
-    parts = [part.strip() for part in line.split(",")]
+    parts = rule_parts(line)
     if not parts or parts[0] not in RULE_TYPES:
         raise RuntimeError(f"unsupported Surge rule in {name} line {index}: {line}")
     if len(parts) < 2 or not parts[1]:
         raise RuntimeError(f"missing rule value in {name} line {index}: {line}")
     rule_type, value = parts[0], parts[1]
-    if rule_type in DOMAIN_TYPES and not norm_domain(value):
+    if rule_type in DOMAIN_TYPES and not HOSTNAME_RE.fullmatch(value):
         raise RuntimeError(f"invalid domain rule in {name} line {index}: {line}")
+    if re.search(r"(?:^|,)\s*pre-matching\s*(?:,|$)", line, re.IGNORECASE):
+        raise RuntimeError(f"pre-matching is not allowed in a Surge rule set: {name} line {index}")
     if rule_type == "IP-CIDR":
         ipaddress.IPv4Network(value, strict=False)
     elif rule_type == "IP-CIDR6":
@@ -232,6 +272,31 @@ def validate_source(kind: str, entry: str, rules: set[Rule]) -> None:
         )
 
 
+def load_snapshot() -> dict[str, int]:
+    if not SNAPSHOT.exists():
+        return {}
+    try:
+        data = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
+        return {key: int(value) for key, value in data.get("counts", {}).items()}
+    except (OSError, ValueError, TypeError) as error:
+        raise RuntimeError(f"invalid source snapshot: {SNAPSHOT}: {error}") from error
+
+
+def validate_snapshot_change(previous: dict[str, int], current: dict[str, int]) -> None:
+    for key, old_count in previous.items():
+        if key not in current or old_count < 20:
+            continue
+        new_count = current[key]
+        if new_count * 100 < old_count * 65:
+            raise RuntimeError(f"source rule count dropped too much for {key}: {old_count} -> {new_count}")
+        if new_count > old_count * 5 // 2:
+            raise RuntimeError(f"source rule count grew too much for {key}: {old_count} -> {new_count}")
+
+
+def render_snapshot(counts: dict[str, int]) -> str:
+    return json.dumps({"version": 1, "counts": counts}, indent=2, sort_keys=True) + "\n"
+
+
 def covered_by_suffix(domain: str, suffixes: set[str]) -> bool:
     return any(domain == suffix or domain.endswith(f".{suffix}") for suffix in suffixes)
 
@@ -308,10 +373,13 @@ def validate_change(name: str, target: Path, output: str) -> None:
 
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
+    outputs: dict[str, str] = {}
+    source_counts: dict[str, int] = {}
     for name, mapping in TARGETS.items():
         bm7_url = f"{BM7_BASE}/{name}/{name}.list"
         lines, base_rules = parse_bm7(fetch(bm7_url))
         validate_bm7(name, lines)
+        source_counts[f"bm7/{name}"] = len(lines)
         source_rules: set[Rule] = set()
         sources: list[str] = []
 
@@ -319,6 +387,7 @@ def main() -> None:
             entry = mapping["v2fly"]
             rules = parse_v2fly(entry)
             validate_source("v2fly", entry, rules)
+            source_counts[f"v2fly/{entry}"] = len(rules)
             for rule in rules:
                 merge_rule(source_rules, rule)
             sources.append(f"{V2FLY_BASE}/{entry}")
@@ -326,6 +395,7 @@ def main() -> None:
             entry = mapping["rabbit"]
             rules = parse_source_rules(fetch(f"{RABBIT_BASE}/{entry}"))
             validate_source("rabbit", entry, rules)
+            source_counts[f"rabbit/{entry}"] = len(rules)
             for rule in rules:
                 merge_rule(source_rules, rule)
             sources.append(f"{RABBIT_BASE}/{entry}")
@@ -333,6 +403,7 @@ def main() -> None:
             entry = mapping["loyal"]
             rules = parse_source_rules(fetch(f"{LOYAL_BASE}/{entry}"))
             validate_source("loyal", entry, rules)
+            source_counts[f"loyal/{entry}"] = len(rules)
             for rule in rules:
                 merge_rule(source_rules, rule)
             sources.append(f"{LOYAL_BASE}/{entry}")
@@ -340,6 +411,7 @@ def main() -> None:
             entry = mapping["meta"]
             rules = parse_source_rules(fetch(f"{META_BASE}/{entry}.list"), plain=True)
             validate_source("meta", entry, rules)
+            source_counts[f"meta/{entry}"] = len(rules)
             for rule in rules:
                 merge_rule(source_rules, rule)
             sources.append(f"{META_BASE}/{entry}.list")
@@ -353,6 +425,11 @@ def main() -> None:
 
         target = OUT / f"{name}.list"
         validate_change(name, target, output)
+        outputs[name] = output
+
+    validate_snapshot_change(load_snapshot(), source_counts)
+    for name, output in outputs.items():
+        target = OUT / f"{name}.list"
         if target.exists() and stable(target.read_text(encoding="utf-8")) == stable(output):
             print(f"{name}: unchanged")
         else:
@@ -361,6 +438,7 @@ def main() -> None:
                 f"{name}: BM7={len(lines)} sources={len(source_rules)} "
                 f"added={len(additions)} output={count_rules(output)}"
             )
+    SNAPSHOT.write_text(render_snapshot(source_counts), encoding="utf-8")
 
 
 if __name__ == "__main__":
