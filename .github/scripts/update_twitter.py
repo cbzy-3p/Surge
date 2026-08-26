@@ -29,7 +29,7 @@ TYPE_ORDER = {
 
 def fetch_text(url: str) -> str:
     request = urllib.request.Request(
-        url, headers={"User-Agent": "Rongwuyou-Surge-Updater"}
+        url, headers={"User-Agent": "cbzy-3p-Surge-Updater"}
     )
     with urllib.request.urlopen(request, timeout=30) as response:
         return response.read().decode("utf-8", errors="replace")

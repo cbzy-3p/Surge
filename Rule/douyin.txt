@@ -1,5 +1,5 @@
 # NAME: Multi-source-DouYin
-# AUTHOR: Rongwuyou
+# AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
 # UPDATED: 2026-08-26 00:00:00 UTC
 # RULE COUNT: 143

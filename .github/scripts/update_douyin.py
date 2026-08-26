@@ -32,7 +32,7 @@ def fetch_text(url: str, attempts: int = 3) -> str:
         try:
             request = urllib.request.Request(
                 url,
-                headers={"User-Agent": "Rongwuyou-Surge-Douyin-Updater/1.0"},
+                headers={"User-Agent": "cbzy-3p-Surge-Douyin-Updater/1.0"},
             )
             with urllib.request.urlopen(request, timeout=30) as response:
                 if response.status != 200:
@@ -130,7 +130,7 @@ def render(rules: set[tuple[str, str]]) -> str:
     ordered = [f"{rule_type},{value}" for rule_type, value in sorted(rules)]
     header = [
         "# NAME: Multi-source-DouYin",
-        "# AUTHOR: Rongwuyou",
+        "# AUTHOR: cbzy-3p",
         "# FORMAT: Surge Rule Set",
         f"# UPDATED: {updated}",
         f"# RULE COUNT: {len(rules)}",

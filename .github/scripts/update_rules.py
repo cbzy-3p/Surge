@@ -102,7 +102,7 @@ def fetch(url: str, attempts: int = 3) -> str:
     for attempt in range(attempts):
         try:
             request = urllib.request.Request(
-                url, headers={"User-Agent": "Rongwuyou-Surge-Rules-Updater/2.0"}
+                url, headers={"User-Agent": "cbzy-3p-Surge-Rules-Updater/2.0"}
             )
             with urllib.request.urlopen(request, timeout=30) as response:
                 if response.status != 200:
@@ -346,7 +346,7 @@ def render(
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     header = [
         f"# NAME: Multi-source-{name}",
-        "# AUTHOR: Rongwuyou",
+        "# AUTHOR: cbzy-3p",
         "# FORMAT: Surge Rule Set",
         f"# UPDATED: {now}",
         f"# RULE COUNT: {len(all_lines)}",

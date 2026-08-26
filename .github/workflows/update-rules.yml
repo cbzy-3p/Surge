@@ -116,7 +116,7 @@ jobs:
 
           {
             echo "# NAME: Telegram_All"
-            echo "# AUTHOR: Rongwuyou"
+            echo "# AUTHOR: cbzy-3p"
             echo "# SORT: PROCESS-NAME > DOMAIN > DOMAIN-SUFFIX > DOMAIN-KEYWORD > IP-CIDR > IP-CIDR6 > IP-ASN"
             echo "# SOURCE: Rabbit-Spec/Surge Rules/TelegramASN.list"
             echo "# SOURCE: blackmatrix7/ios_rule_script rule/Surge/Telegram/Telegram.list"

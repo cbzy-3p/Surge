@@ -31,7 +31,7 @@ TYPE_ORDER = {
 
 
 def fetch_text(url: str) -> str:
-    req = urllib.request.Request(url, headers={"User-Agent": "Rongwuyou-Surge-Updater"})
+    req = urllib.request.Request(url, headers={"User-Agent": "cbzy-3p-Surge-Updater"})
     with urllib.request.urlopen(req, timeout=30) as resp:
         return resp.read().decode("utf-8", errors="replace")
 

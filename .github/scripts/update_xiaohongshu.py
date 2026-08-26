@@ -81,7 +81,7 @@ def fetch_text(url: str, attempts: int = 3) -> str:
         try:
             request = urllib.request.Request(
                 url,
-                headers={"User-Agent": "Rongwuyou-Surge-XiaoHongShu-Updater/2.0"},
+                headers={"User-Agent": "cbzy-3p-Surge-XiaoHongShu-Updater/2.0"},
             )
             with urllib.request.urlopen(request, timeout=30) as response:
                 if response.status != 200:
@@ -242,7 +242,7 @@ def render(rules: set[Rule]) -> str:
     by_type = {rule_type: sum(1 for item in rules if item[0] == rule_type) for rule_type in RULE_TYPES}
     header = [
         "# NAME: XiaoHongShu",
-        "# AUTHOR: Rongwuyou",
+        "# AUTHOR: cbzy-3p",
         "# FORMAT: Surge Rule Set",
         f"# UPDATED: {updated}",
         *[f"# SOURCE: {source}" for source in SOURCE_LABELS],

@@ -7,5 +7,5 @@ BM7 `blackmatrix7/ios_rule_script` 作为主来源，按类别补充 `v2fly/doma
 生成步骤保留 Surge 的规则类型语义。`DOMAIN-SUFFIX` 会覆盖同值的 `DOMAIN`，精确域名不会被擅自放宽。每次更新都会检查来源数量、规则格式、CIDR、ASN、重复项、DOMAIN 与 DOMAIN-SUFFIX 冲突以及输出数量变化，校验通过后才写入文件。
 
 ```ini
-RULE-SET,https://raw.githubusercontent.com/Rongwuyou/Surge/main/Rule/Google.list,Google,extended-matching,no-resolve
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/Google.list,Google,extended-matching,no-resolve
 ```
