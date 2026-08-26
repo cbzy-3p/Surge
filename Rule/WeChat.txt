@@ -36,14 +36,11 @@ DOMAIN,szshort.snspay.wechatpay.cn
 DOMAIN,szshort.weixin.qq.com
 DOMAIN,tencentmap.wechat.com
 DOMAIN,vweixinf.tc.qq.com
-DOMAIN,wechat.com
 DOMAIN,weixin110.qq.com
 DOMAIN,wework.qpic.cn
 DOMAIN,wss.neixin.cn
 DOMAIN,wup.imtt.qq.com
-DOMAIN,wx.gtimg.com
 DOMAIN,wx.qlogo.cn
-DOMAIN,wxapp.tc.qq.com
 DOMAIN,wyw-pics.wxqcloud.qq.com.cn
 DOMAIN-SUFFIX,iot-tencent.com
 DOMAIN-SUFFIX,lbs.gtimg.com
