@@ -1,29 +1,43 @@
 # NAME: XiaoHongShu
 # AUTHOR: Rongwuyou
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-08-25 16:42:24 UTC
+# UPDATED: 2026-08-25 20:00:00 UTC
 # SOURCE: v2fly/domain-list-community data/xiaohongshu (recursive includes)
 # SOURCE: blackmatrix7/ios_rule_script XiaoHongShu.list
 # SOURCE: wresource/hxmy-proxy app-xiaohongshu.txt
-# SOURCE: Xiaohongshu first-party domains verified from ICP records
-# NOTE: Domain-only merge to avoid shared-IP collateral damage.
-# DOMAIN-SUFFIX: 37
-# TOTAL: 37
+# SOURCE: bgpeer/rules geosite/xiaohongshu.list
+# SOURCE: dl123100/clash-geosite XHS.list
+# SOURCE: Xiaohongshu first-party domains verified from public ICP records
+# NOTE: Domain-only merge. Supplemental community domains require cross-source corroboration or public ICP ownership verification.
+# DOMAIN: 0
+# DOMAIN-SUFFIX: 54
+# TOTAL: 54
 
+DOMAIN-SUFFIX,aboutmgzn.com
 DOMAIN-SUFFIX,askdiandian.com
+DOMAIN-SUFFIX,batman.plus
 DOMAIN-SUFFIX,cdnxhs.com
 DOMAIN-SUFFIX,cn-rednotecdn.com
 DOMAIN-SUFFIX,diandianlife.top
 DOMAIN-SUFFIX,fengkongcloud.com
+DOMAIN-SUFFIX,hongyunlogistics.com
+DOMAIN-SUFFIX,iselect.red
 DOMAIN-SUFFIX,redbascket.com
+DOMAIN-SUFFIX,redelight.biz
 DOMAIN-SUFFIX,redelight.cn
+DOMAIN-SUFFIX,redelight.com.cn
+DOMAIN-SUFFIX,redelight.info
+DOMAIN-SUFFIX,redelight.net
 DOMAIN-SUFFIX,rednote.com
 DOMAIN-SUFFIX,rednote.com.my
 DOMAIN-SUFFIX,rednote.life
 DOMAIN-SUFFIX,rednotecdn.com
+DOMAIN-SUFFIX,redselect.cn
+DOMAIN-SUFFIX,redselect.com.cn
 DOMAIN-SUFFIX,rl.ink
 DOMAIN-SUFFIX,rnote.com
 DOMAIN-SUFFIX,rnotecdn.com
+DOMAIN-SUFFIX,xhs.cn
 DOMAIN-SUFFIX,xhscdn.cn
 DOMAIN-SUFFIX,xhscdn.com
 DOMAIN-SUFFIX,xhscdn.net
@@ -47,3 +61,9 @@ DOMAIN-SUFFIX,xiaohongshu.net.cn
 DOMAIN-SUFFIX,xingin.cn
 DOMAIN-SUFFIX,xingin.com
 DOMAIN-SUFFIX,xingin.net
+DOMAIN-SUFFIX,xingludalogistics.com
+DOMAIN-SUFFIX,yuukoo.biz
+DOMAIN-SUFFIX,yuukoo.com.cn
+DOMAIN-SUFFIX,yuukoo.info
+DOMAIN-SUFFIX,yuukoo.net
+DOMAIN-SUFFIX,yuukoo.red
