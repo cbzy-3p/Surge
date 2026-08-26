@@ -14,7 +14,7 @@ class DouyinRuleTests(unittest.TestCase):
     def test_v2fly_domains_are_suffix_rules(self):
         self.assertEqual(
             UPDATE.parse_v2fly("full:api.douyin.com\ndomain:example.com\nkeyword:ignore\n"),
-            {("DOMAIN-SUFFIX", "api.douyin.com"), ("DOMAIN-SUFFIX", "example.com")},
+            {("DOMAIN", "api.douyin.com"), ("DOMAIN-SUFFIX", "example.com")},
         )
 
     def test_suffix_replaces_exact_duplicate(self):
