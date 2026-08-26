@@ -2,13 +2,6 @@ name: Update XiaoHongShu Rules
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/update-xiaohongshu.yml"
-      - ".github/scripts/update_xiaohongshu.py"
-      - ".github/scripts/test_update_xiaohongshu.py"
   pull_request:
     paths:
       - ".github/workflows/update-xiaohongshu.yml"
@@ -16,8 +9,6 @@ on:
       - ".github/scripts/test_update_xiaohongshu.py"
       - ".github/xiaohongshu-source-snapshot.json"
       - "Rule/XiaoHongShu.list"
-  schedule:
-    - cron: "23 19 * * *"
 
 permissions:
   contents: read

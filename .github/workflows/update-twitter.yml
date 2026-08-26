@@ -1,13 +1,7 @@
 name: Update Twitter Rules
 
 on:
-  schedule:
-    - cron: "15 20 * * 6"
   workflow_dispatch:
-  push:
-    paths:
-      - ".github/workflows/update-twitter.yml"
-      - ".github/scripts/update_twitter.py"
 
 permissions:
   contents: write

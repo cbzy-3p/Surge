@@ -4,18 +4,17 @@ from __future__ import annotations
 import ipaddress
 import sys
 import urllib.request
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+
 
 ROOT = Path(__file__).resolve().parents[2]
 TARGET = ROOT / "Rule" / "WeChat.txt"
-
 SOURCE_URLS = [
     "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/WeChat/WeChat.list",
     "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Wechat.list",
     "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/WeChat.list",
 ]
-
 TYPE_ORDER = {
     "DOMAIN": 0,
     "DOMAIN-SUFFIX": 1,
@@ -51,19 +50,15 @@ def normalize_rule(line: str) -> str | None:
     line = strip_comment(line)
     if not line:
         return None
-
     parts = [part.strip() for part in line.split(",")]
     if len(parts) < 2:
         return None
-
     rule_type = parts[0].upper()
     value = parts[1].strip()
     if not rule_type or not value:
         return None
-
     if rule_type in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD"}:
         return f"{rule_type},{value.lower().rstrip('.')}"
-
     if rule_type in {"IP-CIDR", "IP-CIDR6"}:
         try:
             network = ipaddress.ip_network(value, strict=False)
@@ -74,21 +69,29 @@ def normalize_rule(line: str) -> str | None:
         if rule_type == "IP-CIDR6" and network.version != 6:
             return None
         return f"{rule_type},{network},no-resolve"
-
     if rule_type == "IP-ASN":
         return f"{rule_type},{value},no-resolve"
-
-    cleaned_parts = [rule_type, value] + [p for p in parts[2:] if p]
-    return ",".join(cleaned_parts)
+    return ",".join([rule_type, value] + [part for part in parts[2:] if part])
 
 
-def collect_rules(text: str) -> set[str]:
-    rules: set[str] = set()
-    for raw_line in text.splitlines():
-        rule = normalize_rule(raw_line)
-        if rule:
-            rules.add(rule)
-    return rules
+def collect_rule_lines(text: str) -> list[str]:
+    return [rule for raw_line in text.splitlines() if (rule := normalize_rule(raw_line))]
+
+
+def dedupe_rules(rules: set[str]) -> set[str]:
+    suffixes = {
+        rule.split(",", 1)[1]
+        for rule in rules
+        if rule.startswith("DOMAIN-SUFFIX,")
+    }
+    return {
+        rule
+        for rule in rules
+        if not (
+            rule.startswith("DOMAIN,")
+            and rule.split(",", 1)[1] in suffixes
+        )
+    }
 
 
 def sort_key(rule: str):
@@ -118,14 +121,11 @@ def render(rules: set[str]) -> str:
         "# > WeChat\n"
         f"# UpdateTime: {now}\n"
         f"# RuleCount: {len(rules)}\n"
-        "# AutoUpdate: weekly by GitHub Actions; current rules preserved; upstream rules merged without broad-rule filtering\n"
+        "# AutoUpdate: daily at 00:17 Beijing time; current rules preserved; upstream rules merged and semantically deduplicated\n"
+        "# Sources: blackmatrix7 WeChat, ACL4SSR Wechat, ConnersHua RuleGo WeChat\n"
         "\n"
         f"{body}\n"
     )
-
-
-def existing_body(text: str) -> list[str]:
-    return sorted(collect_rules(text), key=sort_key)
 
 
 def main() -> int:
@@ -133,7 +133,8 @@ def main() -> int:
         raise SystemExit("WeChat.txt not found")
 
     current_text = TARGET.read_text(encoding="utf-8")
-    rules = collect_rules(current_text)
+    current_lines = collect_rule_lines(current_text)
+    rules = dedupe_rules(set(current_lines))
 
     fetched_count = 0
     for url in SOURCE_URLS:
@@ -143,13 +144,16 @@ def main() -> int:
             print(f"skip source: {url} ({exc})", file=sys.stderr)
             continue
         fetched_count += 1
-        rules |= collect_rules(text)
+        rules |= set(collect_rule_lines(text))
+        rules = dedupe_rules(rules)
 
     if fetched_count == 0:
         raise SystemExit("all upstream WeChat sources failed")
+    if len(rules) < 500:
+        raise SystemExit(f"unexpectedly small WeChat rule set: {len(rules)}")
 
-    if sorted(rules, key=sort_key) == existing_body(current_text):
-        print("No rule changes.")
+    if sorted(rules, key=sort_key) == sorted(current_lines, key=sort_key):
+        print(f"No rule changes. Checked {len(rules)} rules from {fetched_count} sources.")
         return 0
 
     TARGET.write_text(render(rules), encoding="utf-8", newline="\n")

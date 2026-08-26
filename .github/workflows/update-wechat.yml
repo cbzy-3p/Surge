@@ -1,13 +1,7 @@
 name: Update WeChat Rules
 
 on:
-  schedule:
-    - cron: "0 20 * * 6"
   workflow_dispatch:
-  push:
-    paths:
-      - ".github/workflows/update-wechat.yml"
-      - ".github/scripts/update_wechat.py"
 
 permissions:
   contents: write
