@@ -1,6 +1,6 @@
 # > WeChat
 # UpdateTime: 2026-07-04 13:46:18
-# RuleCount: 1105
+# RuleCount: 1102
 # AutoUpdate: weekly by GitHub Actions; current rules preserved; upstream rules merged without broad-rule filtering
 
 DOMAIN,apd-pcdnwxlogin.teg.tencent-cloud.net
