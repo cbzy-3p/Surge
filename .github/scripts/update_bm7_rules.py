@@ -31,6 +31,17 @@ TARGETS = {
     "Cryptocurrency": {"v2fly": None, "rabbit": None, "loyal": None, "meta": "category-cryptocurrency"},
 }
 DOMAIN_TYPES = {"DOMAIN", "DOMAIN-SUFFIX"}
+RULE_TYPES = DOMAIN_TYPES | {
+    "DOMAIN-KEYWORD", "IP-CIDR", "IP-CIDR6", "IP-ASN", "USER-AGENT",
+    "PROCESS-NAME", "URL-REGEX", "DEST-PORT", "PROTOCOL", "IN-PORT",
+    "RULE-SET", "DOMAIN-SET", "GEOIP", "FINAL", "AND", "OR", "NOT",
+}
+MIN_BM7_LINES = {
+    "GitHub": 25, "Kingsoft": 200, "AppleMusic": 8, "AppleTV": 8,
+    "OpenAI": 25, "GoogleVoice": 1, "Google": 600, "TikTok": 25,
+    "Instagram": 3, "Facebook": 500, "PayPal": 200, "OKX": 3,
+    "Binance": 8, "Crypto": 150, "Cryptocurrency": 35,
+}
 DOMAIN_RE = re.compile(r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")
 RABBIT_BASE = "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules"
 LOYAL_BASE = "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset"
@@ -82,6 +93,16 @@ def parse_bm7(text: str) -> tuple[list[str], set[str]]:
     return lines, domains
 
 
+def validate_bm7(name: str, lines: list[str]) -> None:
+    minimum = MIN_BM7_LINES[name]
+    if len(lines) < minimum:
+        raise RuntimeError(f"BM7 rule count unexpectedly low for {name}: {len(lines)} < {minimum}")
+    for index, line in enumerate(lines, 1):
+        parts = [p.strip() for p in line.split(",")]
+        if not parts or parts[0] not in RULE_TYPES:
+            raise RuntimeError(f"unsupported Surge rule in {name} line {index}: {line}")
+        if parts[0] in DOMAIN_TYPES and (len(parts) < 2 or not norm_domain(parts[1])):
+            raise RuntimeError(f"invalid domain rule in {name} line {index}: {line}")
 def parse_source_domains(content: str, plain: bool = False) -> set[str]:
     domains: set[str] = set()
     for raw in content.replace("\r", "").splitlines():
@@ -158,28 +179,39 @@ def main() -> None:
         bm7_url = f"{BM7_BASE}/{name}/{name}.list"
         bm7 = fetch(bm7_url)
         lines, _ = parse_bm7(bm7)
+        validate_bm7(name, lines)
         additions: set[str] = set()
         sources: list[str] = []
 
         if mapping["v2fly"]:
             entry = mapping["v2fly"]
-            additions.update(parse_v2fly(entry))
+            source = parse_v2fly(entry)
+            if not source:
+                raise RuntimeError(f"empty v2fly source: {entry}")
+            additions.update(source)
             sources.append(f"{V2FLY_BASE}/{entry}")
         if mapping["rabbit"]:
             entry = mapping["rabbit"]
-            additions.update(parse_source_domains(fetch(f"{RABBIT_BASE}/{entry}")))
+            source = parse_source_domains(fetch(f"{RABBIT_BASE}/{entry}"))
+            if not source:
+                raise RuntimeError(f"empty Rabbit-Spec source: {entry}")
+            additions.update(source)
             sources.append(f"{RABBIT_BASE}/{entry}")
         if mapping["loyal"]:
             entry = mapping["loyal"]
-            additions.update(parse_source_domains(fetch(f"{LOYAL_BASE}/{entry}")))
+            source = parse_source_domains(fetch(f"{LOYAL_BASE}/{entry}"))
+            if not source:
+                raise RuntimeError(f"empty Loyalsoldier source: {entry}")
+            additions.update(source)
             sources.append(f"{LOYAL_BASE}/{entry}")
         if mapping["meta"]:
             entry = mapping["meta"]
-            additions.update(parse_source_domains(fetch(f"{META_BASE}/{entry}.list"), plain=True))
+            source = parse_source_domains(fetch(f"{META_BASE}/{entry}.list"), plain=True)
+            if not source:
+                raise RuntimeError(f"empty MetaCubeX source: {entry}")
+            additions.update(source)
             sources.append(f"{META_BASE}/{entry}.list")
 
-        if not lines:
-            raise RuntimeError(f"empty BM7 rules: {name}")
         output = render(name, lines, additions, sources)
         target = OUT / f"{name}.list"
         def stable(text: str) -> str:
