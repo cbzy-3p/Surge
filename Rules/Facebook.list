@@ -1,7 +1,7 @@
-# NAME: BM7-Facebook
+# NAME: Multi-source-Facebook
 # AUTHOR: Rongwuyou
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-08-25 17:14:17 UTC
+# UPDATED: 2026-08-26 01:12:39 UTC
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Facebook/Facebook.list
 # MERGED SOURCE: https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/facebook
 # MERGED SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Facebook.list
