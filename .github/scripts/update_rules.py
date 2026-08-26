@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "Rules" / "BM7"
+OUT = ROOT / "Rules"
 BM7_BASE = "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge"
 V2FLY_BASE = "https://raw.githubusercontent.com/v2fly/domain-list-community/master/data"
 
