@@ -161,6 +161,8 @@ def main() -> int:
 
     if fetched_count == 0:
         raise SystemExit("all upstream Apple Intelligence sources failed")
+    if len(rules) < 8:
+        raise SystemExit(f"unexpectedly small Apple Intelligence rule set: {len(rules)}")
 
     if sorted(rules, key=sort_key) == sorted(existing_rules(current_text), key=sort_key):
         print("No rule changes.")
