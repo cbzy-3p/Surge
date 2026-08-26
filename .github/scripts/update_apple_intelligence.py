@@ -133,7 +133,7 @@ def render(rules: set[str]) -> str:
         "# > Apple Intelligence\n"
         f"# UpdateTime: {now}\n"
         f"# RuleCount: {len(rules)}\n"
-        "# AutoUpdate: weekly by GitHub Actions; upstream rules merged and deduplicated\n"
+        "# AutoUpdate: daily at 00:17 Beijing time; upstream rules merged and deduplicated\n"
         "# Sources: xpdigital Apple-AI, SukkaW apple_intelligence, blackmatrix7 Siri\n"
         "\n"
         f"{body}\n"
