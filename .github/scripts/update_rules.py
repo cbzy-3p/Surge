@@ -56,6 +56,12 @@ MIN_BM7_LINES = {
     "Instagram": 3, "Facebook": 500, "PayPal": 200, "OKX": 3,
     "Binance": 8, "Crypto": 150, "Cryptocurrency": 35,
 }
+VERIFIED_SUPPLEMENTS = {
+    "TikTok": {
+        ("DOMAIN", "lf19-pkgcdn.pitaya-clientai.com"),
+    },
+}
+
 MIN_SOURCE_RULES = {
     ("v2fly", "github"): 40,
     ("v2fly", "kingsoft"): 25,
@@ -328,7 +334,13 @@ def select_additions(base_rules: set[Rule], source_rules: set[Rule]) -> list[Rul
     return sorted(selected)
 
 
-def render(name: str, lines: list[str], additions: list[Rule], sources: list[str]) -> str:
+def render(
+    name: str,
+    lines: list[str],
+    additions: list[Rule],
+    sources: list[str],
+    verified_supplements: set[Rule],
+) -> str:
     all_lines = list(lines)
     all_lines.extend(f"{rule_type},{domain}" for rule_type, domain in additions)
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
@@ -340,6 +352,7 @@ def render(name: str, lines: list[str], additions: list[Rule], sources: list[str
         f"# RULE COUNT: {len(all_lines)}",
         f"# SOURCE: {BM7_BASE}/{name}/{name}.list",
         *[f"# MERGED SOURCE: {source}" for source in sources],
+        *[f"# VERIFIED SUPPLEMENT: {rule_type},{value} from iOS App Privacy Report" for rule_type, value in sorted(verified_supplements)],
         "# NOTE: BM7 is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and deduplicated.",
         "",
     ]
@@ -416,8 +429,11 @@ def main() -> None:
                 merge_rule(source_rules, rule)
             sources.append(f"{META_BASE}/{entry}.list")
 
+        verified_supplements = VERIFIED_SUPPLEMENTS.get(name, set())
+        for rule in verified_supplements:
+            merge_rule(source_rules, rule)
         additions = select_additions(base_rules, source_rules)
-        output = render(name, lines, additions, sources)
+        output = render(name, lines, additions, sources, verified_supplements)
         for index, line in enumerate(
             (line for line in output.splitlines() if line and not line.startswith("#")), 1
         ):
