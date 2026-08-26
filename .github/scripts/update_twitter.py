@@ -149,7 +149,7 @@ def render(rules: set[str]) -> str:
         "# - blackmatrix7/ios_rule_script rule/Surge/Twitter/Twitter.list\n"
         "# - ACL4SSR/ACL4SSR Clash/Ruleset/Twitter.list\n"
         "# - v2fly/domain-list-community data/twitter\n"
-        "# AutoUpdate: weekly by GitHub Actions; rebuilt, normalized and deduplicated\n"
+        "# AutoUpdate: daily at 00:17 Beijing time; rebuilt, normalized and deduplicated\n"
         "\n"
         f"{body}\n"
     )
