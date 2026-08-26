@@ -98,6 +98,13 @@ jobs:
             "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Telegram.list" \
             -o "$OUT_DIR/ConnersHua-Telegram.list"
 
+          for source in "$OUT_DIR/RabbitSpec-TelegramASN.list" \
+                        "$OUT_DIR/blackmatrix7-Telegram.list" \
+                        "$OUT_DIR/ConnersHua-Telegram.list"; do
+            count="$(awk -F, '$1 ~ /^(PROCESS-NAME|DOMAIN|DOMAIN-SUFFIX|DOMAIN-KEYWORD|IP-CIDR|IP-CIDR6|IP-ASN)$/ {n++} END {print n+0}' "$source")"
+            test "$count" -ge 2 || { echo "Telegram source unexpectedly small: $source ($count)"; exit 1; }
+          done
+
           cat "$OUT_DIR/RabbitSpec-TelegramASN.list" \
               "$OUT_DIR/blackmatrix7-Telegram.list" \
               "$OUT_DIR/ConnersHua-Telegram.list" \
