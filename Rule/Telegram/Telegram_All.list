@@ -4,6 +4,7 @@
 # SOURCE: Rabbit-Spec/Surge Rules/TelegramASN.list
 # SOURCE: blackmatrix7/ios_rule_script rule/Surge/Telegram/Telegram.list
 # SOURCE: ConnersHua/RuleGo Surge/Ruleset/Extra/Telegram.list
+# AutoUpdate: daily at 00:17 Beijing time
 
 PROCESS-NAME,nekox.messenger
 PROCESS-NAME,org.telegram.messenger
