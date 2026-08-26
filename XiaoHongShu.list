@@ -8,10 +8,11 @@
 # SOURCE: bgpeer/rules geosite/xiaohongshu.list
 # SOURCE: dl123100/clash-geosite XHS.list
 # SOURCE: Xiaohongshu first-party domains verified from public ICP records
-# NOTE: Domain-only merge. Supplemental community domains require cross-source corroboration or public ICP ownership verification.
+# NOTE: Domain rules require cross-source corroboration or public ICP ownership verification. IP-ASN rules require direct registry ownership verification.
 # DOMAIN: 0
 # DOMAIN-SUFFIX: 54
-# TOTAL: 54
+# IP-ASN: 2
+# TOTAL: 56
 
 DOMAIN-SUFFIX,aboutmgzn.com
 DOMAIN-SUFFIX,askdiandian.com
@@ -67,3 +68,5 @@ DOMAIN-SUFFIX,yuukoo.com.cn
 DOMAIN-SUFFIX,yuukoo.info
 DOMAIN-SUFFIX,yuukoo.net
 DOMAIN-SUFFIX,yuukoo.red
+IP-ASN,151281
+IP-ASN,151282
