@@ -1,13 +1,7 @@
 name: Update CN Additional Domain Set
 
 on:
-  schedule:
-    - cron: "30 21 * * *"
   workflow_dispatch:
-  push:
-    paths:
-      - ".github/workflows/update-cn-additional.yml"
-      - ".github/scripts/update_cn_additional.py"
 
 permissions:
   contents: write
