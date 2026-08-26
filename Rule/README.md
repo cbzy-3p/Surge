@@ -7,5 +7,5 @@ BM7 `blackmatrix7/ios_rule_script` is the baseline. Directly corresponding categ
 The updater follows the current Surge external rule-set syntax. It checks BM7 baseline counts, supplemental source minimums, source-count history, allowed rule types, forbidden rule-set options, CIDR and ASN values, and unexpected output-size changes. All outputs are validated before any file is written. Pull requests fail when committed rule files do not match the generated result, and scheduled failures open or update a GitHub issue.
 
 ```ini
-RULE-SET,https://raw.githubusercontent.com/Rongwuyou/Surge/main/Rules/Google.list,Google,extended-matching,no-resolve
+RULE-SET,https://raw.githubusercontent.com/Rongwuyou/Surge/main/Rule/Google.list,Google,extended-matching,no-resolve
 ```

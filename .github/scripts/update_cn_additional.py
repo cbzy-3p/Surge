@@ -5,7 +5,8 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 
 SOURCE_URL = "https://static-file-global.353355.xyz/rules/cn-additional-list.txt"
-OUTPUT_PATH = Path("CN-Additional.list")
+ROOT = Path(__file__).resolve().parents[2]
+OUTPUT_PATH = ROOT / "Rule" / "CN-Additional.list"
 DOMAIN_RE = re.compile(r"^[a-z0-9-]+(?:\.[a-z0-9-]+)+$")
 
 

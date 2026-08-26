@@ -17,7 +17,7 @@ on:
       - ".github/scripts/update_rules.py"
       - ".github/scripts/test_update_rules.py"
       - ".github/rule-source-snapshot.json"
-      - "Rules/**"
+      - "Rule/**"
 
 permissions:
   contents: read
@@ -54,7 +54,7 @@ jobs:
 
       - name: Verify generated files are committed
         run: |
-          git diff --exit-code -- Rules/*.list .github/rule-source-snapshot.json
+          git diff --exit-code -- Rule/*.list .github/rule-source-snapshot.json
           test -z "$(git status --porcelain --untracked-files=all)"
 
   update:
@@ -85,7 +85,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add Rules/*.list .github/rule-source-snapshot.json
+          git add Rule/*.list .github/rule-source-snapshot.json
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
