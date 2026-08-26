@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-TARGET = ROOT / "AppleIntelligence.list"
+TARGET = ROOT / "Rule" / "AppleIntelligence.list"
 
 SOURCE_URLS = [
     "https://raw.githubusercontent.com/xpdigital/Apple-Rule/refs/heads/main/Apple-AI.list",

@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "Rules"
+OUT = ROOT / "Rule"
 SNAPSHOT = ROOT / ".github" / "rule-source-snapshot.json"
 BM7_BASE = "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge"
 V2FLY_BASE = "https://raw.githubusercontent.com/v2fly/domain-list-community/master/data"

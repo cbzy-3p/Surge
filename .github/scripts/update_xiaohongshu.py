@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-OUTPUT = ROOT / "XiaoHongShu.list"
+OUTPUT = ROOT / "Rule" / "XiaoHongShu.list"
 SNAPSHOT = ROOT / ".github" / "xiaohongshu-source-snapshot.json"
 V2FLY_BASE = "https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/"
 BLACKMATRIX_URL = (

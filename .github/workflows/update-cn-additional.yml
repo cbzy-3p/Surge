@@ -36,4 +36,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update CN additional domain set"
-          file_pattern: CN-Additional.list
+          file_pattern: Rule/CN-Additional.list
