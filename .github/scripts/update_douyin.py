@@ -93,11 +93,17 @@ def parse_v2fly(content: str) -> set[tuple[str, str]]:
         token = line.split()[0]
         if token.startswith(("keyword:", "regexp:", "include:")):
             continue
-        if token.startswith(("full:", "domain:")):
+        if token.startswith("full:"):
             token = token.split(":", 1)[1]
+            rule_type = "DOMAIN"
+        elif token.startswith("domain:"):
+            token = token.split(":", 1)[1]
+            rule_type = "DOMAIN-SUFFIX"
+        else:
+            rule_type = "DOMAIN-SUFFIX"
         value = normalize_domain(token)
         if value:
-            merge_rule(rules, ("DOMAIN-SUFFIX", value))
+            merge_rule(rules, (rule_type, value))
     return rules
 
 
