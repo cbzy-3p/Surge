@@ -32,6 +32,7 @@ DL123_URL = (
 
 Rule = tuple[str, str]
 DOMAIN_TYPES = {"DOMAIN", "DOMAIN-SUFFIX"}
+RULE_TYPES = DOMAIN_TYPES | {"IP-ASN"}
 DOMAIN_RE = re.compile(
     r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+"
     r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$"
@@ -55,6 +56,8 @@ VERIFIED_FIRST_PARTY_DOMAINS = {
     "xingin.cn",
     "yuukoo.info",
 }
+# APNIC registers both ASNs to Xingyin Information Technology (Shanghai) Co., Ltd.
+VERIFIED_FIRST_PARTY_ASNS = {"151281", "151282"}
 MIN_SOURCE_RULES = {
     "v2fly": 10,
     "blackmatrix7": 4,
@@ -101,12 +104,20 @@ def normalize_domain(value: str) -> str | None:
     return domain if DOMAIN_RE.fullmatch(domain) else None
 
 
+def normalize_asn(value: str) -> str | None:
+    asn = value.strip()
+    if not asn.isdecimal():
+        return None
+    number = int(asn)
+    return str(number) if 1 <= number <= 4_294_967_295 else None
+
+
 def merge_rule(rules: set[Rule], rule: Rule) -> None:
     rule_type, domain = rule
     if rule_type == "DOMAIN-SUFFIX":
         rules.discard(("DOMAIN", domain))
         rules.add(rule)
-    elif ("DOMAIN-SUFFIX", domain) not in rules:
+    elif rule_type != "DOMAIN" or ("DOMAIN-SUFFIX", domain) not in rules:
         rules.add(rule)
 
 
@@ -150,11 +161,12 @@ def parse_surge_rules(content: str) -> set[Rule]:
         if not line or line.startswith(";"):
             continue
         parts = [part.strip() for part in line.split(",")]
-        if len(parts) < 2 or parts[0] not in DOMAIN_TYPES:
+        if len(parts) < 2 or parts[0] not in RULE_TYPES:
             continue
-        domain = normalize_domain(parts[1])
-        if domain:
-            merge_rule(rules, (parts[0], domain))
+        rule_type = parts[0]
+        value = normalize_domain(parts[1]) if rule_type in DOMAIN_TYPES else normalize_asn(parts[1])
+        if value:
+            merge_rule(rules, (rule_type, value))
     return rules
 
 
@@ -210,9 +222,10 @@ def current_rules() -> set[Rule]:
 def validate_rules(rules: set[Rule]) -> None:
     if not 30 <= len(rules) <= 150:
         raise RuntimeError(f"unexpected output count: {len(rules)}")
-    for rule_type, domain in rules:
-        if rule_type not in DOMAIN_TYPES or not normalize_domain(domain):
-            raise RuntimeError(f"invalid Surge domain rule: {rule_type},{domain}")
+    for rule_type, value in rules:
+        valid = normalize_domain(value) if rule_type in DOMAIN_TYPES else normalize_asn(value)
+        if rule_type not in RULE_TYPES or not valid:
+            raise RuntimeError(f"invalid Surge rule: {rule_type},{value}")
 
 
 def validate_output_change(previous: set[Rule], current: set[Rule]) -> None:
@@ -226,16 +239,17 @@ def validate_output_change(previous: set[Rule], current: set[Rule]) -> None:
 
 def render(rules: set[Rule]) -> str:
     updated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
-    by_type = {rule_type: sum(1 for item in rules if item[0] == rule_type) for rule_type in DOMAIN_TYPES}
+    by_type = {rule_type: sum(1 for item in rules if item[0] == rule_type) for rule_type in RULE_TYPES}
     header = [
         "# NAME: XiaoHongShu",
         "# AUTHOR: Rongwuyou",
         "# FORMAT: Surge Rule Set",
         f"# UPDATED: {updated}",
         *[f"# SOURCE: {source}" for source in SOURCE_LABELS],
-        "# NOTE: Domain-only merge. Supplemental community domains require cross-source corroboration or public ICP ownership verification.",
+        "# NOTE: Domain rules require cross-source corroboration or public ICP ownership verification. IP-ASN rules require direct registry ownership verification.",
         f"# DOMAIN: {by_type['DOMAIN']}",
         f"# DOMAIN-SUFFIX: {by_type['DOMAIN-SUFFIX']}",
+        f"# IP-ASN: {by_type['IP-ASN']}",
         f"# TOTAL: {len(rules)}",
         "",
     ]
@@ -264,8 +278,10 @@ def main() -> None:
             merge_rule(rules, rule)
     for domain in VERIFIED_FIRST_PARTY_DOMAINS:
         merge_rule(rules, ("DOMAIN-SUFFIX", domain))
-    bgpeer_domains = {domain for _, domain in bgpeer}
-    dl123100_domains = {domain for _, domain in dl123100}
+    for asn in VERIFIED_FIRST_PARTY_ASNS:
+        merge_rule(rules, ("IP-ASN", asn))
+    bgpeer_domains = {value for rule_type, value in bgpeer if rule_type in DOMAIN_TYPES}
+    dl123100_domains = {value for rule_type, value in dl123100 if rule_type in DOMAIN_TYPES}
     for domain in bgpeer_domains & dl123100_domains:
         merge_rule(rules, ("DOMAIN-SUFFIX", domain))
 

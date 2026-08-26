@@ -19,9 +19,14 @@ class XiaoHongShuRuleTests(unittest.TestCase):
 
     def test_non_domain_rules_are_not_merged(self):
         rules = UPDATE.parse_surge_rules(
-            "IP-CIDR,43.159.95.0/24,no-resolve\nDOMAIN-KEYWORD,xiaohongshu\n"
+            "IP-CIDR,43.159.95.0/24,no-resolve\nDOMAIN-KEYWORD,xiaohongshu\nIP-ASN,151281\n"
         )
-        self.assertEqual(rules, set())
+        self.assertEqual(rules, {("IP-ASN", "151281")})
+
+    def test_invalid_asn_is_rejected(self):
+        self.assertIsNone(UPDATE.normalize_asn("0"))
+        self.assertIsNone(UPDATE.normalize_asn("not-an-asn"))
+        self.assertEqual(UPDATE.normalize_asn("151282"), "151282")
 
     def test_v2fly_full_domain_stays_exact(self):
         original = UPDATE.fetch_text
