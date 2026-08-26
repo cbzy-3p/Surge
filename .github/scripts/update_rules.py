@@ -161,7 +161,7 @@ def render(name: str, lines: list[str], additions: set[str], sources: list[str])
         all_lines.append(f"DOMAIN-SUFFIX,{d}")
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     header = [
-        f"# NAME: BM7-{name}",
+        f"# NAME: Multi-source-{name}",
         "# AUTHOR: Rongwuyou",
         "# FORMAT: Surge Rule Set",
         f"# UPDATED: {now}",
