@@ -1,11 +1,12 @@
 # NAME: Multi-source-AppleMusic
 # AUTHOR: Rongwuyou
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-08-26 01:12:23 UTC
+# UPDATED: 2026-08-26 01:57:08 UTC
+# RULE COUNT: 20
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/AppleMusic/AppleMusic.list
 # MERGED SOURCE: https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/apple-music
 # MERGED SOURCE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-music.list
-# NOTE: BM7 is authoritative; mapped sources add domain-only rules after exact deduplication.
+# NOTE: BM7 is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and deduplicated.
 
 DOMAIN,aod-ssl.itunes.apple.com
 DOMAIN,aod.itunes.apple.com
@@ -18,8 +19,6 @@ DOMAIN-SUFFIX,blobstore.apple.com
 DOMAIN-SUFFIX,music.apple.com
 USER-AGENT,Music*
 PROCESS-NAME,Music
-DOMAIN-SUFFIX,amp-api-edge.music.apple.com
-DOMAIN-SUFFIX,amp-api.music.apple.com
 DOMAIN-SUFFIX,applemusic.berlin
 DOMAIN-SUFFIX,applemusic.co
 DOMAIN-SUFFIX,applemusic.com.au
@@ -27,9 +26,5 @@ DOMAIN-SUFFIX,applemusic.hamburg
 DOMAIN-SUFFIX,applemusic.wang
 DOMAIN-SUFFIX,applemusicconnect.com
 DOMAIN-SUFFIX,applemusicfestival.com
-DOMAIN-SUFFIX,js-cdn.music.apple.com
 DOMAIN-SUFFIX,musickit.net
-DOMAIN-SUFFIX,musicstatus.music.apple.com
-DOMAIN-SUFFIX,play.music.apple.com
-DOMAIN-SUFFIX,speedysub.music.apple.com
 DOMAIN-SUFFIX,wwwapplemusic.com
