@@ -1,23 +1,17 @@
-name: Update Multi-source Rules
+name: Update All Surge Rules
 
 on:
   workflow_dispatch:
   schedule:
+    # 00:17 Beijing time
     - cron: "17 16 * * *"
-  push:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/update-rules.yml"
-      - ".github/scripts/update_rules.py"
-      - ".github/scripts/test_update_rules.py"
   pull_request:
     paths:
-      - ".github/workflows/update-rules.yml"
-      - ".github/scripts/update_rules.py"
-      - ".github/scripts/test_update_rules.py"
-      - ".github/rule-source-snapshot.json"
+      - ".github/workflows/**"
+      - ".github/scripts/**"
+      - ".github/*-snapshot.json"
       - "Rule/**"
+      - "Twitter.txt"
 
 permissions:
   contents: read
@@ -26,7 +20,7 @@ env:
   PYTHONDONTWRITEBYTECODE: "1"
 
 concurrency:
-  group: update-multisource-rules
+  group: update-all-surge-rules
   cancel-in-progress: false
 
 jobs:
@@ -35,24 +29,25 @@ jobs:
     permissions:
       contents: read
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-
+    timeout-minutes: 20
     steps:
       - name: Checkout repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
-
-      - name: Test Surge rule parser
-        run: python .github/scripts/test_update_rules.py
-
-      - name: Generate and validate multi-source rules
+      - name: Run updater tests
+        run: |
+          python .github/scripts/test_update_rules.py
+          python .github/scripts/test_update_xiaohongshu.py
+          python .github/scripts/test_update_douyin.py
+          python .github/scripts/test_validate_rule_files.py
+      - name: Validate generated rule files
+        run: python .github/scripts/validate_rule_files.py
+      - name: Rebuild baseline multi-source rules
         run: python .github/scripts/update_rules.py
-
-      - name: Verify generated files are committed
+      - name: Verify committed baseline output
         run: |
           git diff --exit-code -- Rule/*.list .github/rule-source-snapshot.json
           test -z "$(git status --porcelain --untracked-files=all)"
@@ -62,63 +57,92 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-
+    timeout-minutes: 30
     steps:
       - name: Checkout repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
+      - name: Run updater tests
+        run: |
+          python .github/scripts/test_update_rules.py
+          python .github/scripts/test_update_xiaohongshu.py
+          python .github/scripts/test_update_douyin.py
+          python .github/scripts/test_validate_rule_files.py
+      - name: Update all rule sources
+        run: |
+          python .github/scripts/update_rules.py
+          python .github/scripts/update_apple_intelligence.py
+          python .github/scripts/update_cn_additional.py
+          python .github/scripts/update_wechat.py
+          python .github/scripts/update_xiaohongshu.py
+          python .github/scripts/update_douyin.py
+          python .github/scripts/update_twitter.py
+      - name: Sync Telegram rules
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT_DIR="Rule/Telegram"
+          RAW_FILE="$OUT_DIR/.telegram_all.raw"
+          mkdir -p "$OUT_DIR"
 
-      - name: Test Surge rule parser
-        run: python .github/scripts/test_update_rules.py
+          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 \
+            "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/TelegramASN.list" \
+            -o "$OUT_DIR/RabbitSpec-TelegramASN.list"
+          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 \
+            "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Telegram/Telegram.list" \
+            -o "$OUT_DIR/blackmatrix7-Telegram.list"
+          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 \
+            "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Telegram.list" \
+            -o "$OUT_DIR/ConnersHua-Telegram.list"
 
-      - name: Generate and validate multi-source rules
-        run: python .github/scripts/update_rules.py
+          cat "$OUT_DIR/RabbitSpec-TelegramASN.list" \
+              "$OUT_DIR/blackmatrix7-Telegram.list" \
+              "$OUT_DIR/ConnersHua-Telegram.list" \
+            | sed 's/\r$//' \
+            | sed 's/[[:space:]]*\/\/.*$//' \
+            | awk '{$1=$1; print}' \
+            | awk 'NF && $0 !~ /^#/ && $0 !~ /^OR,/' \
+            | awk '!seen[$0]++' > "$RAW_FILE"
 
+          {
+            echo "# NAME: Telegram_All"
+            echo "# AUTHOR: Rongwuyou"
+            echo "# SORT: PROCESS-NAME > DOMAIN > DOMAIN-SUFFIX > DOMAIN-KEYWORD > IP-CIDR > IP-CIDR6 > IP-ASN"
+            echo "# SOURCE: Rabbit-Spec/Surge Rules/TelegramASN.list"
+            echo "# SOURCE: blackmatrix7/ios_rule_script rule/Surge/Telegram/Telegram.list"
+            echo "# SOURCE: ConnersHua/RuleGo Surge/Ruleset/Extra/Telegram.list"
+            echo "# AutoUpdate: daily at 00:17 Beijing time"
+            echo
+            awk -F, '$1 == "PROCESS-NAME"' "$RAW_FILE" | LC_ALL=C sort -t, -k2,2 -u
+            echo
+            awk -F, '$1 == "DOMAIN"' "$RAW_FILE" | LC_ALL=C sort -t, -k2,2 -u
+            echo
+            awk -F, '$1 == "DOMAIN-SUFFIX"' "$RAW_FILE" | LC_ALL=C sort -t, -k2,2 -u
+            echo
+            awk -F, '$1 == "DOMAIN-KEYWORD"' "$RAW_FILE" | LC_ALL=C sort -t, -k2,2 -u
+            echo
+            awk -F, '$1 == "IP-CIDR"' "$RAW_FILE" | LC_ALL=C sort -t, -k2,2V -u
+            echo
+            awk -F, '$1 == "IP-CIDR6"' "$RAW_FILE" | LC_ALL=C sort -t, -k2,2 -u
+            echo
+            awk -F, '$1 == "IP-ASN"' "$RAW_FILE" | LC_ALL=C sort -t, -k2,2n -u
+          } > "$OUT_DIR/Telegram_All.list"
+          rm -f "$RAW_FILE"
+      - name: Validate all generated rules
+        run: python .github/scripts/validate_rule_files.py
       - name: Commit changes
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add Rule/*.list .github/rule-source-snapshot.json
+          git add Rule Twitter.txt .github/*-snapshot.json
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "update multi-source rules"
+            git commit -m "update all surge rules"
             git push
-          fi
-
-  notify:
-    needs: update
-    if: always() && github.event_name == 'schedule'
-    permissions:
-      contents: read
-      issues: write
-    runs-on: ubuntu-latest
-    steps:
-      - name: Report scheduled update status
-        env:
-          GH_TOKEN: ${{ github.token }}
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          UPDATE_RESULT: ${{ needs.update.result }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          title="Scheduled Surge rule update failed"
-          issue_url="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "$title in:title" --json title,url --jq '.[] | select(.title == "Scheduled Surge rule update failed") | .url' | head -n 1)"
-          if [ "$UPDATE_RESULT" = "failure" ]; then
-            body="The scheduled rule update failed. Run: $RUN_URL"
-            if [ -n "$issue_url" ]; then
-              gh issue comment "$issue_url" --body "$body"
-            else
-              gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --body "$body"
-            fi
-          elif [ -n "$issue_url" ]; then
-            gh issue comment "$issue_url" --body "The scheduled rule update recovered. Run: $RUN_URL"
-            gh issue close "$issue_url"
           fi
