@@ -1,4 +1,4 @@
-name: Update BM7 Rules
+name: Update Multi-source Rules
 
 on:
   workflow_dispatch:
@@ -8,13 +8,13 @@ on:
     branches:
       - main
     paths:
-      - ".github/workflows/update-bm7-rules.yml"
-      - ".github/scripts/update_bm7_rules.py"
+      - ".github/workflows/update-rules.yml"
+      - ".github/scripts/update_rules.py"
   pull_request:
     paths:
-      - ".github/workflows/update-bm7-rules.yml"
-      - ".github/scripts/update_bm7_rules.py"
-      - "Rules/BM7/**"
+      - ".github/workflows/update-rules.yml"
+      - ".github/scripts/update_rules.py"
+      - "Rules/**"
 
 permissions:
   contents: write
@@ -37,8 +37,8 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Merge and validate BM7 rules
-        run: python .github/scripts/update_bm7_rules.py
+      - name: Merge and validate multi-source rules
+        run: python .github/scripts/update_rules.py
 
       - name: Commit changes
         if: github.event_name != 'pull_request'
@@ -47,7 +47,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add Rules/BM7
+          git add Rules/*.list
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
