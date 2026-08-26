@@ -13,7 +13,7 @@ DOMAIN_RE = re.compile(r"^[a-z0-9-]+(?:\.[a-z0-9-]+)+$")
 def fetch_source() -> str:
     request = Request(
         SOURCE_URL,
-        headers={"User-Agent": "Rongwuyou-Surge-Rules/2.0"},
+        headers={"User-Agent": "cbzy-3p-Surge-Rules/2.0"},
     )
     with urlopen(request, timeout=60) as response:
         return response.read().decode("utf-8-sig")
