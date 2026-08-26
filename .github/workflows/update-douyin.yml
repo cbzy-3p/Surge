@@ -2,13 +2,6 @@ name: Update DouYin Rules
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/update-douyin.yml"
-      - ".github/scripts/update_douyin.py"
-      - ".github/scripts/test_update_douyin.py"
   pull_request:
     paths:
       - ".github/workflows/update-douyin.yml"
@@ -16,8 +9,6 @@ on:
       - ".github/scripts/test_update_douyin.py"
       - ".github/douyin-source-snapshot.json"
       - "Rule/douyin.txt"
-  schedule:
-    - cron: "19 19 * * *"
 
 permissions:
   contents: read
