@@ -12,7 +12,6 @@ ROOT = Path(__file__).resolve().parents[2]
 TARGET = ROOT / "Rule" / "AppleIntelligence.list"
 
 SOURCE_URLS = [
-    "https://raw.githubusercontent.com/xpdigital/Apple-Rule/refs/heads/main/Apple-AI.list",
     "https://ruleset.skk.moe/List/non_ip/apple_intelligence.conf",
     "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Siri/Siri.list",
 ]
@@ -134,7 +133,7 @@ def render(rules: set[str]) -> str:
         f"# UpdateTime: {now}\n"
         f"# RuleCount: {len(rules)}\n"
         "# AutoUpdate: daily at 00:17 Beijing time; upstream rules merged and deduplicated\n"
-        "# Sources: xpdigital Apple-AI, SukkaW apple_intelligence, blackmatrix7 Siri\n"
+        "# Sources: SukkaW apple_intelligence, blackmatrix7 Siri\n"
         "\n"
         f"{body}\n"
     )
