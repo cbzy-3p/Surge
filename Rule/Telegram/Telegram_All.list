@@ -1,5 +1,5 @@
 # NAME: Telegram_All
-# AUTHOR: Rongwuyou
+# AUTHOR: cbzy-3p
 # SORT: PROCESS-NAME > DOMAIN > DOMAIN-SUFFIX > DOMAIN-KEYWORD > IP-CIDR > IP-CIDR6 > IP-ASN
 # SOURCE: Rabbit-Spec/Surge Rules/TelegramASN.list
 # SOURCE: blackmatrix7/ios_rule_script rule/Surge/Telegram/Telegram.list
