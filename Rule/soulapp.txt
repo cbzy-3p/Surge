@@ -7,7 +7,6 @@ DOMAIN,janapi.jd.com
 DOMAIN,mssdk.volces.com
 DOMAIN,dsp-x.jd.com
 DOMAIN,vod-license-m.volccdn.com
-DOMAIN,soulapp.cn
 DOMAIN-SUFFIX,soulapp.cn
 DOMAIN-SUFFIX,soulapp.com
 DOMAIN-SUFFIX,soulapp-api.com
@@ -17,7 +16,6 @@ DOMAIN-SUFFIX,cdn-api-auth.zztfly.com
 DOMAIN-SUFFIX,vod-settings.volcvod.com
 DOMAIN-SUFFIX,mgw.mpaas.cn-hangzhou.aliyuncs.com
 DOMAIN-SUFFIX,dypnsapi.aliyuncs.com
-DOMAIN-SUFFIX,cdn-api-auth.zztfly.com
 DOMAIN-SUFFIX,fdl.zztfly.com
 IP-CIDR,8.210.3.170/32,no-resolve
 IP-CIDR,43.231.145.10/32,no-resolve
