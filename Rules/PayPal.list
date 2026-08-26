@@ -1,9 +1,11 @@
 # NAME: Multi-source-PayPal
 # AUTHOR: Rongwuyou
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-08-26 01:12:39 UTC
+# UPDATED: 2026-08-26 01:57:08 UTC
+# RULE COUNT: 248
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/PayPal/PayPal.list
-# NOTE: BM7 is authoritative; mapped sources add domain-only rules after exact deduplication.
+# MERGED SOURCE: https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/paypal
+# NOTE: BM7 is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and deduplicated.
 
 DOMAIN-SUFFIX,account-paypal.info
 DOMAIN-SUFFIX,account-paypal.net

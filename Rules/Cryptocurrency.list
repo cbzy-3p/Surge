@@ -1,10 +1,12 @@
 # NAME: Multi-source-Cryptocurrency
 # AUTHOR: Rongwuyou
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-08-26 01:12:42 UTC
+# UPDATED: 2026-08-26 01:57:08 UTC
+# RULE COUNT: 248
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Cryptocurrency/Cryptocurrency.list
+# MERGED SOURCE: https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/category-cryptocurrency
 # MERGED SOURCE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-cryptocurrency.list
-# NOTE: BM7 is authoritative; mapped sources add domain-only rules after exact deduplication.
+# NOTE: BM7 is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and deduplicated.
 
 DOMAIN-SUFFIX,aex.com
 DOMAIN-SUFFIX,aicoin.com
@@ -49,6 +51,14 @@ DOMAIN-SUFFIX,poloniex.com
 DOMAIN-SUFFIX,sushi.com
 DOMAIN-SUFFIX,uniswap.org
 DOMAIN-SUFFIX,zb.com
+DOMAIN,bybit-exchange.github.io
+DOMAIN,bybit.ada.support
+DOMAIN,d3r7nsslvs6aaf.cloudfront.net
+DOMAIN,deribit.cdn.prismic.io
+DOMAIN,onekey.zendesk.com
+DOMAIN,straitsx-826709081262441084-b790f87a2ae6fd417434295.freshchat.com
+DOMAIN,zftksc.cdn-settings.appsflyersdk.com
+DOMAIN,zftksc.launches.appsflyersdk.com
 DOMAIN-SUFFIX,1inch.io
 DOMAIN-SUFFIX,aave.com
 DOMAIN-SUFFIX,asproex.com
@@ -107,9 +117,7 @@ DOMAIN-SUFFIX,byabcde.com
 DOMAIN-SUFFIX,byapis.com
 DOMAIN-SUFFIX,byapps.net
 DOMAIN-SUFFIX,bybdc6.com
-DOMAIN-SUFFIX,bybit-exchange.github.io
 DOMAIN-SUFFIX,bybit-global.com
-DOMAIN-SUFFIX,bybit.ada.support
 DOMAIN-SUFFIX,bybit.biz
 DOMAIN-SUFFIX,bybit.cloud
 DOMAIN-SUFFIX,bybitglobal.com
@@ -134,9 +142,7 @@ DOMAIN-SUFFIX,cryptocompare.com
 DOMAIN-SUFFIX,cryptomus.com
 DOMAIN-SUFFIX,curve.fi
 DOMAIN-SUFFIX,cyberx.com
-DOMAIN-SUFFIX,d3r7nsslvs6aaf.cloudfront.net
 DOMAIN-SUFFIX,delets.online
-DOMAIN-SUFFIX,deribit.cdn.prismic.io
 DOMAIN-SUFFIX,deribit.com
 DOMAIN-SUFFIX,devcon.org
 DOMAIN-SUFFIX,dogecoin.com
@@ -199,7 +205,6 @@ DOMAIN-SUFFIX,okx.cab
 DOMAIN-SUFFIX,okx.com.cdn.cloudflare.net
 DOMAIN-SUFFIX,onekey-asset.com
 DOMAIN-SUFFIX,onekey.so
-DOMAIN-SUFFIX,onekey.zendesk.com
 DOMAIN-SUFFIX,onekeycn.com
 DOMAIN-SUFFIX,onemoment.cc
 DOMAIN-SUFFIX,onfinality.io
@@ -226,7 +231,6 @@ DOMAIN-SUFFIX,safepal.com
 DOMAIN-SUFFIX,satoshilabs.com
 DOMAIN-SUFFIX,solidifi.app
 DOMAIN-SUFFIX,stealthex.io
-DOMAIN-SUFFIX,straitsx-826709081262441084-b790f87a2ae6fd417434295.freshchat.com
 DOMAIN-SUFFIX,straitsx.com
 DOMAIN-SUFFIX,taiko.xyz
 DOMAIN-SUFFIX,theblock.co
@@ -251,6 +255,4 @@ DOMAIN-SUFFIX,zapper.fi
 DOMAIN-SUFFIX,zb.app
 DOMAIN-SUFFIX,zb.io
 DOMAIN-SUFFIX,zb.live
-DOMAIN-SUFFIX,zftksc.cdn-settings.appsflyersdk.com
-DOMAIN-SUFFIX,zftksc.launches.appsflyersdk.com
 DOMAIN-SUFFIX,zklighter.elliot.ai

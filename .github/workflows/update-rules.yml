@@ -3,7 +3,7 @@ name: Update Multi-source Rules
 on:
   workflow_dispatch:
   schedule:
-    - cron: "37 19 * * *"
+    - cron: "0 16 * * *"
   push:
     branches:
       - main
@@ -20,7 +20,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: update-bm7-rules
+  group: update-multisource-rules
   cancel-in-progress: false
 
 jobs:
@@ -37,8 +37,12 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Merge and validate multi-source rules
+      - name: Generate and validate multi-source rules
         run: python .github/scripts/update_rules.py
+
+      - name: Verify generated files are committed
+        if: github.event_name == 'pull_request'
+        run: git diff --exit-code -- Rules/*.list
 
       - name: Commit changes
         if: github.event_name != 'pull_request'
@@ -51,6 +55,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "update BM7 rules"
+            git commit -m "update multi-source rules"
             git push
           fi
