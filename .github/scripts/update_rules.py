@@ -18,26 +18,27 @@ V2FLY_BASE = "https://raw.githubusercontent.com/v2fly/domain-list-community/mast
 RABBIT_BASE = "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules"
 LOYAL_BASE = "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset"
 META_BASE = "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite"
+YUU_BASE = "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite"
 
 Rule = tuple[str, str]
 
 # BM7 remains the baseline. Supplemental sources are used only for direct category matches.
 TARGETS = {
-    "GitHub": {"v2fly": "github", "rabbit": None, "loyal": None, "meta": None},
-    "Kingsoft": {"v2fly": "kingsoft", "rabbit": None, "loyal": None, "meta": None},
-    "AppleMusic": {"v2fly": "apple-music", "rabbit": None, "loyal": None, "meta": "apple-music"},
-    "AppleTV": {"v2fly": "apple-tvplus", "rabbit": None, "loyal": None, "meta": "apple-tvplus"},
-    "OpenAI": {"v2fly": "openai", "rabbit": None, "loyal": None, "meta": None},
-    "GoogleVoice": {"v2fly": None, "rabbit": None, "loyal": None, "meta": None},
-    "Google": {"v2fly": "google", "rabbit": "Google.list", "loyal": "google.txt", "meta": None},
-    "TikTok": {"v2fly": "tiktok", "rabbit": "TikTok.list", "loyal": None, "meta": None},
-    "Instagram": {"v2fly": "instagram", "rabbit": "Instagram.list", "loyal": None, "meta": None},
-    "Facebook": {"v2fly": "facebook", "rabbit": "Facebook.list", "loyal": None, "meta": None},
-    "PayPal": {"v2fly": "paypal", "rabbit": None, "loyal": None, "meta": None},
-    "OKX": {"v2fly": "okx", "rabbit": None, "loyal": None, "meta": None},
-    "Binance": {"v2fly": "binance", "rabbit": None, "loyal": None, "meta": "binance"},
-    "Crypto": {"v2fly": None, "rabbit": None, "loyal": None, "meta": None},
-    "Cryptocurrency": {"v2fly": "category-cryptocurrency", "rabbit": None, "loyal": None, "meta": "category-cryptocurrency"},
+    "GitHub": {"v2fly": "github", "rabbit": None, "loyal": None, "meta": None, "yuu": "github"},
+    "Kingsoft": {"v2fly": "kingsoft", "rabbit": None, "loyal": None, "meta": None, "yuu": "kingsoft"},
+    "AppleMusic": {"v2fly": "apple-music", "rabbit": None, "loyal": None, "meta": "apple-music", "yuu": "apple-music"},
+    "AppleTV": {"v2fly": "apple-tvplus", "rabbit": None, "loyal": None, "meta": "apple-tvplus", "yuu": "apple-tvplus"},
+    "OpenAI": {"v2fly": "openai", "rabbit": None, "loyal": None, "meta": None, "yuu": "openai"},
+    "GoogleVoice": {"v2fly": None, "rabbit": None, "loyal": None, "meta": None, "yuu": None},
+    "Google": {"v2fly": "google", "rabbit": "Google.list", "loyal": "google.txt", "meta": None, "yuu": "google"},
+    "TikTok": {"v2fly": "tiktok", "rabbit": "TikTok.list", "loyal": None, "meta": None, "yuu": "tiktok"},
+    "Instagram": {"v2fly": "instagram", "rabbit": "Instagram.list", "loyal": None, "meta": None, "yuu": "instagram"},
+    "Facebook": {"v2fly": "facebook", "rabbit": "Facebook.list", "loyal": None, "meta": None, "yuu": "facebook"},
+    "PayPal": {"v2fly": "paypal", "rabbit": None, "loyal": None, "meta": None, "yuu": "paypal"},
+    "OKX": {"v2fly": "okx", "rabbit": None, "loyal": None, "meta": None, "yuu": "okx"},
+    "Binance": {"v2fly": "binance", "rabbit": None, "loyal": None, "meta": "binance", "yuu": "binance"},
+    "Crypto": {"v2fly": None, "rabbit": None, "loyal": None, "meta": None, "yuu": None},
+    "Cryptocurrency": {"v2fly": "category-cryptocurrency", "rabbit": None, "loyal": None, "meta": "category-cryptocurrency", "yuu": "category-cryptocurrency"},
 }
 
 DOMAIN_TYPES = {"DOMAIN", "DOMAIN-SUFFIX"}
@@ -85,6 +86,19 @@ MIN_SOURCE_RULES = {
     ("meta", "apple-tvplus"): 5,
     ("meta", "binance"): 30,
     ("meta", "category-cryptocurrency"): 180,
+    ("yuu", "github"): 40,
+    ("yuu", "kingsoft"): 25,
+    ("yuu", "apple-music"): 8,
+    ("yuu", "apple-tvplus"): 5,
+    ("yuu", "openai"): 15,
+    ("yuu", "google"): 500,
+    ("yuu", "tiktok"): 20,
+    ("yuu", "instagram"): 50,
+    ("yuu", "facebook"): 300,
+    ("yuu", "paypal"): 180,
+    ("yuu", "okx"): 7,
+    ("yuu", "binance"): 30,
+    ("yuu", "category-cryptocurrency"): 180,
 }
 DOMAIN_RE = re.compile(
     r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+"
@@ -428,6 +442,14 @@ def main() -> None:
             for rule in rules:
                 merge_rule(source_rules, rule)
             sources.append(f"{META_BASE}/{entry}.list")
+        if mapping["yuu"]:
+            entry = mapping["yuu"]
+            rules = parse_source_rules(fetch(f"{YUU_BASE}/{entry}.list"))
+            validate_source("yuu", entry, rules)
+            source_counts[f"yuu/{entry}"] = len(rules)
+            for rule in rules:
+                merge_rule(source_rules, rule)
+            sources.append(f"{YUU_BASE}/{entry}.list")
 
         verified_supplements = VERIFIED_SUPPLEMENTS.get(name, set())
         for rule in verified_supplements:

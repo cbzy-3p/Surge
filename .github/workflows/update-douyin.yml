@@ -8,7 +8,7 @@ on:
       - ".github/scripts/update_douyin.py"
       - ".github/scripts/test_update_douyin.py"
       - ".github/douyin-source-snapshot.json"
-      - "Rule/douyin.txt"
+      - "Rule/douyin.list"
 
 permissions:
   contents: read
@@ -40,7 +40,7 @@ jobs:
         run: python .github/scripts/update_douyin.py
       - name: Verify generated files are committed
         run: |
-          git diff --exit-code -- Rule/douyin.txt .github/douyin-source-snapshot.json
+          git diff --exit-code -- Rule/douyin.list .github/douyin-source-snapshot.json
           test -z "$(git status --porcelain --untracked-files=all)"
 
   update:
@@ -66,7 +66,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add Rule/douyin.txt .github/douyin-source-snapshot.json
+          git add Rule/douyin.list .github/douyin-source-snapshot.json
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else

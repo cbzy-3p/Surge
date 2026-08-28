@@ -11,7 +11,6 @@ on:
       - ".github/scripts/**"
       - ".github/*-snapshot.json"
       - "Rule/**"
-      - "Twitter.txt"
 
 permissions:
   contents: read
@@ -97,10 +96,14 @@ jobs:
           curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 \
             "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Telegram.list" \
             -o "$OUT_DIR/ConnersHua-Telegram.list"
+          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 \
+            "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/telegram.list" \
+            -o "$OUT_DIR/Yuu518-Telegram.list"
 
           for source in "$OUT_DIR/RabbitSpec-TelegramASN.list" \
                         "$OUT_DIR/blackmatrix7-Telegram.list" \
-                        "$OUT_DIR/ConnersHua-Telegram.list"; do
+                        "$OUT_DIR/ConnersHua-Telegram.list" \
+                        "$OUT_DIR/Yuu518-Telegram.list"; do
             count="$(awk -F, '$1 ~ /^(PROCESS-NAME|DOMAIN|DOMAIN-SUFFIX|DOMAIN-KEYWORD|IP-CIDR|IP-CIDR6|IP-ASN)$/ {n++} END {print n+0}' "$source")"
             test "$count" -ge 2 || { echo "Telegram source unexpectedly small: $source ($count)"; exit 1; }
           done
@@ -108,6 +111,7 @@ jobs:
           cat "$OUT_DIR/RabbitSpec-TelegramASN.list" \
               "$OUT_DIR/blackmatrix7-Telegram.list" \
               "$OUT_DIR/ConnersHua-Telegram.list" \
+              "$OUT_DIR/Yuu518-Telegram.list" \
             | sed 's/\r$//' \
             | sed 's/[[:space:]]*\/\/.*$//' \
             | awk '{$1=$1; print}' \
@@ -121,6 +125,7 @@ jobs:
             echo "# SOURCE: Rabbit-Spec/Surge Rules/TelegramASN.list"
             echo "# SOURCE: blackmatrix7/ios_rule_script rule/Surge/Telegram/Telegram.list"
             echo "# SOURCE: ConnersHua/RuleGo Surge/Ruleset/Extra/Telegram.list"
+            echo "# SOURCE: Yuu518/Yuu-rules surge/geosite/telegram.list"
             echo "# AutoUpdate: daily at 00:17 Beijing time"
             echo
             awk -F, '$1 == "PROCESS-NAME"' "$RAW_FILE" | LC_ALL=C sort -t, -k2,2 -u
@@ -146,7 +151,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add Rule Twitter.txt .github/*-snapshot.json
+          git add Rule .github/*-snapshot.json
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else

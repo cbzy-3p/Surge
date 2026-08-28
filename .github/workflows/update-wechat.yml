@@ -30,4 +30,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update WeChat rules"
-          file_pattern: Rule/WeChat.txt
+          file_pattern: Rule/WeChat.list

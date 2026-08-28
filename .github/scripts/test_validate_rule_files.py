@@ -26,6 +26,10 @@ class RuleFileValidationTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             VALIDATOR.validate_text(Path("sample.list"), "DOMAIN-SUFFIX,example.com\nDOMAIN-SUFFIX,example.com\n")
 
+    def test_top_level_domain_suffix_is_valid(self):
+        result = VALIDATOR.validate_text(Path("sample.list"), "DOMAIN-SUFFIX,cn\n")
+        self.assertEqual(result["rules"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

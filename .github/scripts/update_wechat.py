@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-TARGET = ROOT / "Rule" / "WeChat.txt"
+TARGET = ROOT / "Rule" / "WeChat.list"
 SOURCE_URLS = [
     "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/WeChat/WeChat.list",
     "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Wechat.list",
@@ -130,7 +130,7 @@ def render(rules: set[str]) -> str:
 
 def main() -> int:
     if not TARGET.exists():
-        raise SystemExit("WeChat.txt not found")
+        raise SystemExit("WeChat.list not found")
 
     current_text = TARGET.read_text(encoding="utf-8")
     current_lines = collect_rule_lines(current_text)
@@ -157,7 +157,7 @@ def main() -> int:
         return 0
 
     TARGET.write_text(render(rules), encoding="utf-8", newline="\n")
-    print(f"Updated WeChat.txt with {len(rules)} rules from {fetched_count} upstream sources.")
+    print(f"Updated WeChat.list with {len(rules)} rules from {fetched_count} upstream sources.")
     return 0
 
 

@@ -30,4 +30,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update Twitter rules"
-          file_pattern: Twitter.txt
+          file_pattern: Rule/Twitter.list

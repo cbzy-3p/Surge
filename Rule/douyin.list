@@ -1,10 +1,11 @@
 # NAME: Multi-source-DouYin
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-08-26 00:00:00 UTC
+# UPDATED: 2026-08-28 05:01:25 UTC
 # RULE COUNT: 143
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/DouYin/DouYin.list
 # SOURCE: https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/douyin
+# SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/douyin.list
 # NOTE: Existing rules are preserved; upstream DOMAIN and DOMAIN-SUFFIX rules are merged and deduplicated.
 
 DOMAIN,apmplus.volces.com

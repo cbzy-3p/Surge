@@ -39,10 +39,15 @@ jobs:
             "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Telegram.list" \
             -o "$OUT_DIR/ConnersHua-Telegram.list"
 
+          curl -fsSL --retry 3 --connect-timeout 15 \
+            "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/telegram.list" \
+            -o "$OUT_DIR/Yuu518-Telegram.list"
+
           cat \
             "$OUT_DIR/RabbitSpec-TelegramASN.list" \
             "$OUT_DIR/blackmatrix7-Telegram.list" \
             "$OUT_DIR/ConnersHua-Telegram.list" \
+            "$OUT_DIR/Yuu518-Telegram.list" \
             | sed 's/\r$//' \
             | sed 's/[[:space:]]*\/\/.*$//' \
             | awk '{$1=$1; print}' \
@@ -56,6 +61,7 @@ jobs:
             echo "# SOURCE: Rabbit-Spec/Surge Rules/TelegramASN.list"
             echo "# SOURCE: blackmatrix7/ios_rule_script rule/Surge/Telegram/Telegram.list"
             echo "# SOURCE: ConnersHua/RuleGo Surge/Ruleset/Extra/Telegram.list"
+            echo "# SOURCE: Yuu518/Yuu-rules surge/geosite/telegram.list"
             echo
             awk -F, '$1 == "PROCESS-NAME"' "$RAW_FILE" | LC_ALL=C sort -t, -k2,2 -u
             echo

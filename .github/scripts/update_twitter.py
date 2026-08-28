@@ -7,11 +7,12 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-TARGET = ROOT / "Twitter.txt"
+TARGET = ROOT / "Rule" / "Twitter.list"
 
 SURGE_SOURCES = [
     "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Twitter/Twitter.list",
     "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Twitter.list",
+    "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/twitter.list",
 ]
 V2FLY_SOURCE = (
     "https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/twitter"
@@ -149,6 +150,7 @@ def render(rules: set[str]) -> str:
         "# - blackmatrix7/ios_rule_script rule/Surge/Twitter/Twitter.list\n"
         "# - ACL4SSR/ACL4SSR Clash/Ruleset/Twitter.list\n"
         "# - v2fly/domain-list-community data/twitter\n"
+        "# - Yuu518/Yuu-rules surge/geosite/twitter.list\n"
         "# AutoUpdate: daily at 00:17 Beijing time; rebuilt, normalized and deduplicated\n"
         "\n"
         f"{body}\n"
@@ -163,11 +165,11 @@ def main() -> int:
     validate(rules)
 
     if sorted(rules, key=sort_key) == current_rules():
-        print(f"No rule changes. Checked {len(rules)} rules from 3 sources.")
+        print(f"No rule changes. Checked {len(rules)} rules from 4 sources.")
         return 0
 
     TARGET.write_text(render(rules), encoding="utf-8", newline="\n")
-    print(f"Updated Twitter.txt with {len(rules)} rules from 3 sources.")
+    print(f"Updated Twitter.list with {len(rules)} rules from 4 sources.")
     return 0
 
 

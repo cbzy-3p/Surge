@@ -10,20 +10,21 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-TARGET = ROOT / "Rule" / "douyin.txt"
+TARGET = ROOT / "Rule" / "douyin.list"
 SNAPSHOT = ROOT / ".github" / "douyin-source-snapshot.json"
 BM7_URL = (
     "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/"
     "rule/Surge/DouYin/DouYin.list"
 )
 V2FLY_URL = "https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/douyin"
+YUU_URL = "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/douyin.list"
 DOMAIN_TYPES = {"DOMAIN", "DOMAIN-SUFFIX"}
 RULE_TYPES = DOMAIN_TYPES | {"DOMAIN-KEYWORD"}
 DOMAIN_RE = re.compile(
     r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+"
     r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$"
 )
-MIN_SOURCE_RULES = {"bm7": 10, "v2fly": 50}
+MIN_SOURCE_RULES = {"bm7": 10, "v2fly": 50, "yuu": 50}
 
 
 def fetch_text(url: str, attempts: int = 3) -> str:
@@ -136,6 +137,7 @@ def render(rules: set[tuple[str, str]]) -> str:
         f"# RULE COUNT: {len(rules)}",
         f"# SOURCE: {BM7_URL}",
         f"# SOURCE: {V2FLY_URL}",
+        f"# SOURCE: {YUU_URL}",
         "# NOTE: Existing rules are preserved; upstream DOMAIN and DOMAIN-SUFFIX rules are merged and deduplicated.",
         "",
     ]
@@ -146,13 +148,16 @@ def main() -> None:
     current = parse_surge_rules(TARGET.read_text(encoding="utf-8")) if TARGET.exists() else set()
     bm7 = parse_surge_rules(fetch_text(BM7_URL))
     v2fly = parse_v2fly(fetch_text(V2FLY_URL))
+    yuu = parse_surge_rules(fetch_text(YUU_URL))
     if len(bm7) < MIN_SOURCE_RULES["bm7"]:
         raise RuntimeError(f"BM7 source count unexpectedly low: {len(bm7)}")
     if len(v2fly) < MIN_SOURCE_RULES["v2fly"]:
         raise RuntimeError(f"v2fly source count unexpectedly low: {len(v2fly)}")
+    if len(yuu) < MIN_SOURCE_RULES["yuu"]:
+        raise RuntimeError(f"Yuu518 source count unexpectedly low: {len(yuu)}")
 
     rules = set(current)
-    for source in (bm7, v2fly):
+    for source in (bm7, v2fly, yuu):
         for rule in source:
             merge_rule(rules, rule)
     if len(rules) < 80 or len(rules) > 300:
@@ -165,7 +170,7 @@ def main() -> None:
         if len(rules) > len(previous) * 5 // 2:
             raise RuntimeError(f"output count grew too much: {len(previous)} -> {len(rules)}")
 
-    counts = {"bm7": len(bm7), "v2fly": len(v2fly), "output": len(rules)}
+    counts = {"bm7": len(bm7), "v2fly": len(v2fly), "yuu": len(yuu), "output": len(rules)}
     validate_snapshot_change(load_snapshot(), counts)
     output = render(rules)
     if not TARGET.exists() or TARGET.read_text(encoding="utf-8").splitlines()[4:] != output.splitlines()[4:]:

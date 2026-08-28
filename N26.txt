@@ -1,7 +1,0 @@
-DOMAIN,n26.com
-DOMAIN,app.n26.com
-DOMAIN,my.n26.com
-DOMAIN,api.tech26.de
-DOMAIN-SUFFIX,number26.de
-DOMAIN-SUFFIX,tech26.de
-DOMAIN-SUFFIX,n26.com

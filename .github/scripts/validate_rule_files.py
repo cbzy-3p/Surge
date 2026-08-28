@@ -21,13 +21,16 @@ DOMAIN_RE = re.compile(
     r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+"
     r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$"
 )
+DOMAIN_LABEL_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")
 
 
-def normalize_domain(value: str) -> str | None:
+def normalize_domain(value: str, allow_tld: bool = False) -> str | None:
     domain = value.strip().lower().rstrip(".")
     if domain.startswith("*."):
         domain = domain[2:]
-    return domain if DOMAIN_RE.fullmatch(domain) else None
+    if DOMAIN_RE.fullmatch(domain):
+        return domain
+    return domain if allow_tld and DOMAIN_LABEL_RE.fullmatch(domain) else None
 
 
 def strip_comment(raw: str) -> str:
@@ -54,7 +57,9 @@ def validate_rule_line(path: Path, number: int, line: str) -> tuple[str, str, st
 
     normalized_value = value
     if rule_type in DOMAIN_TYPES:
-        normalized_value = normalize_domain(value) or ""
+        normalized_value = normalize_domain(
+            value, allow_tld=rule_type == "DOMAIN-SUFFIX"
+        ) or ""
         if not normalized_value:
             raise RuntimeError(f"{path}:{number}: invalid domain: {line}")
     elif rule_type == "DOMAIN-KEYWORD":
