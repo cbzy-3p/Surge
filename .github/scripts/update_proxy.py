@@ -13,13 +13,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 TARGET = ROOT / "Rule" / "Proxy.list"
 SNAPSHOT = ROOT / ".github" / "proxy-source-snapshot.json"
+SNAPSHOT_VERSION = 2
 SOURCES = {
     "bm7": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Proxy/Proxy.list",
     "rabbit": "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Proxy.list",
-    "loyalsoldier": "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt",
     "yuu": "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/category-proxy-tunnels.list",
 }
-MINIMUMS = {"bm7": 100, "rabbit": 6_000, "loyalsoldier": 20_000, "yuu": 10}
+MINIMUMS = {"bm7": 100, "rabbit": 6_000, "yuu": 10}
 DOMAIN_TYPES = {"DOMAIN", "DOMAIN-SUFFIX"}
 RULE_TYPES = DOMAIN_TYPES | {
     "DOMAIN-KEYWORD", "DOMAIN-WILDCARD", "IP-CIDR", "IP-CIDR6", "IP-ASN",
@@ -127,7 +127,10 @@ def merge(rules: set[tuple[str, str]], additions: set[tuple[str, str]]) -> set[t
 def load_snapshot() -> dict[str, int]:
     if not SNAPSHOT.exists():
         return {}
-    return {key: int(value) for key, value in json.loads(SNAPSHOT.read_text())["counts"].items()}
+    data = json.loads(SNAPSHOT.read_text())
+    if data.get("version") != SNAPSHOT_VERSION:
+        return {}
+    return {key: int(value) for key, value in data["counts"].items()}
 
 
 def validate_snapshot(previous: dict[str, int], current: dict[str, int]) -> None:
@@ -165,7 +168,6 @@ def main() -> None:
     fetched = {
         "bm7": parse_surge(fetch(SOURCES["bm7"])),
         "rabbit": parse_surge(fetch(SOURCES["rabbit"])),
-        "loyalsoldier": parse_surge(fetch(SOURCES["loyalsoldier"])),
         "yuu": parse_surge(fetch(SOURCES["yuu"])),
     }
     counts = {name: len(rules) for name, rules in fetched.items()}
@@ -177,10 +179,12 @@ def main() -> None:
         rules = merge(rules, source)
     counts["output"] = len(rules)
     validate_snapshot(load_snapshot(), counts)
-    if TARGET.exists() and len(rules) * 100 < sum(1 for line in TARGET.read_text().splitlines() if line and not line.startswith("#")) * 65:
+    previous_text = TARGET.read_text(encoding="utf-8") if TARGET.exists() else ""
+    source_set_changed = "Loyalsoldier/surge-rules" in previous_text
+    if not source_set_changed and previous_text and len(rules) * 100 < sum(1 for line in previous_text.splitlines() if line and not line.startswith("#")) * 65:
         raise RuntimeError("output rule count dropped too much")
     TARGET.write_text(render(rules), encoding="utf-8")
-    SNAPSHOT.write_text(json.dumps({"version": 1, "counts": counts}, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    SNAPSHOT.write_text(json.dumps({"version": SNAPSHOT_VERSION, "counts": counts}, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(f"updated {TARGET.name} with {len(rules)} rules")
 
 
