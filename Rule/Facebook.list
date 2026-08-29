@@ -1,11 +1,12 @@
 # NAME: Multi-source-Facebook
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-08-26 01:57:08 UTC
+# UPDATED: 2026-08-29 00:34:21 UTC
 # RULE COUNT: 573
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Facebook/Facebook.list
 # MERGED SOURCE: https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/facebook
 # MERGED SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Facebook.list
+# MERGED SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/facebook.list
 # NOTE: BM7 is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and deduplicated.
 
 DOMAIN-SUFFIX,aboutfacebook.com

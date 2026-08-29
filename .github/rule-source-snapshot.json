@@ -36,7 +36,20 @@
     "v2fly/okx": 10,
     "v2fly/openai": 22,
     "v2fly/paypal": 245,
-    "v2fly/tiktok": 36
+    "v2fly/tiktok": 36,
+    "yuu/apple-music": 11,
+    "yuu/apple-tvplus": 8,
+    "yuu/binance": 45,
+    "yuu/category-cryptocurrency": 232,
+    "yuu/facebook": 394,
+    "yuu/github": 59,
+    "yuu/google": 739,
+    "yuu/instagram": 72,
+    "yuu/kingsoft": 43,
+    "yuu/okx": 10,
+    "yuu/openai": 22,
+    "yuu/paypal": 245,
+    "yuu/tiktok": 35
   },
   "version": 1
 }
