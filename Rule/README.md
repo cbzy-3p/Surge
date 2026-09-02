@@ -8,6 +8,8 @@ BM7 `blackmatrix7/ios_rule_script` 作为主来源，按类别补充 `v2fly/doma
 
 `Proxy.list` 使用 BM7、Rabbit-Spec 和 Yuu518 的明确代理服务分类。v2fly 与 MetaCubeX 没有可直接用于 Surge 的同类分类，因此不以其他宽泛规则替代。
 
+`Apple.list` 是完整 Apple 服务总集，使用 SukkaW、BM7、Yuu518 和 MetaCubeX 合并生成，不拆分 Apple Music、Apple TV、iCloud 或地区服务。
+
 生成步骤保留 Surge 的规则类型语义。`DOMAIN-SUFFIX` 会覆盖同值的 `DOMAIN`，精确域名不会被擅自放宽。每次更新都会检查来源数量、规则格式、CIDR、ASN、重复项、DOMAIN 与 DOMAIN-SUFFIX 冲突以及输出数量变化，校验通过后才写入文件。
 
 ```ini

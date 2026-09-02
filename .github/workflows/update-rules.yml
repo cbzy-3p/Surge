@@ -42,6 +42,7 @@ jobs:
           python .github/scripts/test_update_xiaohongshu.py
           python .github/scripts/test_update_douyin.py
           python .github/scripts/test_update_proxy.py
+          python .github/scripts/test_update_apple.py
           python .github/scripts/test_validate_rule_files.py
       - name: Validate generated rule files
         run: python .github/scripts/validate_rule_files.py
@@ -49,6 +50,7 @@ jobs:
         run: |
           python .github/scripts/update_rules.py
           python .github/scripts/update_proxy.py
+          python .github/scripts/update_apple.py
       - name: Verify committed baseline output
         run: |
           git diff --exit-code -- Rule/*.list .github/rule-source-snapshot.json
@@ -73,6 +75,7 @@ jobs:
           python .github/scripts/test_update_xiaohongshu.py
           python .github/scripts/test_update_douyin.py
           python .github/scripts/test_update_proxy.py
+          python .github/scripts/test_update_apple.py
           python .github/scripts/test_validate_rule_files.py
       - name: Update all rule sources
         run: |
@@ -83,6 +86,7 @@ jobs:
           python .github/scripts/update_xiaohongshu.py
           python .github/scripts/update_douyin.py
           python .github/scripts/update_proxy.py
+          python .github/scripts/update_apple.py
           python .github/scripts/update_twitter.py
       - name: Sync Telegram rules
         shell: bash
