@@ -5,6 +5,14 @@ on:
   schedule:
     # 00:17 Beijing time
     - cron: "17 16 * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/**"
+      - ".github/scripts/**"
+      - ".github/*-snapshot.json"
+      - "Rule/**"
   pull_request:
     paths:
       - ".github/workflows/**"
@@ -24,7 +32,7 @@ concurrency:
 
 jobs:
   validate:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -53,18 +61,20 @@ jobs:
       - name: Validate generated rule files
         run: python .github/scripts/validate_rule_files.py
       - name: Rebuild baseline multi-source rules
+        if: github.event_name == 'pull_request'
         run: |
           python .github/scripts/update_rules.py
           python .github/scripts/update_proxy.py
           python .github/scripts/update_apple.py
           python .github/scripts/update_media_rules.py
       - name: Verify committed baseline output
+        if: github.event_name == 'pull_request'
         run: |
           git diff --exit-code -- Rule/*.list .github/rule-source-snapshot.json
           test -z "$(git status --porcelain --untracked-files=all)"
 
   update:
-    if: github.event_name != 'pull_request'
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -110,16 +120,16 @@ jobs:
           RAW_FILE="$OUT_DIR/.telegram_all.raw"
           mkdir -p "$OUT_DIR"
 
-          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 \
+          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 90 \
             "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/TelegramASN.list" \
             -o "$OUT_DIR/RabbitSpec-TelegramASN.list"
-          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 \
+          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 90 \
             "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Telegram/Telegram.list" \
             -o "$OUT_DIR/blackmatrix7-Telegram.list"
-          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 \
+          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 90 \
             "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Telegram.list" \
             -o "$OUT_DIR/ConnersHua-Telegram.list"
-          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 \
+          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 90 \
             "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/telegram.list" \
             -o "$OUT_DIR/Yuu518-Telegram.list"
 

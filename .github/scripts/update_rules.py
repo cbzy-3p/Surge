@@ -425,6 +425,7 @@ def render(
 ) -> str:
     all_lines = list(lines)
     all_lines.extend(f"{rule_type},{domain}" for rule_type, domain in additions)
+    all_lines = compact_rule_lines(all_lines)
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     header = [
         f"# NAME: Multi-source-{name}",
