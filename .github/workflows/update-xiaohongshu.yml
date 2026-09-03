@@ -81,33 +81,3 @@ jobs:
             git commit -m "update xiaohongshu rules"
             git push
           fi
-
-  notify:
-    needs: update
-    if: always() && github.event_name == 'schedule'
-    permissions:
-      contents: read
-      issues: write
-    runs-on: ubuntu-latest
-    steps:
-      - name: Report scheduled update status
-        env:
-          GH_TOKEN: ${{ github.token }}
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          UPDATE_RESULT: ${{ needs.update.result }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          title="Scheduled XiaoHongShu rule update failed"
-          issue_url="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "$title in:title" --json title,url --jq '.[] | select(.title == "Scheduled XiaoHongShu rule update failed") | .url' | head -n 1)"
-          if [ "$UPDATE_RESULT" = "failure" ]; then
-            body="The scheduled XiaoHongShu rule update failed. Run: $RUN_URL"
-            if [ -n "$issue_url" ]; then
-              gh issue comment "$issue_url" --body "$body"
-            else
-              gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --body "$body"
-            fi
-          elif [ -n "$issue_url" ]; then
-            gh issue comment "$issue_url" --body "The scheduled XiaoHongShu rule update recovered. Run: $RUN_URL"
-            gh issue close "$issue_url"
-          fi

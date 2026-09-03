@@ -13,13 +13,14 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
 
@@ -35,19 +36,19 @@ jobs:
           RAW_FILE="$OUT_DIR/.telegram_all.raw"
           mkdir -p "$OUT_DIR"
 
-          curl -fsSL --retry 3 --connect-timeout 15 \
+          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 90 \
             "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/TelegramASN.list" \
             -o "$OUT_DIR/RabbitSpec-TelegramASN.list"
 
-          curl -fsSL --retry 3 --connect-timeout 15 \
+          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 90 \
             "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Telegram/Telegram.list" \
             -o "$OUT_DIR/blackmatrix7-Telegram.list"
 
-          curl -fsSL --retry 3 --connect-timeout 15 \
+          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 90 \
             "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Telegram.list" \
             -o "$OUT_DIR/ConnersHua-Telegram.list"
 
-          curl -fsSL --retry 3 --connect-timeout 15 \
+          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 90 \
             "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/telegram.list" \
             -o "$OUT_DIR/Yuu518-Telegram.list"
 

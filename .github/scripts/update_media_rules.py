@@ -192,8 +192,14 @@ def parse_cidrs(content: str) -> set[tuple[str, str]]:
 PARSERS = {"surge": parse_surge, "domain": parse_domains, "cidr": parse_cidrs}
 
 
-def covered_by_suffix(domain: str, suffixes: set[str]) -> bool:
-    return any(domain == suffix or domain.endswith(f".{suffix}") for suffix in suffixes)
+def covering_suffix(domain: str, suffixes: set[str]) -> str | None:
+    """Return the nearest covering suffix without scanning the whole set."""
+    labels = domain.split(".")
+    for index in range(len(labels)):
+        candidate = ".".join(labels[index:])
+        if candidate in suffixes:
+            return candidate
+    return None
 
 
 def compact(rules: set[tuple[str, str]]) -> set[tuple[str, str]]:
@@ -202,11 +208,11 @@ def compact(rules: set[tuple[str, str]]) -> set[tuple[str, str]]:
         (value for kind, value in rules if kind == "DOMAIN-SUFFIX"),
         key=lambda value: (value.count("."), value),
     ):
-        if not covered_by_suffix(domain, suffixes):
+        if covering_suffix(domain, suffixes) is None:
             suffixes.add(domain)
     exact = {
         value for kind, value in rules
-        if kind == "DOMAIN" and not covered_by_suffix(value, suffixes)
+        if kind == "DOMAIN" and covering_suffix(value, suffixes) is None
     }
     result = {
         rule for rule in rules

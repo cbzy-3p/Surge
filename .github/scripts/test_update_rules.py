@@ -80,6 +80,22 @@ class SurgeRuleTests(unittest.TestCase):
             ],
         )
 
+    def test_supplemental_parent_suffix_compacts_base_children(self):
+        output = UPDATE_RULES.render(
+            "Example",
+            [
+                "DOMAIN-SUFFIX,api.example.com",
+                "DOMAIN-SUFFIX,static.example.com",
+            ],
+            [("DOMAIN-SUFFIX", "example.com")],
+            ["https://example.com/rules.list"],
+            set(),
+        )
+        self.assertIn("DOMAIN-SUFFIX,example.com\n", output)
+        self.assertNotIn("DOMAIN-SUFFIX,api.example.com\n", output)
+        self.assertNotIn("DOMAIN-SUFFIX,static.example.com\n", output)
+        self.assertIn("# RULE COUNT: 1\n", output)
+
     def test_domain_rules_with_different_options_are_preserved(self):
         lines = [
             "DOMAIN,api.example.com,extended-matching",
