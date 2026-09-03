@@ -43,8 +43,13 @@ jobs:
           python .github/scripts/test_update_douyin.py
           python .github/scripts/test_update_proxy.py
           python .github/scripts/test_update_apple.py
+          python .github/scripts/test_update_apple_intelligence.py
+          python .github/scripts/test_update_cn_additional.py
+          python .github/scripts/test_update_wechat.py
+          python .github/scripts/test_update_twitter.py
           python .github/scripts/test_update_media_rules.py
           python .github/scripts/test_validate_rule_files.py
+          python .github/scripts/test_compact_rule_file.py
       - name: Validate generated rule files
         run: python .github/scripts/validate_rule_files.py
       - name: Rebuild baseline multi-source rules
@@ -78,8 +83,13 @@ jobs:
           python .github/scripts/test_update_douyin.py
           python .github/scripts/test_update_proxy.py
           python .github/scripts/test_update_apple.py
+          python .github/scripts/test_update_apple_intelligence.py
+          python .github/scripts/test_update_cn_additional.py
+          python .github/scripts/test_update_wechat.py
+          python .github/scripts/test_update_twitter.py
           python .github/scripts/test_update_media_rules.py
           python .github/scripts/test_validate_rule_files.py
+          python .github/scripts/test_compact_rule_file.py
       - name: Update all rule sources
         run: |
           python .github/scripts/update_rules.py
@@ -156,6 +166,7 @@ jobs:
             awk -F, '$1 == "IP-ASN"' "$RAW_FILE" | LC_ALL=C sort -t, -k2,2n -u
           } > "$OUT_DIR/Telegram_All.list"
           rm -f "$RAW_FILE"
+          python .github/scripts/compact_rule_file.py "$OUT_DIR/Telegram_All.list"
       - name: Validate all generated rules
         run: python .github/scripts/validate_rule_files.py
       - name: Commit changes

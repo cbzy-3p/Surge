@@ -6,7 +6,7 @@
 # ==============================================================
 
 # [0] OCSP / 证书校验：必须直连
-OR,((DOMAIN,ocsp.apple.com),(DOMAIN,ocsp2.apple.com),(DOMAIN,valid.apple.com),(DOMAIN,ocsp.digicert.com),(DOMAIN-SUFFIX,digicert.com)),DIRECT
+OR,((DOMAIN,ocsp.apple.com),(DOMAIN,ocsp2.apple.com),(DOMAIN,valid.apple.com),(DOMAIN-SUFFIX,digicert.com)),DIRECT
 
 # [1] 网络连通性探测：必须直连
 OR,((DOMAIN,captive.apple.com),(DOMAIN,www.appleiphonecell.com)),DIRECT
@@ -18,13 +18,13 @@ OR,((DOMAIN-SUFFIX,push.apple.com)),DIRECT
 OR,((DOMAIN,identity.apple.com),(DOMAIN,idmsa.apple.com),(DOMAIN,gs.apple.com),(DOMAIN-SUFFIX,buy.itunes.apple.com),(DOMAIN-KEYWORD,-buy.itunes.apple.com)),Apple
 
 # [4] App Store / StoreKit 控制面：走 Apple（补齐 apps / amp-api）
-OR,((DOMAIN,bag.itunes.apple.com),(DOMAIN,init.itunes.apple.com),(DOMAIN,mzstorekit.itunes.apple.com),(DOMAIN,sandbox.itunes.apple.com),(DOMAIN-SUFFIX,itunes.apple.com),(DOMAIN-SUFFIX,apps.apple.com),(DOMAIN-SUFFIX,amp-api-edge.apps.apple.com),(DOMAIN-SUFFIX,amp-api.apps.apple.com)),Apple
+OR,((DOMAIN-SUFFIX,itunes.apple.com),(DOMAIN-SUFFIX,apps.apple.com)),Apple
 
 # [5] 大流量下载 & 静态资源 & iCloud 实体内容：直连更快
 OR,((DOMAIN,appldnld.apple.com),(DOMAIN-SUFFIX,mzstatic.com),(DOMAIN-SUFFIX,cdn-apple.com),(DOMAIN-SUFFIX,icloud-content.com)),DIRECT
 
 # [6] iCloud 控制面：走 Apple（方案1）
-OR,((DOMAIN,gateway.icloud.com),(DOMAIN-SUFFIX,apple-cloudkit.com),(DOMAIN-SUFFIX,icloud.com),(DOMAIN-SUFFIX,me.com)),Apple
+OR,((DOMAIN-SUFFIX,apple-cloudkit.com),(DOMAIN-SUFFIX,icloud.com),(DOMAIN-SUFFIX,me.com)),Apple
 
 # [7] Apple Intelligence / Siri / 美区内容：必须走 Apple
 OR,((DOMAIN,guzzoni.apple.com),(DOMAIN-SUFFIX,smoot.apple.com),(DOMAIN-SUFFIX,apple.news),(DOMAIN-SUFFIX,news.apple.com),(DOMAIN-SUFFIX,tv.apple.com)),Apple

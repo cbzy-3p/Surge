@@ -61,7 +61,18 @@ def convert(text: str) -> tuple[list[str], list[str]]:
         seen.add(domain)
         domains.append(domain)
 
-    return domains, invalid
+    return compact_domains(domains), invalid
+
+
+def compact_domains(domains: list[str]) -> list[str]:
+    available = set(domains)
+    compacted: list[str] = []
+    for domain in domains:
+        labels = domain.split(".")
+        if any(".".join(labels[index:]) in available for index in range(1, len(labels))):
+            continue
+        compacted.append(domain)
+    return compacted
 
 
 def main() -> None:

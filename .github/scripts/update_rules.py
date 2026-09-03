@@ -194,6 +194,74 @@ def parse_bm7(text: str) -> tuple[list[str], set[Rule]]:
     return lines, domain_rules
 
 
+def compact_rule_lines(lines: list[str]) -> list[str]:
+    parsed: dict[int, tuple[str, str, tuple[str, ...]]] = {}
+    suffixes: dict[tuple[str, ...], set[str]] = {}
+    cidrs: dict[int, tuple[ipaddress.IPv4Network | ipaddress.IPv6Network, tuple[str, ...]]] = {}
+    networks: dict[
+        tuple[str, ...], set[ipaddress.IPv4Network | ipaddress.IPv6Network]
+    ] = {}
+    for index, line in enumerate(lines):
+        parts = rule_parts(line)
+        if len(parts) < 2:
+            continue
+        options = tuple(part.lower() for part in parts[2:])
+        if parts[0] in {"IP-CIDR", "IP-CIDR6"}:
+            try:
+                network = ipaddress.ip_network(parts[1], strict=False)
+            except ValueError:
+                continue
+            cidrs[index] = network, options
+            networks.setdefault(options, set()).add(network)
+            continue
+        if parts[0] not in DOMAIN_TYPES:
+            continue
+        domain = norm_domain(parts[1])
+        if not domain:
+            continue
+        parsed[index] = parts[0], domain, options
+        if parts[0] == "DOMAIN-SUFFIX":
+            suffixes.setdefault(options, set()).add(domain)
+
+    keep: list[str] = []
+    for index, line in enumerate(lines):
+        cidr = cidrs.get(index)
+        if cidr:
+            network, options = cidr
+            if any(
+                network.supernet(new_prefix=prefix) in networks[options]
+                for prefix in range(network.prefixlen - 1, -1, -1)
+            ):
+                continue
+            keep.append(line)
+            continue
+        rule = parsed.get(index)
+        if not rule:
+            keep.append(line)
+            continue
+        rule_type, domain, options = rule
+        candidates = suffixes.get(options, set())
+        covered = any(
+            domain == suffix or domain.endswith(f".{suffix}")
+            for suffix in candidates
+            if rule_type == "DOMAIN" or suffix != domain
+        )
+        if not covered:
+            keep.append(line)
+    return keep
+
+
+def domain_rules_from_lines(lines: list[str]) -> set[Rule]:
+    rules: set[Rule] = set()
+    for line in lines:
+        parts = rule_parts(line)
+        if len(parts) >= 2 and parts[0] in DOMAIN_TYPES:
+            domain = norm_domain(parts[1])
+            if domain:
+                rules.add((parts[0], domain))
+    return rules
+
+
 def validate_rule(name: str, index: int, line: str) -> None:
     parts = rule_parts(line)
     if not parts or parts[0] not in RULE_TYPES:
@@ -367,7 +435,7 @@ def render(
         f"# SOURCE: {BM7_BASE}/{name}/{name}.list",
         *[f"# MERGED SOURCE: {source}" for source in sources],
         *[f"# VERIFIED SUPPLEMENT: {rule_type},{value} from iOS App Privacy Report" for rule_type, value in sorted(verified_supplements)],
-        "# NOTE: BM7 is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and deduplicated.",
+        "# NOTE: BM7 coverage is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and compacted.",
         "",
     ]
     return "\n".join(header + all_lines) + "\n"
@@ -404,9 +472,11 @@ def main() -> None:
     source_counts: dict[str, int] = {}
     for name, mapping in TARGETS.items():
         bm7_url = f"{BM7_BASE}/{name}/{name}.list"
-        lines, base_rules = parse_bm7(fetch(bm7_url))
+        lines, _ = parse_bm7(fetch(bm7_url))
         validate_bm7(name, lines)
         source_counts[f"bm7/{name}"] = len(lines)
+        lines = compact_rule_lines(lines)
+        base_rules = domain_rules_from_lines(lines)
         source_rules: set[Rule] = set()
         sources: list[str] = []
 

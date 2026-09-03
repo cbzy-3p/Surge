@@ -65,6 +65,38 @@ class SurgeRuleTests(unittest.TestCase):
             UPDATE_RULES.validate_snapshot_change({"source": 100}, {"source": 251})
         UPDATE_RULES.validate_snapshot_change({"source": 100}, {"source": 80})
 
+    def test_base_rules_are_compacted_without_losing_non_domain_rules(self):
+        lines = [
+            "DOMAIN,api.example.com",
+            "DOMAIN-SUFFIX,api.example.com",
+            "DOMAIN-SUFFIX,example.com",
+            "IP-CIDR,192.0.2.0/24,no-resolve",
+        ]
+        self.assertEqual(
+            UPDATE_RULES.compact_rule_lines(lines),
+            [
+                "DOMAIN-SUFFIX,example.com",
+                "IP-CIDR,192.0.2.0/24,no-resolve",
+            ],
+        )
+
+    def test_domain_rules_with_different_options_are_preserved(self):
+        lines = [
+            "DOMAIN,api.example.com,extended-matching",
+            "DOMAIN-SUFFIX,example.com",
+        ]
+        self.assertEqual(UPDATE_RULES.compact_rule_lines(lines), lines)
+
+    def test_covered_cidr_is_removed(self):
+        lines = [
+            "IP-CIDR,192.0.2.0/24,no-resolve",
+            "IP-CIDR,192.0.2.0/25,no-resolve",
+        ]
+        self.assertEqual(
+            UPDATE_RULES.compact_rule_lines(lines),
+            ["IP-CIDR,192.0.2.0/24,no-resolve"],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

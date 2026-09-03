@@ -79,19 +79,37 @@ def collect_rule_lines(text: str) -> list[str]:
 
 
 def dedupe_rules(rules: set[str]) -> set[str]:
-    suffixes = {
-        rule.split(",", 1)[1]
-        for rule in rules
-        if rule.startswith("DOMAIN-SUFFIX,")
+    suffixes: set[str] = set()
+    for rule in sorted(
+        (rule for rule in rules if rule.startswith("DOMAIN-SUFFIX,")),
+        key=lambda rule: (rule.split(",")[1].count("."), rule),
+    ):
+        domain = rule.split(",")[1]
+        if not any(domain == suffix or domain.endswith(f".{suffix}") for suffix in suffixes):
+            suffixes.add(domain)
+
+    result = {
+        rule for rule in rules
+        if not rule.startswith(("DOMAIN,", "DOMAIN-SUFFIX,", "IP-CIDR,", "IP-CIDR6,"))
     }
-    return {
-        rule
-        for rule in rules
-        if not (
-            rule.startswith("DOMAIN,")
-            and rule.split(",", 1)[1] in suffixes
+    result.update(f"DOMAIN-SUFFIX,{domain}" for domain in suffixes)
+    for rule in rules:
+        if rule.startswith("DOMAIN,"):
+            domain = rule.split(",")[1]
+            if not any(domain == suffix or domain.endswith(f".{suffix}") for suffix in suffixes):
+                result.add(rule)
+    for version, rule_type in ((4, "IP-CIDR"), (6, "IP-CIDR6")):
+        networks = [
+            ipaddress.ip_network(rule.split(",")[1])
+            for rule in rules
+            if rule.startswith(f"{rule_type},")
+        ]
+        result.update(
+            f"{rule_type},{network},no-resolve"
+            for network in ipaddress.collapse_addresses(networks)
+            if network.version == version
         )
-    }
+    return result
 
 
 def sort_key(rule: str):

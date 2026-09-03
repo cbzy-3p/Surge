@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 RULE_DIR = ROOT / "Rule"
 DOMAIN_TYPES = {"DOMAIN", "DOMAIN-SUFFIX"}
+Network = ipaddress.IPv4Network | ipaddress.IPv6Network
 RULE_TYPES = DOMAIN_TYPES | {
     "DOMAIN-KEYWORD", "DOMAIN-WILDCARD", "DOMAIN-SET",
     "IP-CIDR", "IP-CIDR6", "IP-ASN", "GEOIP",
@@ -22,6 +23,9 @@ DOMAIN_RE = re.compile(
     r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$"
 )
 DOMAIN_LABEL_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")
+LOGICAL_DOMAIN_RE = re.compile(
+    r"\((DOMAIN-SUFFIX|DOMAIN),\s*([^(),]+)\)", re.IGNORECASE
+)
 
 
 def normalize_domain(value: str, allow_tld: bool = False) -> str | None:
@@ -85,10 +89,38 @@ def validate_rule_line(path: Path, number: int, line: str) -> tuple[str, str, st
     return normalized, rule_type, normalized_value
 
 
+def covering_suffix(domain: str, suffixes: set[str], include_self: bool = True) -> str | None:
+    labels = domain.split(".")
+    start = 0 if include_self else 1
+    for index in range(start, len(labels)):
+        candidate = ".".join(labels[index:])
+        if candidate in suffixes:
+            return candidate
+    return None
+
+
+def validate_logical_or(path: Path, number: int, line: str) -> None:
+    if not line.upper().startswith("OR,"):
+        return
+    rules = [
+        (rule_type.upper(), normalize_domain(value) or "")
+        for rule_type, value in LOGICAL_DOMAIN_RE.findall(line)
+    ]
+    rules = [(rule_type, value) for rule_type, value in rules if value]
+    suffixes = {value for rule_type, value in rules if rule_type == "DOMAIN-SUFFIX"}
+    for rule_type, value in rules:
+        parent = covering_suffix(value, suffixes, include_self=rule_type == "DOMAIN")
+        if parent and not (rule_type == "DOMAIN-SUFFIX" and parent == value):
+            raise RuntimeError(
+                f"{path}:{number}: logical OR contains covered domain: "
+                f"{rule_type},{value} covered by DOMAIN-SUFFIX,{parent}"
+            )
+
+
 def validate_text(path: Path, text: str) -> dict[str, int]:
     exact_lines: set[str] = set()
-    domains: set[str] = set()
-    suffixes: set[str] = set()
+    domain_rules: list[tuple[str, str, tuple[str, ...]]] = []
+    cidr_rules: list[tuple[Network, tuple[str, ...]]] = []
     rule_count = 0
     for number, raw in enumerate(text.replace("\r", "").splitlines(), 1):
         line = strip_comment(raw)
@@ -98,29 +130,58 @@ def validate_text(path: Path, text: str) -> dict[str, int]:
             domain = normalize_domain(line.lstrip("."))
             if not domain:
                 raise RuntimeError(f"{path}:{number}: invalid DOMAIN-SET entry: {line}")
-            canonical = f"DOMAIN-SET,{domain}"
+            rule_type = "DOMAIN-SUFFIX" if line.startswith(".") else "DOMAIN"
+            canonical = f"{rule_type},{domain}"
             if canonical in exact_lines:
                 raise RuntimeError(f"{path}:{number}: duplicate rule: {line}")
             exact_lines.add(canonical)
+            domain_rules.append((rule_type, domain, ()))
             rule_count += 1
             continue
 
+        validate_logical_or(path, number, line)
         canonical, rule_type, value = validate_rule_line(path, number, line)
         if canonical in exact_lines:
             raise RuntimeError(f"{path}:{number}: duplicate rule: {line}")
         exact_lines.add(canonical)
         rule_count += 1
-        if rule_type == "DOMAIN":
-            domains.add(value)
-        elif rule_type == "DOMAIN-SUFFIX":
-            suffixes.add(value)
+        options = tuple(canonical.split(",")[2:])
+        if rule_type in DOMAIN_TYPES:
+            domain_rules.append((rule_type, value, options))
+        elif rule_type in {"IP-CIDR", "IP-CIDR6"}:
+            cidr_rules.append((ipaddress.ip_network(value), options))
 
-    conflicts = domains & suffixes
-    if conflicts:
-        sample = ", ".join(sorted(conflicts)[:5])
-        raise RuntimeError(f"{path}: DOMAIN and DOMAIN-SUFFIX overlap: {sample}")
+    suffixes_by_options: dict[tuple[str, ...], set[str]] = {}
+    for rule_type, value, options in domain_rules:
+        if rule_type == "DOMAIN-SUFFIX":
+            suffixes_by_options.setdefault(options, set()).add(value)
+    for rule_type, value, options in domain_rules:
+        suffixes = suffixes_by_options.get(options, set())
+        parent = covering_suffix(value, suffixes, include_self=rule_type == "DOMAIN")
+        if parent and not (rule_type == "DOMAIN-SUFFIX" and parent == value):
+            raise RuntimeError(
+                f"{path}: covered domain rule: {rule_type},{value} "
+                f"covered by DOMAIN-SUFFIX,{parent}"
+            )
+
+    networks_by_options: dict[tuple[str, ...], set[Network]] = {}
+    for network, options in cidr_rules:
+        networks_by_options.setdefault(options, set()).add(network)
+    for network, options in cidr_rules:
+        networks = networks_by_options[options]
+        for prefix in range(network.prefixlen - 1, -1, -1):
+            parent = network.supernet(new_prefix=prefix)
+            if parent in networks:
+                raise RuntimeError(
+                    f"{path}: covered CIDR rule: {network} covered by {parent}"
+                )
     if rule_count == 0:
         raise RuntimeError(f"{path}: no rules found")
+    declared = re.search(r"^#\s*(?:RULE COUNT|RuleCount):\s*(\d+)\s*$", text, re.MULTILINE)
+    if declared and int(declared.group(1)) != rule_count:
+        raise RuntimeError(
+            f"{path}: declared rule count {declared.group(1)} does not match {rule_count}"
+        )
     return {"rules": rule_count}
 
 

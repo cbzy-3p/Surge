@@ -7,7 +7,7 @@
 # MERGED SOURCE: https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/apple-tvplus
 # MERGED SOURCE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-tvplus.list
 # MERGED SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/apple-tvplus.list
-# NOTE: BM7 is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and deduplicated.
+# NOTE: BM7 coverage is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and compacted.
 
 DOMAIN,hls-amt.itunes.apple.com
 DOMAIN,hls.itunes.apple.com

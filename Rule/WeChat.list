@@ -1,47 +1,24 @@
 # > WeChat
 # UpdateTime: 2026-07-04 13:46:18
-# RuleCount: 1102
+# RuleCount: 1074
 # AutoUpdate: daily at 00:17 Beijing time; current rules preserved; upstream rules merged and semantically deduplicated
 
 DOMAIN,apd-pcdnwxlogin.teg.tencent-cloud.net
-DOMAIN,dl.wechat.com
 DOMAIN,dldir1.qq.com
 DOMAIN,dldir1v6.qq.com
-DOMAIN,dns.weixin.qq.com
 DOMAIN,dns.weixin.qq.com.cn
 DOMAIN,finder.video.qq.com
 DOMAIN,findera4.video.qq.com
 DOMAIN,findermp.video.qq.com
-DOMAIN,gtimg.wechatpay.cn
 DOMAIN,img.ssad.qq.com
 DOMAIN,marscdnbypass-wxapp.tc.qq.com
-DOMAIN,mmbiz.qpic.cn
-DOMAIN,mmecoa.qpic.cn
-DOMAIN,paydns.wechat.com
-DOMAIN,paydns.weixin.qq.com
 DOMAIN,pikem0-bj.sankuai.com
-DOMAIN,res.wx.qq.com
-DOMAIN,sglong.wechat.com
-DOMAIN,sgminorshort.wechat.com
-DOMAIN,sgshort.pay.wechat.com
-DOMAIN,sgshort.wechat.com
 DOMAIN,slife.xy-asia.com
 DOMAIN,soup.v.qq.com
-DOMAIN,szextshort.weixin.qq.com
-DOMAIN,szlong.weixin.qq.com
-DOMAIN,szminorshort.weixin.qq.com
-DOMAIN,szshort.mixpay.wechatpay.cn
-DOMAIN,szshort.pay.weixin.qq.com
-DOMAIN,szshort.snspay.wechatpay.cn
-DOMAIN,szshort.weixin.qq.com
-DOMAIN,tencentmap.wechat.com
 DOMAIN,vweixinf.tc.qq.com
 DOMAIN,weixin110.qq.com
-DOMAIN,wework.qpic.cn
 DOMAIN,wss.neixin.cn
 DOMAIN,wup.imtt.qq.com
-DOMAIN,wx.qlogo.cn
-DOMAIN,wyw-pics.wxqcloud.qq.com.cn
 DOMAIN-SUFFIX,iot-tencent.com
 DOMAIN-SUFFIX,lbs.gtimg.com
 DOMAIN-SUFFIX,map.qq.com
@@ -725,8 +702,6 @@ IP-CIDR,101.227.132.165/32,no-resolve
 IP-CIDR,101.227.161.125/32,no-resolve
 IP-CIDR,111.13.80.138/32,no-resolve
 IP-CIDR,111.30.160.0/20,no-resolve
-IP-CIDR,111.30.169.191/32,no-resolve
-IP-CIDR,111.30.169.196/32,no-resolve
 IP-CIDR,111.31.206.196/32,no-resolve
 IP-CIDR,111.32.204.41/32,no-resolve
 IP-CIDR,111.32.207.114/32,no-resolve
@@ -1024,13 +999,10 @@ IP-CIDR6,240e:e1:a800::/46,no-resolve
 IP-CIDR6,240e:e1:a900::/48,no-resolve
 IP-CIDR6,240e:e1:aa00::/48,no-resolve
 IP-CIDR6,240e:e9:6003::/48,no-resolve
-IP-CIDR6,240e:e9:6003:211::112/128,no-resolve
 IP-CIDR6,240e:f7:4f00:1f10::/60,no-resolve
 IP-CIDR6,240e:f7:a070:100::/60,no-resolve
 IP-CIDR6,240e:ff:9018:100::/60,no-resolve
 IP-CIDR6,240e:ff:f100::/44,no-resolve
-IP-CIDR6,240e:ff:f100:100e::7/128,no-resolve
-IP-CIDR6,240e:ff:f100:5005::1d/128,no-resolve
 IP-CIDR6,240e:338:a010:b2e0:10e1:2c47:e7d2:166d/128,no-resolve
 IP-CIDR6,240e:338:a010:b2e0:18b9:526f:4bb3:761b/128,no-resolve
 IP-CIDR6,240e:338:a010:cf60:6063:9b98:e745:140a/128,no-resolve

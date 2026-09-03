@@ -7,7 +7,7 @@
 # MERGED SOURCE: https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/instagram
 # MERGED SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Instagram.list
 # MERGED SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/instagram.list
-# NOTE: BM7 is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and deduplicated.
+# NOTE: BM7 coverage is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and compacted.
 
 DOMAIN-SUFFIX,cdninstagram.com
 DOMAIN-SUFFIX,instagr.am

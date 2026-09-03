@@ -2,19 +2,14 @@
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
 # UPDATED: 2026-08-28 05:01:25 UTC
-# RULE COUNT: 143
+# RULE COUNT: 138
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/DouYin/DouYin.list
 # SOURCE: https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/douyin
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/douyin.list
-# NOTE: Existing rules are preserved; upstream DOMAIN and DOMAIN-SUFFIX rules are merged and deduplicated.
+# NOTE: Existing rules are preserved; upstream rules are merged and compacted without reducing coverage.
 
 DOMAIN,apmplus.volces.com
-DOMAIN,aweme.snssdk.com
-DOMAIN,lf3-static.bytednsdoc.com
 DOMAIN,mssdk.volces.com
-DOMAIN,v5-dy-o-abtest.zjcdn.com
-DOMAIN,v6-dy-o.zjcdn.com
-DOMAIN,vod.snssdk.com
 DOMAIN-KEYWORD,douyin
 DOMAIN-SUFFIX,activity-wbsj.com
 DOMAIN-SUFFIX,aihst8.com

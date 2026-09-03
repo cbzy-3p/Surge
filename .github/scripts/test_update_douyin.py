@@ -31,6 +31,20 @@ class DouyinRuleTests(unittest.TestCase):
             {("DOMAIN-KEYWORD", "douyin")},
         )
 
+    def test_parent_suffix_removes_child_rules(self):
+        self.assertEqual(
+            UPDATE.compact_rules({
+                ("DOMAIN", "api.example.com"),
+                ("DOMAIN-SUFFIX", "api.example.com"),
+                ("DOMAIN-SUFFIX", "example.com"),
+                ("DOMAIN-KEYWORD", "douyin"),
+            }),
+            {
+                ("DOMAIN-SUFFIX", "example.com"),
+                ("DOMAIN-KEYWORD", "douyin"),
+            },
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

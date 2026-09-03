@@ -65,6 +65,26 @@ def merge_rule(rules: set[tuple[str, str]], rule: tuple[str, str]) -> None:
         rules.add(rule)
 
 
+def compact_rules(rules: set[tuple[str, str]]) -> set[tuple[str, str]]:
+    suffixes: set[str] = set()
+    for domain in sorted(
+        (value for rule_type, value in rules if rule_type == "DOMAIN-SUFFIX"),
+        key=lambda value: (value.count("."), value),
+    ):
+        if not any(domain == suffix or domain.endswith(f".{suffix}") for suffix in suffixes):
+            suffixes.add(domain)
+    result = {
+        rule for rule in rules if rule[0] not in {"DOMAIN", "DOMAIN-SUFFIX"}
+    }
+    result.update(("DOMAIN-SUFFIX", domain) for domain in suffixes)
+    result.update(
+        ("DOMAIN", domain) for rule_type, domain in rules
+        if rule_type == "DOMAIN"
+        and not any(domain == suffix or domain.endswith(f".{suffix}") for suffix in suffixes)
+    )
+    return result
+
+
 def parse_surge_rules(content: str) -> set[tuple[str, str]]:
     rules: set[tuple[str, str]] = set()
     for raw_line in content.replace("\r", "").splitlines():
@@ -138,7 +158,7 @@ def render(rules: set[tuple[str, str]]) -> str:
         f"# SOURCE: {BM7_URL}",
         f"# SOURCE: {V2FLY_URL}",
         f"# SOURCE: {YUU_URL}",
-        "# NOTE: Existing rules are preserved; upstream DOMAIN and DOMAIN-SUFFIX rules are merged and deduplicated.",
+        "# NOTE: Existing rules are preserved; upstream rules are merged and compacted without reducing coverage.",
         "",
     ]
     return "\n".join(header + ordered) + "\n"
@@ -160,6 +180,7 @@ def main() -> None:
     for source in (bm7, v2fly, yuu):
         for rule in source:
             merge_rule(rules, rule)
+    rules = compact_rules(rules)
     if len(rules) < 80 or len(rules) > 300:
         raise RuntimeError(f"unexpected output count: {len(rules)}")
 

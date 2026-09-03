@@ -35,6 +35,7 @@ RULE_PATTERN = re.compile(
     re.IGNORECASE,
 )
 DOMAIN_VALUE_PATTERN = re.compile(r"^(?:\*\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)*$")
+BLOCKED_EXACT_DOMAINS = {"7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe"}
 
 
 def fetch_text(url: str) -> str:
@@ -59,7 +60,7 @@ def normalize_rule(line: str) -> str | None:
 
     if rule_type in {"DOMAIN", "DOMAIN-SUFFIX"}:
         value = value.lower().rstrip(".")
-        if not DOMAIN_VALUE_PATTERN.match(value):
+        if not DOMAIN_VALUE_PATTERN.match(value) or value in BLOCKED_EXACT_DOMAINS:
             return None
         return f"{rule_type},{value}"
 
@@ -97,12 +98,38 @@ def collect_rules(text: str) -> set[str]:
 
 
 def dedupe_rules(rules: set[str]) -> set[str]:
-    suffix_values = {rule.split(",", 1)[1] for rule in rules if rule.startswith("DOMAIN-SUFFIX,")}
-    return {
-        rule
-        for rule in rules
-        if not (rule.startswith("DOMAIN,") and rule.split(",", 1)[1] in suffix_values)
+    suffixes: set[str] = set()
+    for rule in sorted(
+        (rule for rule in rules if rule.startswith("DOMAIN-SUFFIX,")),
+        key=lambda rule: (rule.split(",")[1].count("."), rule),
+    ):
+        domain = rule.split(",")[1]
+        if not any(domain == suffix or domain.endswith(f".{suffix}") for suffix in suffixes):
+            suffixes.add(domain)
+
+    result = {
+        rule for rule in rules
+        if not rule.startswith(("DOMAIN,", "DOMAIN-SUFFIX,", "IP-CIDR,", "IP-CIDR6,"))
     }
+    result.update(f"DOMAIN-SUFFIX,{domain}" for domain in suffixes)
+    for rule in rules:
+        if not rule.startswith("DOMAIN,"):
+            continue
+        domain = rule.split(",")[1]
+        if not any(domain == suffix or domain.endswith(f".{suffix}") for suffix in suffixes):
+            result.add(rule)
+    for version, rule_type in ((4, "IP-CIDR"), (6, "IP-CIDR6")):
+        networks = [
+            ipaddress.ip_network(rule.split(",")[1])
+            for rule in rules
+            if rule.startswith(f"{rule_type},")
+        ]
+        result.update(
+            f"{rule_type},{network},no-resolve"
+            for network in ipaddress.collapse_addresses(networks)
+            if network.version == version
+        )
+    return result
 
 
 def sort_key(rule: str):

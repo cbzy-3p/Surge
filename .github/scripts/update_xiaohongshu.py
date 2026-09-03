@@ -121,6 +121,28 @@ def merge_rule(rules: set[Rule], rule: Rule) -> None:
         rules.add(rule)
 
 
+def compact_rules(rules: set[Rule]) -> set[Rule]:
+    suffixes: set[str] = set()
+    for domain in sorted(
+        (value for rule_type, value in rules if rule_type == "DOMAIN-SUFFIX"),
+        key=lambda value: (value.count("."), value),
+    ):
+        labels = domain.split(".")
+        if not any(".".join(labels[index:]) in suffixes for index in range(len(labels))):
+            suffixes.add(domain)
+    result = {rule for rule in rules if rule[0] not in DOMAIN_TYPES}
+    result.update(("DOMAIN-SUFFIX", domain) for domain in suffixes)
+    result.update(
+        ("DOMAIN", domain) for rule_type, domain in rules
+        if rule_type == "DOMAIN"
+        and not any(
+            ".".join(domain.split(".")[index:]) in suffixes
+            for index in range(len(domain.split(".")))
+        )
+    )
+    return result
+
+
 def parse_v2fly(entry: str, visited: set[str] | None = None) -> set[Rule]:
     visited = visited or set()
     if entry in visited:
@@ -285,6 +307,7 @@ def main() -> None:
     for domain in bgpeer_domains & dl123100_domains:
         merge_rule(rules, ("DOMAIN-SUFFIX", domain))
 
+    rules = compact_rules(rules)
     validate_rules(rules)
     previous = current_rules()
     validate_output_change(previous, rules)

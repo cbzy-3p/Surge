@@ -18,6 +18,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Test rule compactor
+        run: python .github/scripts/test_compact_rule_file.py
+
       - name: Download Telegram rules
         shell: bash
         run: |
@@ -79,6 +87,7 @@ jobs:
           } > "$OUT_DIR/Telegram_All.list"
 
           rm -f "$RAW_FILE"
+          python .github/scripts/compact_rule_file.py "$OUT_DIR/Telegram_All.list"
 
       - name: Commit changes
         shell: bash

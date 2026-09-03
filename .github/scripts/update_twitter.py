@@ -106,6 +106,41 @@ def collect_v2fly_rules(text: str) -> set[str]:
     return rules
 
 
+def compact_rules(rules: set[str]) -> set[str]:
+    suffixes: set[str] = set()
+    for rule in sorted(
+        (rule for rule in rules if rule.startswith("DOMAIN-SUFFIX,")),
+        key=lambda rule: (rule.split(",")[1].count("."), rule),
+    ):
+        domain = rule.split(",")[1]
+        labels = domain.split(".")
+        if not any(".".join(labels[index:]) in suffixes for index in range(len(labels))):
+            suffixes.add(domain)
+    result = {
+        rule for rule in rules
+        if not rule.startswith(("DOMAIN,", "DOMAIN-SUFFIX,", "IP-CIDR,", "IP-CIDR6,"))
+    }
+    result.update(f"DOMAIN-SUFFIX,{domain}" for domain in suffixes)
+    for rule in rules:
+        if rule.startswith("DOMAIN,"):
+            domain = rule.split(",")[1]
+            labels = domain.split(".")
+            if not any(".".join(labels[index:]) in suffixes for index in range(len(labels))):
+                result.add(rule)
+    for version, rule_type in ((4, "IP-CIDR"), (6, "IP-CIDR6")):
+        networks = [
+            ipaddress.ip_network(rule.split(",")[1])
+            for rule in rules
+            if rule.startswith(f"{rule_type},")
+        ]
+        result.update(
+            f"{rule_type},{network},no-resolve"
+            for network in ipaddress.collapse_addresses(networks)
+            if network.version == version
+        )
+    return result
+
+
 def sort_key(rule: str):
     parts = rule.split(",")
     rule_type = parts[0]
@@ -151,7 +186,7 @@ def render(rules: set[str]) -> str:
         "# - ACL4SSR/ACL4SSR Clash/Ruleset/Twitter.list\n"
         "# - v2fly/domain-list-community data/twitter\n"
         "# - Yuu518/Yuu-rules surge/geosite/twitter.list\n"
-        "# AutoUpdate: daily at 00:17 Beijing time; rebuilt, normalized and deduplicated\n"
+        "# AutoUpdate: daily at 00:17 Beijing time; rebuilt, normalized and compacted\n"
         "\n"
         f"{body}\n"
     )
@@ -162,6 +197,7 @@ def main() -> int:
     for url in SURGE_SOURCES:
         rules |= collect_surge_rules(fetch_text(url))
     rules |= collect_v2fly_rules(fetch_text(V2FLY_SOURCE))
+    rules = compact_rules(rules)
     validate(rules)
 
     if sorted(rules, key=sort_key) == current_rules():

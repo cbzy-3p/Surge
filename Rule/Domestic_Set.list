@@ -21,11 +21,9 @@ DOMAIN,cdn.staticfile.net
 DOMAIN,cdn.staticfile.org
 DOMAIN,cloud.gateway.ddysq.com
 DOMAIN,cn.voice.gcloudcs.com
-DOMAIN,ct-cn-central-00001.oos-b-220615.ctyunapi.cn
 DOMAIN,doh.pub
 DOMAIN,easytomessage.com
 DOMAIN,fp-it.fengkongcloud.com
-DOMAIN,gateway.icloud.com.cn
 DOMAIN,gather.colorfulclouds.net
 DOMAIN,hdns.ksyun.com
 DOMAIN,hsdcdn.qnqcdn.net
@@ -86,8 +84,6 @@ DOMAIN-SUFFIX,bcelive.com
 DOMAIN-SUFFIX,bdimg.com
 DOMAIN-SUFFIX,bdstatic.com
 DOMAIN-SUFFIX,bdurl.net
-DOMAIN-SUFFIX,bigfun.cn
-DOMAIN-SUFFIX,bigfunapp.cn
 DOMAIN-SUFFIX,biliapi.com
 DOMAIN-SUFFIX,biliapi.net
 DOMAIN-SUFFIX,bilibili.com
@@ -95,7 +91,6 @@ DOMAIN-SUFFIX,bilibili.tv
 DOMAIN-SUFFIX,bilicomic.com
 DOMAIN-SUFFIX,biligame.com
 DOMAIN-SUFFIX,biligame.net
-DOMAIN-SUFFIX,bilivideo.cn
 DOMAIN-SUFFIX,bilivideo.com
 DOMAIN-SUFFIX,buycoffee.top
 DOMAIN-SUFFIX,bybxmp.com
@@ -119,8 +114,6 @@ DOMAIN-SUFFIX,cmbimg.com
 DOMAIN-SUFFIX,cmicapm.com
 DOMAIN-SUFFIX,cmpassport.com
 DOMAIN-SUFFIX,cnzz.com
-DOMAIN-SUFFIX,com.cn
-DOMAIN-SUFFIX,convection.cn
 DOMAIN-SUFFIX,csdn.net
 DOMAIN-SUFFIX,ctobsnssdk.com
 DOMAIN-SUFFIX,ctrip.com
@@ -200,12 +193,10 @@ DOMAIN-SUFFIX,point-memory.com
 DOMAIN-SUFFIX,pstatp.com
 DOMAIN-SUFFIX,puata.info
 DOMAIN-SUFFIX,pwrgnez.com
-DOMAIN-SUFFIX,qchannel01.cn
 DOMAIN-SUFFIX,qcloud.com
 DOMAIN-SUFFIX,qidian.com
 DOMAIN-SUFFIX,qishui.com
 DOMAIN-SUFFIX,qq.com
-DOMAIN-SUFFIX,quark.cn
 DOMAIN-SUFFIX,qunar.com
 DOMAIN-SUFFIX,qunarzz.com
 DOMAIN-SUFFIX,ruanmei.com
@@ -216,7 +207,6 @@ DOMAIN-SUFFIX,servicewechat.com
 DOMAIN-SUFFIX,shujupie.com
 DOMAIN-SUFFIX,shuqireader.com
 DOMAIN-SUFFIX,smtcdns.net
-DOMAIN-SUFFIX,soulapp.cn
 DOMAIN-SUFFIX,ssports.com
 DOMAIN-SUFFIX,tanx.com
 DOMAIN-SUFFIX,tcdnos.com
@@ -224,8 +214,6 @@ DOMAIN-SUFFIX,tec73.com
 DOMAIN-SUFFIX,tencent.com
 DOMAIN-SUFFIX,toutiao.com
 DOMAIN-SUFFIX,tujia.com
-DOMAIN-SUFFIX,twamjb.cn
-DOMAIN-SUFFIX,uc.cn
 DOMAIN-SUFFIX,ucweb.com
 DOMAIN-SUFFIX,umeng.com
 DOMAIN-SUFFIX,umetrip.com

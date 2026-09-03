@@ -115,13 +115,43 @@ def parse_plain(content: str) -> set[tuple[str, str]]:
     return rules
 
 
-def merge(rules: set[tuple[str, str]], additions: set[tuple[str, str]]) -> set[tuple[str, str]]:
-    suffixes = {value for kind, value in rules | additions if kind == "DOMAIN-SUFFIX"}
-    merged = rules | additions
-    return {
-        rule for rule in merged
-        if rule[0] != "DOMAIN" or not any(rule[1] == suffix or rule[1].endswith(f".{suffix}") for suffix in suffixes)
+def covered_by_suffix(domain: str, suffixes: set[str]) -> bool:
+    labels = domain.split(".")
+    return any(".".join(labels[index:]) in suffixes for index in range(len(labels)))
+
+
+def compact(rules: set[tuple[str, str]]) -> set[tuple[str, str]]:
+    suffixes: set[str] = set()
+    for domain in sorted(
+        (value for kind, value in rules if kind == "DOMAIN-SUFFIX"),
+        key=lambda value: (value.count("."), value),
+    ):
+        if not covered_by_suffix(domain, suffixes):
+            suffixes.add(domain)
+    result = {
+        rule for rule in rules
+        if rule[0] not in {"DOMAIN", "DOMAIN-SUFFIX", "IP-CIDR", "IP-CIDR6"}
     }
+    result.update(("DOMAIN-SUFFIX", value) for value in suffixes)
+    result.update(
+        ("DOMAIN", value) for kind, value in rules
+        if kind == "DOMAIN" and not covered_by_suffix(value, suffixes)
+    )
+    for version, rule_type in ((4, "IP-CIDR"), (6, "IP-CIDR6")):
+        networks = [
+            ipaddress.ip_network(value)
+            for kind, value in rules
+            if kind == rule_type and ipaddress.ip_network(value).version == version
+        ]
+        result.update(
+            (rule_type, str(network))
+            for network in ipaddress.collapse_addresses(networks)
+        )
+    return result
+
+
+def merge(rules: set[tuple[str, str]], additions: set[tuple[str, str]]) -> set[tuple[str, str]]:
+    return compact(rules | additions)
 
 
 def load_snapshot() -> dict[str, int]:
@@ -142,19 +172,19 @@ def validate_snapshot(previous: dict[str, int], current: dict[str, int]) -> None
             raise RuntimeError(f"unexpected source count change for {name}: {old} -> {new}")
 
 
-def render(rules: set[tuple[str, str]]) -> str:
+def render(rules: set[tuple[str, str]], updated: str | None = None) -> str:
     order = {"DOMAIN": 0, "DOMAIN-SUFFIX": 1, "DOMAIN-KEYWORD": 2, "DOMAIN-WILDCARD": 3, "USER-AGENT": 4, "PROCESS-NAME": 5, "IP-CIDR": 6, "IP-CIDR6": 7, "IP-ASN": 8}
     def key(rule: tuple[str, str]) -> tuple[int, str]:
         return (order[rule[0]], rule[1])
-    now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    updated = updated or datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     header = [
         "# NAME: Multi-source-Proxy",
         "# AUTHOR: cbzy-3p",
         "# FORMAT: Surge Rule Set",
-        f"# UPDATED: {now}",
+        f"# UPDATED: {updated}",
         f"# RULE COUNT: {len(rules)}",
         *[f"# SOURCE: {url}" for url in SOURCES.values()],
-        "# NOTE: Sources are normalized, merged and deduplicated; DOMAIN-SUFFIX overrides covered DOMAIN entries.",
+        "# NOTE: Sources are normalized, merged and compacted without reducing domain or CIDR coverage.",
         "",
     ]
     body = []
@@ -183,7 +213,10 @@ def main() -> None:
     source_set_changed = "Loyalsoldier/surge-rules" in previous_text
     if not source_set_changed and previous_text and len(rules) * 100 < sum(1 for line in previous_text.splitlines() if line and not line.startswith("#")) * 65:
         raise RuntimeError("output rule count dropped too much")
-    TARGET.write_text(render(rules), encoding="utf-8")
+    previous_updated = re.search(r"^# UPDATED: (.+)$", previous_text, re.MULTILINE)
+    unchanged_text = render(rules, previous_updated.group(1)) if previous_updated else ""
+    if unchanged_text != previous_text:
+        TARGET.write_text(render(rules), encoding="utf-8")
     SNAPSHOT.write_text(json.dumps({"version": SNAPSHOT_VERSION, "counts": counts}, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(f"updated {TARGET.name} with {len(rules)} rules")
 

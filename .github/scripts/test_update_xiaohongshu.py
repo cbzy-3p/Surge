@@ -42,6 +42,17 @@ class XiaoHongShuRuleTests(unittest.TestCase):
             UPDATE.validate_snapshot_change({"bgpeer": 100}, {"bgpeer": 64})
         UPDATE.validate_snapshot_change({"bgpeer": 100}, {"bgpeer": 80})
 
+    def test_parent_suffix_removes_child_domains(self):
+        self.assertEqual(
+            UPDATE.compact_rules({
+                ("DOMAIN", "api.example.com"),
+                ("DOMAIN-SUFFIX", "api.example.com"),
+                ("DOMAIN-SUFFIX", "example.com"),
+                ("IP-ASN", "151281"),
+            }),
+            {("DOMAIN-SUFFIX", "example.com"), ("IP-ASN", "151281")},
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

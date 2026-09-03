@@ -2,11 +2,11 @@
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
 # UPDATED: 2026-09-02 19:24:29 UTC
-# RULE COUNT: 6968
+# RULE COUNT: 6959
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Proxy/Proxy.list
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Proxy.list
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/category-proxy-tunnels.list
-# NOTE: Sources are normalized, merged and deduplicated; DOMAIN-SUFFIX overrides covered DOMAIN entries.
+# NOTE: Sources are normalized, merged and compacted without reducing domain or CIDR coverage.
 
 DOMAIN,api.waqi.info
 DOMAIN,aqi.aqicn.org
@@ -2325,9 +2325,7 @@ DOMAIN-SUFFIX,gitbook.com
 DOMAIN-SUFFIX,gitbook.io
 DOMAIN-SUFFIX,gitbooks.io
 DOMAIN-SUFFIX,githack.com
-DOMAIN-SUFFIX,github-atom-io-herokuapp-com.freetls.fastly.net
 DOMAIN-SUFFIX,github-avatars.oss-cn-hongkong.aliyuncs.com
-DOMAIN-SUFFIX,github-cloud.s3.amazonaws.com
 DOMAIN-SUFFIX,github.blog
 DOMAIN-SUFFIX,github.com
 DOMAIN-SUFFIX,github.community
@@ -3129,7 +3127,6 @@ DOMAIN-SUFFIX,jjgirls.com
 DOMAIN-SUFFIX,jkb.cc
 DOMAIN-SUFFIX,jkforum.net
 DOMAIN-SUFFIX,jkub.com
-DOMAIN-SUFFIX,jma.go.jp
 DOMAIN-SUFFIX,jmscult.com
 DOMAIN-SUFFIX,joachims.org
 DOMAIN-SUFFIX,jobso.tv
@@ -4086,7 +4083,6 @@ DOMAIN-SUFFIX,nownews.com
 DOMAIN-SUFFIX,nowtorrents.com
 DOMAIN-SUFFIX,noxinfluencer.com
 DOMAIN-SUFFIX,noypf.com
-DOMAIN-SUFFIX,npa.go.jp
 DOMAIN-SUFFIX,npm.community
 DOMAIN-SUFFIX,npmjs.com
 DOMAIN-SUFFIX,npmjs.org
@@ -6966,13 +6962,8 @@ IP-CIDR,74.86.0.0/16,no-resolve
 IP-CIDR,75.126.0.0/16,no-resolve
 IP-CIDR,91.105.192.0/23,no-resolve
 IP-CIDR,91.108.0.0/16,no-resolve
-IP-CIDR,91.108.16.0/21,no-resolve
-IP-CIDR,91.108.4.0/22,no-resolve
-IP-CIDR,91.108.56.0/22,no-resolve
-IP-CIDR,91.108.8.0/21,no-resolve
 IP-CIDR,95.161.64.0/20,no-resolve
 IP-CIDR6,2001:67c:4e8::/48,no-resolve
-IP-CIDR6,2001:b28:f23c::/48,no-resolve
-IP-CIDR6,2001:b28:f23d::/48,no-resolve
+IP-CIDR6,2001:b28:f23c::/47,no-resolve
 IP-CIDR6,2001:b28:f23f::/48,no-resolve
 IP-CIDR6,2a0a:f280::/32,no-resolve
