@@ -56,6 +56,7 @@ jobs:
           python .github/scripts/test_update_wechat.py
           python .github/scripts/test_update_twitter.py
           python .github/scripts/test_update_media_rules.py
+          python .github/scripts/test_update_v2fly_rules.py
           python .github/scripts/test_validate_rule_files.py
           python .github/scripts/test_compact_rule_file.py
       - name: Validate generated rule files
@@ -98,6 +99,7 @@ jobs:
           python .github/scripts/test_update_wechat.py
           python .github/scripts/test_update_twitter.py
           python .github/scripts/test_update_media_rules.py
+          python .github/scripts/test_update_v2fly_rules.py
           python .github/scripts/test_validate_rule_files.py
           python .github/scripts/test_compact_rule_file.py
       - name: Update all rule sources
@@ -111,6 +113,7 @@ jobs:
           python .github/scripts/update_proxy.py
           python .github/scripts/update_apple.py
           python .github/scripts/update_media_rules.py
+          python .github/scripts/update_v2fly_rules.py
           python .github/scripts/update_twitter.py
       - name: Sync Telegram rules
         shell: bash
