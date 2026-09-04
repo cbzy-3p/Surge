@@ -1,11 +1,11 @@
 # NAME: Multi-source-Google
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-08-29 00:34:20 UTC
-# RULE COUNT: 914
+# UPDATED: 2026-09-04 18:59:52 UTC
+# RULE COUNT: 911
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Google/Google.list
-# MERGED SOURCE: https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/google
 # MERGED SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Google.list
+# MERGED SOURCE: https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Google/Google.list
 # MERGED SOURCE: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/google.txt
 # MERGED SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/google.list
 # NOTE: BM7 coverage is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and compacted.
@@ -712,12 +712,11 @@ DOMAIN,qgadmin.qcpp1.net
 DOMAIN,qualysapi.qatp1.net
 DOMAIN,qualysguard.qpdp1.net
 DOMAIN,scanservice1.qcpp1.net
-DOMAIN-SUFFIX,actifio.com
 DOMAIN-SUFFIX,adtrafficquality.google
+DOMAIN-SUFFIX,ai.dev
 DOMAIN-SUFFIX,ai.studio
 DOMAIN-SUFFIX,antigravity-unleash.goog
 DOMAIN-SUFFIX,antigravity.google
-DOMAIN-SUFFIX,app-ads-services.com
 DOMAIN-SUFFIX,app-analytics-services-att.com
 DOMAIN-SUFFIX,deepmind.google
 DOMAIN-SUFFIX,docs.new
@@ -733,7 +732,6 @@ DOMAIN-SUFFIX,get.rsvp
 DOMAIN-SUFFIX,ggpht.cn
 DOMAIN-SUFFIX,ggpht.com
 DOMAIN-SUFFIX,google-access.net
-DOMAIN-SUFFIX,google.co
 DOMAIN-SUFFIX,googleads-cn.com
 DOMAIN-SUFFIX,googleads.com
 DOMAIN-SUFFIX,googleadsserving.cn
@@ -751,7 +749,6 @@ DOMAIN-SUFFIX,labs.google
 DOMAIN-SUFFIX,new.day
 DOMAIN-SUFFIX,notebooklm.google
 DOMAIN-SUFFIX,opal.google
-DOMAIN-SUFFIX,openxla.org
 DOMAIN-SUFFIX,pub.dev
 DOMAIN-SUFFIX,sheets.new
 DOMAIN-SUFFIX,slides.new

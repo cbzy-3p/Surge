@@ -1,9 +1,10 @@
 # NAME: Multi-source-Crypto
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-08-26 01:57:08 UTC
-# RULE COUNT: 201
+# UPDATED: 2026-09-04 18:59:55 UTC
+# RULE COUNT: 225
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Crypto/Crypto.list
+# MERGED SOURCE: https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Crypto.list
 # NOTE: BM7 coverage is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and compacted.
 
 DOMAIN,token-api.metaswap.codefi.network
@@ -207,3 +208,27 @@ DOMAIN-KEYWORD,binance
 DOMAIN-KEYWORD,huobi
 DOMAIN-KEYWORD,metamask
 DOMAIN-KEYWORD,okx
+DOMAIN-SUFFIX,backpack.exchange
+DOMAIN-SUFFIX,binance.com
+DOMAIN-SUFFIX,binance.info
+DOMAIN-SUFFIX,binance.org
+DOMAIN-SUFFIX,bitget.com
+DOMAIN-SUFFIX,bitget.site
+DOMAIN-SUFFIX,bsappapi.com
+DOMAIN-SUFFIX,bscdnweb.com
+DOMAIN-SUFFIX,byabcde.com
+DOMAIN-SUFFIX,byapps.net
+DOMAIN-SUFFIX,bybdc6.com
+DOMAIN-SUFFIX,bybit-global.com
+DOMAIN-SUFFIX,bybit.biz
+DOMAIN-SUFFIX,bybit.cloud
+DOMAIN-SUFFIX,bybitglobal.com
+DOMAIN-SUFFIX,byd3c3.com
+DOMAIN-SUFFIX,crypto.com
+DOMAIN-SUFFIX,ffbbbdc6d3c353211fe2ba39c9f744cd.com
+DOMAIN-SUFFIX,okx.com
+DOMAIN-SUFFIX,okx.com.cdn.cloudflare.net
+DOMAIN-SUFFIX,probit.com
+DOMAIN-SUFFIX,upbit.com
+DOMAIN-SUFFIX,wsot2022.com
+DOMAIN-SUFFIX,yingwangtech.cloud

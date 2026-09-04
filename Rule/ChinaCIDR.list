@@ -1,12 +1,13 @@
 # NAME: Multi-source-ChinaCIDR
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-02 12:49:07 UTC
-# RULE COUNT: 11040
+# UPDATED: 2026-09-04 19:00:09 UTC
+# RULE COUNT: 11037
+# SOURCE: https://ruleset.skk.moe/List/ip/china_ip.conf
+# SOURCE: https://ruleset.skk.moe/List/ip/china_ip_ipv6.conf
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/ChinaCIDR.list
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaIPs/ChinaIPs.list
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geoip/cn.list
-# SOURCE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.list
 # NOTE: Sources are normalized, merged, deduplicated and compacted without reducing coverage.
 
 IP-CIDR,1.0.1.0/24,no-resolve
@@ -148,7 +149,6 @@ IP-CIDR,101.72.0.0/14,no-resolve
 IP-CIDR,101.76.0.0/15,no-resolve
 IP-CIDR,101.78.0.0/22,no-resolve
 IP-CIDR,101.78.32.0/19,no-resolve
-IP-CIDR,101.79.220.0/24,no-resolve
 IP-CIDR,101.80.0.0/12,no-resolve
 IP-CIDR,101.96.0.0/21,no-resolve
 IP-CIDR,101.96.128.0/17,no-resolve
@@ -8133,6 +8133,7 @@ IP-CIDR6,2402:71c0::/32,no-resolve
 IP-CIDR6,2402:7240::/32,no-resolve
 IP-CIDR6,2402:72a0::/32,no-resolve
 IP-CIDR6,2402:72c0::/32,no-resolve
+IP-CIDR6,2402:73e0::/32,no-resolve
 IP-CIDR6,2402:7540::/32,no-resolve
 IP-CIDR6,2402:75c0::/32,no-resolve
 IP-CIDR6,2402:7740::/32,no-resolve
@@ -10828,10 +10829,7 @@ IP-CIDR6,2a0a:d681:e100::/40,no-resolve
 IP-CIDR6,2a0a:d681:e200::/39,no-resolve
 IP-CIDR6,2a0a:d681:e400::/38,no-resolve
 IP-CIDR6,2a0a:d681:e800::/37,no-resolve
-IP-CIDR6,2a0a:d681:f000::/37,no-resolve
-IP-CIDR6,2a0a:d681:f800::/39,no-resolve
-IP-CIDR6,2a0a:d681:fa00::/40,no-resolve
-IP-CIDR6,2a0a:d681:fd00::/40,no-resolve
+IP-CIDR6,2a0a:d681:f000::/36,no-resolve
 IP-CIDR6,2a0a:d682:8000::/34,no-resolve
 IP-CIDR6,2a0a:d682::/33,no-resolve
 IP-CIDR6,2a0a:d682:c000::/35,no-resolve
@@ -11036,7 +11034,7 @@ IP-CIDR6,2a13:df85:be00::/43,no-resolve
 IP-CIDR6,2a13:df85:beff:ff42::/64,no-resolve
 IP-CIDR6,2a13:df87:5030::/48,no-resolve
 IP-CIDR6,2a14:4380::/30,no-resolve
-IP-CIDR6,2a14:5f00::/29,no-resolve
+IP-CIDR6,2a14:5f00::/30,no-resolve
 IP-CIDR6,2a14:7580:d10::/44,no-resolve
 IP-CIDR6,2a14:7580:d20::/46,no-resolve
 IP-CIDR6,2a14:7582:7000::/37,no-resolve

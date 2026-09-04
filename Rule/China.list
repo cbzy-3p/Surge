@@ -1,16 +1,23 @@
 # NAME: Multi-source-China
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-02 12:49:07 UTC
+# UPDATED: 2026-09-04 19:00:09 UTC
 # RULE COUNT: 5687
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/China.list
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/China/China_Domain.list
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/geolocation-cn.list
-# SOURCE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-cn.list
 # NOTE: Sources are normalized, merged, deduplicated and compacted without reducing coverage.
 
+DOMAIN,api.blipsandchitz.me
 DOMAIN,cdp.cloud.unity3d.com
 DOMAIN,config.uca.cloud.unity3d.com
+DOMAIN,ctdsb.clouddiffuse.xyz
+DOMAIN,end-api.shallow.ink
+DOMAIN,end.shallow.ink
+DOMAIN,izattime.qcomgeo2.com
+DOMAIN,time.izatcloud.net
+DOMAIN,time.xtracloud.net
+DOMAIN,xtratime.qcomgeo2.com
 DOMAIN-SUFFIX,00cdn.com
 DOMAIN-SUFFIX,0123456789.com
 DOMAIN-SUFFIX,0379home.com
@@ -609,7 +616,6 @@ DOMAIN-SUFFIX,apaas-zone-test.com
 DOMAIN-SUFFIX,apabi.com
 DOMAIN-SUFFIX,apcdns.net
 DOMAIN-SUFFIX,api-building.fun
-DOMAIN-SUFFIX,api.blipsandchitz.me
 DOMAIN-SUFFIX,api.crisp.chat
 DOMAIN-SUFFIX,apifox.com
 DOMAIN-SUFFIX,apigwtencent.com
@@ -1430,7 +1436,6 @@ DOMAIN-SUFFIX,ctbcdn.com
 DOMAIN-SUFFIX,ctcdnov.net
 DOMAIN-SUFFIX,ctdcdn.com
 DOMAIN-SUFFIX,ctdns.net
-DOMAIN-SUFFIX,ctdsb.clouddiffuse.xyz
 DOMAIN-SUFFIX,ctdsb.net
 DOMAIN-SUFFIX,ctexcel.ca
 DOMAIN-SUFFIX,ctexcel.com
@@ -1807,8 +1812,6 @@ DOMAIN-SUFFIX,emoriko.com
 DOMAIN-SUFFIX,empornium.me
 DOMAIN-SUFFIX,emsec.hk
 DOMAIN-SUFFIX,emumax.com
-DOMAIN-SUFFIX,end-api.shallow.ink
-DOMAIN-SUFFIX,end.shallow.ink
 DOMAIN-SUFFIX,engineeringvillage.com
 DOMAIN-SUFFIX,englibrary.com
 DOMAIN-SUFFIX,enterdesk.com
@@ -2720,7 +2723,6 @@ DOMAIN-SUFFIX,iyingdi.com
 DOMAIN-SUFFIX,iyiou.com
 DOMAIN-SUFFIX,iyunmu.com
 DOMAIN-SUFFIX,iyunxiao.com
-DOMAIN-SUFFIX,izattime.qcomgeo2.com
 DOMAIN-SUFFIX,izto.com
 DOMAIN-SUFFIX,iztzq.com
 DOMAIN-SUFFIX,izuche.com
@@ -4643,8 +4645,6 @@ DOMAIN-SUFFIX,tiktokd.org
 DOMAIN-SUFFIX,tikv.org
 DOMAIN-SUFFIX,timbrd.com
 DOMAIN-SUFFIX,time-weekly.com
-DOMAIN-SUFFIX,time.izatcloud.net
-DOMAIN-SUFFIX,time.xtracloud.net
 DOMAIN-SUFFIX,timedoo.com
 DOMAIN-SUFFIX,timibase.com
 DOMAIN-SUFFIX,timmerse.com
@@ -5225,7 +5225,6 @@ DOMAIN-SUFFIX,xqfunds.com
 DOMAIN-SUFFIX,xqymuy.com
 DOMAIN-SUFFIX,xsa239.com
 DOMAIN-SUFFIX,xslb.net
-DOMAIN-SUFFIX,xtratime.qcomgeo2.com
 DOMAIN-SUFFIX,xuanchuanyi.com
 DOMAIN-SUFFIX,xue51.com
 DOMAIN-SUFFIX,xueche.com

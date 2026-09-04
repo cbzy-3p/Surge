@@ -1,12 +1,13 @@
 # NAME: Multi-source-GlobalMedia
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-02 12:49:07 UTC
-# RULE COUNT: 3474
+# UPDATED: 2026-09-04 19:00:09 UTC
+# RULE COUNT: 3510
+# SOURCE: https://ruleset.skk.moe/List/non_ip/stream.conf
+# SOURCE: https://ruleset.skk.moe/List/ip/stream.conf
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/GlobalMedia.list
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GlobalMedia/GlobalMedia_All_No_Resolve.list
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/category-media.list
-# SOURCE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-media.list
 # NOTE: Sources are normalized, merged, deduplicated and compacted without reducing coverage.
 
 DOMAIN,ai.google.dev
@@ -18,7 +19,10 @@ DOMAIN,api.okzy.tv
 DOMAIN,api.together.xyz
 DOMAIN,apm-misaka.biliapi.net
 DOMAIN,apple.comscoreresearch.com
+DOMAIN,asahishimbun.sc.omtrdc.net
+DOMAIN,athome.fandango.com
 DOMAIN,bcbolt446c5271-a.akamaihd.net
+DOMAIN,cache.video.iqiyi.com
 DOMAIN,chuangcachecdnoversea-tw.inter.ptqy.gitv.tv
 DOMAIN,console.groq.com
 DOMAIN,copilot-proxy.githubusercontent.com
@@ -26,6 +30,7 @@ DOMAIN,cs428.wpc.edgecastcdn.net
 DOMAIN,dashasiafox.akamaized.netflix
 DOMAIN,daznfeeds.com.edgekey.net
 DOMAIN,dca-lm-livedazn.secure.footprint.net
+DOMAIN,deutschewelle.h-cdn.com
 DOMAIN,e13252.dscg.akamaiedge.net
 DOMAIN,edge.cwtv-vod-ext.top.comcast.net
 DOMAIN,generativelanguage.googleapis.com
@@ -33,6 +38,9 @@ DOMAIN,gspe1-ssl.ls.apple.com
 DOMAIN,h-dazn.online-metrix.net
 DOMAIN,h-netflix.online-metrix.net
 DOMAIN,hamifans.emome.net
+DOMAIN,himalaya-exchange.zendesk.com
+DOMAIN,hls-amt.itunes.apple.com
+DOMAIN,hls.itunes.apple.com
 DOMAIN,hulu.com.c.footprint.net
 DOMAIN,hulu.map.fastly.net
 DOMAIN,images-daznservices-com.cdn.ampproject.org
@@ -42,10 +50,15 @@ DOMAIN,news-client.apple.com
 DOMAIN,news-edge.apple.com
 DOMAIN,news-events.apple.com
 DOMAIN,notebooklm.google.com
+DOMAIN,np-edge.itunes.apple.com
 DOMAIN,ocvideo.apple.com
+DOMAIN,play-edge.itunes.apple.com
+DOMAIN,prod-api.crackle.com
 DOMAIN,rpg.pic-imges.com
 DOMAIN,rthklive2-lh.akamaihd.net
 DOMAIN,sydney.bing.com
+DOMAIN,uts-api.itunes.apple.com
+DOMAIN,vudu.com
 DOMAIN-SUFFIX,112263.com
 DOMAIN-SUFFIX,1917live.red
 DOMAIN-SUFFIX,1degree.com.au
@@ -147,7 +160,6 @@ DOMAIN-SUFFIX,arteldoc.tv
 DOMAIN-SUFFIX,asagaku.com
 DOMAIN-SUFFIX,asahi.com
 DOMAIN-SUFFIX,asahicom.jp
-DOMAIN-SUFFIX,asahishimbun.sc.omtrdc.net
 DOMAIN-SUFFIX,asakonet.co.jp
 DOMAIN-SUFFIX,asiangooglenetwork.com
 DOMAIN-SUFFIX,assetshuluimcom-a.akamaihd.net
@@ -463,7 +475,6 @@ DOMAIN-SUFFIX,dengiamerika.com
 DOMAIN-SUFFIX,dert.online
 DOMAIN-SUFFIX,dert.site
 DOMAIN-SUFFIX,dert.tech
-DOMAIN-SUFFIX,deutschewelle.h-cdn.com
 DOMAIN-SUFFIX,dev-guardianapis.com
 DOMAIN-SUFFIX,dev-theguardian.com
 DOMAIN-SUFFIX,digitaltrends.com
@@ -710,6 +721,7 @@ DOMAIN-SUFFIX,falundafa.org.tw
 DOMAIN-SUFFIX,falundafamuseum.org
 DOMAIN-SUFFIX,falungong.club
 DOMAIN-SUFFIX,faluninfo.net
+DOMAIN-SUFFIX,fanfox.net
 DOMAIN-SUFFIX,fantv.hk
 DOMAIN-SUFFIX,fast.com
 DOMAIN-SUFFIX,fawanghuihui.org
@@ -1028,6 +1040,8 @@ DOMAIN-SUFFIX,hbogoasia.com
 DOMAIN-SUFFIX,hbogoasia.hk
 DOMAIN-SUFFIX,hbogoasia.id
 DOMAIN-SUFFIX,hbogoasia.ph
+DOMAIN-SUFFIX,hbogoasia.sg
+DOMAIN-SUFFIX,hbogoasia.tw
 DOMAIN-SUFFIX,hbolb.onwardsmg.com
 DOMAIN-SUFFIX,hbomax.com
 DOMAIN-SUFFIX,hbomaxcdn.com
@@ -1038,7 +1052,6 @@ DOMAIN-SUFFIX,headlinejobs.hk
 DOMAIN-SUFFIX,hentaiverse.org
 DOMAIN-SUFFIX,heraldsun.com.au
 DOMAIN-SUFFIX,herringnetwork.com
-DOMAIN-SUFFIX,himalaya-exchange.zendesk.com
 DOMAIN-SUFFIX,himalaya.com
 DOMAIN-SUFFIX,himalaya.exchange
 DOMAIN-SUFFIX,hinet.net
@@ -1264,6 +1277,7 @@ DOMAIN-SUFFIX,makaan.com
 DOMAIN-SUFFIX,makersuite.google.com
 DOMAIN-SUFFIX,malayalamanorama.com
 DOMAIN-SUFFIX,mandatewire.com
+DOMAIN-SUFFIX,mangafox.me
 DOMAIN-SUFFIX,manifest.prod.boltdns.net
 DOMAIN-SUFFIX,manorama.com
 DOMAIN-SUFFIX,manoramanews.com
@@ -1629,6 +1643,7 @@ DOMAIN-SUFFIX,pronstore.com
 DOMAIN-SUFFIX,property.com.au
 DOMAIN-SUFFIX,proptiger.com
 DOMAIN-SUFFIX,pscdn.co
+DOMAIN-SUFFIX,psg.cdn.hgc.com.hk
 DOMAIN-SUFFIX,pv-cdn.net
 DOMAIN-SUFFIX,pwmnet.com
 DOMAIN-SUFFIX,q13.com
@@ -2035,6 +2050,8 @@ DOMAIN-SUFFIX,tiktok.com
 DOMAIN-SUFFIX,tiktok.us
 DOMAIN-SUFFIX,tiktokcdn.com
 DOMAIN-SUFFIX,tiktokv.com
+DOMAIN-SUFFIX,tiktokv.us
+DOMAIN-SUFFIX,tiktokw.com
 DOMAIN-SUFFIX,timesmembership.com
 DOMAIN-SUFFIX,timestalks.com
 DOMAIN-SUFFIX,tmsnrt.rs
@@ -2067,6 +2084,7 @@ DOMAIN-SUFFIX,tvbusa.com
 DOMAIN-SUFFIX,tvbweekly.com
 DOMAIN-SUFFIX,tver.co.jp
 DOMAIN-SUFFIX,tver.jp
+DOMAIN-SUFFIX,tvlicensing.co.uk
 DOMAIN-SUFFIX,tvmedia.net.au
 DOMAIN-SUFFIX,tvmost.com.hk
 DOMAIN-SUFFIX,tvnaviweb.jp
@@ -2461,6 +2479,8 @@ DOMAIN-SUFFIX,zhuichaguoji.org
 DOMAIN-SUFFIX,zoomingin.tv
 DOMAIN-SUFFIX,zwtvusa.com
 DOMAIN-SUFFIX,zype.com
+DOMAIN-KEYWORD,-spotify-com
+DOMAIN-KEYWORD,-tiktokcdn-com
 DOMAIN-KEYWORD,abematv.akamaized.net
 DOMAIN-KEYWORD,anthropic
 DOMAIN-KEYWORD,apiproxy-device-prod-nlb-
@@ -2510,9 +2530,11 @@ USER-AGENT,Disney*
 USER-AGENT,Disney+*
 USER-AGENT,DPlus*
 USER-AGENT,encoreTVB*
+USER-AGENT,FOX NOW*
 USER-AGENT,FOX%20NOW*
 USER-AGENT,FOXNOW*
 USER-AGENT,FOXPlus*
+USER-AGENT,HBO NOW*
 USER-AGENT,HBO%20GO%20PROD%20HKG*
 USER-AGENT,HBO%20GO%20PROD*
 USER-AGENT,HBO%20NOW*
@@ -2527,12 +2549,14 @@ USER-AGENT,InstantVideo.US*
 USER-AGENT,ITV_Player*
 USER-AGENT,JOOX*
 USER-AGENT,KKTV*
+USER-AGENT,LINE TV*
 USER-AGENT,LINE%20TV*
 USER-AGENT,LINE*
 USER-AGENT,LINETV*
 USER-AGENT,Max*
 USER-AGENT,My5*
 USER-AGENT,mytv*
+USER-AGENT,Naver TV*
 USER-AGENT,Naver%20TV*
 USER-AGENT,NaverTV*
 USER-AGENT,Niconico*
@@ -2541,6 +2565,7 @@ USER-AGENT,Pandora*
 USER-AGENT,PBS*
 USER-AGENT,PeacockMobile*
 USER-AGENT,PPlus*
+USER-AGENT,Prime Video*
 USER-AGENT,Prime%20Video*
 USER-AGENT,PrimeVideo*
 USER-AGENT,SoundCloud*
@@ -2556,9 +2581,21 @@ USER-AGENT,WeMusic*
 USER-AGENT,WeTV*
 USER-AGENT,YouTube*
 USER-AGENT,YouTubeMusic*
+PROCESS-NAME,com.amazon.avod.thirdpartyclient
+PROCESS-NAME,com.bstar.intl
+PROCESS-NAME,com.hktve.viutv
+PROCESS-NAME,com.hulu.plus
+PROCESS-NAME,com.linecorp.linetv
+PROCESS-NAME,com.netflix.mediaclient
+PROCESS-NAME,com.tencent.ibg.joox
+PROCESS-NAME,com.twgood.android
 PROCESS-NAME,com.viu.pad
 PROCESS-NAME,com.viu.phone
 PROCESS-NAME,com.vuclip.viu
+PROCESS-NAME,music
+PROCESS-NAME,tv
+PROCESS-NAME,tv.twitch.android.app
+URL-REGEX,^https?:\/\/www\.amazon\.com\/(Amazon-Video|gp\/video)\/
 IP-CIDR,1.201.0.0/24,no-resolve
 IP-CIDR,1.37.35.6/32,no-resolve
 IP-CIDR,101.100.179.242/32,no-resolve

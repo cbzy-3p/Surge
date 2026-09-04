@@ -1,10 +1,10 @@
-# NAME: V2Fly-N26
+# NAME: Multi-source-N26
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-03 11:44:47 UTC
+# UPDATED: 2026-09-04 19:00:09 UTC
 # RULE COUNT: 3
-# SOURCE: https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/n26
-# NOTE: Generated from canonical V2Fly geosite data; unsupported regexp rules fail closed.
+# SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/n26.list
+# NOTE: Yuu518 is preferred; canonical V2Fly data is used only as a fail-closed fallback.
 
 DOMAIN-SUFFIX,n26.com
 DOMAIN-SUFFIX,number26.de

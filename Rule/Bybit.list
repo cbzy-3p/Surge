@@ -1,10 +1,10 @@
-# NAME: V2Fly-Bybit
+# NAME: Multi-source-Bybit
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-03 11:44:47 UTC
+# UPDATED: 2026-09-04 19:00:09 UTC
 # RULE COUNT: 16
-# SOURCE: https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/bybit
-# NOTE: Generated from canonical V2Fly geosite data; unsupported regexp rules fail closed.
+# SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/bybit.list
+# NOTE: Yuu518 is preferred; canonical V2Fly data is used only as a fail-closed fallback.
 
 DOMAIN,bybit-exchange.github.io
 DOMAIN,bybit.ada.support

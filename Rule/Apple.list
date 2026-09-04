@@ -1,17 +1,25 @@
 # NAME: Multi-source-Apple
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-02 12:29:32 UTC
+# UPDATED: 2026-09-04 19:00:06 UTC
 # RULE COUNT: 1617
 # SOURCE: https://ruleset.skk.moe/List/non_ip/apple_services.conf
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Apple/Apple_All_No_Resolve.list
+# SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Apple.list
+# SOURCE: https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Apple/Apple.list
+# SOURCE: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/apple.txt
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/apple.list
-# SOURCE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.list
 # NOTE: Sources are normalized, merged and deduplicated; the SKK watermark domain is excluded.
 
 DOMAIN,apple-events.akamaized.net
+DOMAIN,appleworldwidedeveloper.hb-api.omtrdc.net
+DOMAIN,appleworldwidedeveloper.sc.omtrdc.net
+DOMAIN,beatselectronicsllc.tt.omtrdc.net
 DOMAIN,e16991.b.akamaiedge.net
 DOMAIN,lookup-api.apple.com.edgekey.net
+DOMAIN,notary-submissions-prod.s3-accelerate.amazonaws.com
+DOMAIN,notary-submissions-prod.s3.us-west-2.amazonaws.com
+DOMAIN,p-events-delivery.akamaized.net
 DOMAIN-SUFFIX,100beatscheap.com
 DOMAIN-SUFFIX,12diasdepresentesdeitunes.com
 DOMAIN-SUFFIX,12diasderegalosdeitunes.cl
@@ -408,8 +416,6 @@ DOMAIN-SUFFIX,applewatchedition.com
 DOMAIN-SUFFIX,applewatchseries3.net
 DOMAIN-SUFFIX,applewatchsport.com
 DOMAIN-SUFFIX,appleweb.net
-DOMAIN-SUFFIX,appleworldwidedeveloper.hb-api.omtrdc.net
-DOMAIN-SUFFIX,appleworldwidedeveloper.sc.omtrdc.net
 DOMAIN-SUFFIX,applexpo.net
 DOMAIN-SUFFIX,applezh.com
 DOMAIN-SUFFIX,applf.com
@@ -645,7 +651,6 @@ DOMAIN-SUFFIX,beatsdreus.com
 DOMAIN-SUFFIX,beatsearbudsheadphoness.com
 DOMAIN-SUFFIX,beatselectronic.net
 DOMAIN-SUFFIX,beatselectronics.com
-DOMAIN-SUFFIX,beatselectronicsllc.tt.omtrdc.net
 DOMAIN-SUFFIX,beatsep.cn
 DOMAIN-SUFFIX,beatsep.com
 DOMAIN-SUFFIX,beatsep.net
@@ -1408,8 +1413,6 @@ DOMAIN-SUFFIX,newton.com
 DOMAIN-SUFFIX,next.com
 DOMAIN-SUFFIX,nflhotsalejerseys.com
 DOMAIN-SUFFIX,nicesshop.net
-DOMAIN-SUFFIX,notary-submissions-prod.s3-accelerate.amazonaws.com
-DOMAIN-SUFFIX,notary-submissions-prod.s3.us-west-2.amazonaws.com
 DOMAIN-SUFFIX,offerairjordanlebron.com
 DOMAIN-SUFFIX,officialbeatsbydreshop.com
 DOMAIN-SUFFIX,officialbeatsbydrestore.com
@@ -1426,7 +1429,6 @@ DOMAIN-SUFFIX,onsaletrend.com
 DOMAIN-SUFFIX,organicfruitapps.com
 DOMAIN-SUFFIX,outletbeatsshop.com
 DOMAIN-SUFFIX,overapple.com
-DOMAIN-SUFFIX,p-events-delivery.akamaized.net
 DOMAIN-SUFFIX,pascherbeatsmonster.com
 DOMAIN-SUFFIX,paulsimon-music.com
 DOMAIN-SUFFIX,perfectkickz.net

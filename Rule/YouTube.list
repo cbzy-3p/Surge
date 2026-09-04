@@ -1,14 +1,15 @@
 # NAME: Multi-source-YouTube
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-02 12:49:07 UTC
+# UPDATED: 2026-09-04 19:00:09 UTC
 # RULE COUNT: 191
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/YouTube.list
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/YouTube/YouTube.list
+# SOURCE: https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Streaming/Video/YouTube.list
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/youtube.list
-# SOURCE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.list
 # NOTE: Sources are normalized, merged, deduplicated and compacted without reducing coverage.
 
+DOMAIN,yt3.googleusercontent.com
 DOMAIN-SUFFIX,ggpht.cn
 DOMAIN-SUFFIX,ggpht.com
 DOMAIN-SUFFIX,googlevideo.com
@@ -187,7 +188,6 @@ DOMAIN-SUFFIX,youtubei.googleapis.com
 DOMAIN-SUFFIX,youtubekids.com
 DOMAIN-SUFFIX,youtubemobilesupport.com
 DOMAIN-SUFFIX,yt.be
-DOMAIN-SUFFIX,yt3.googleusercontent.com
 DOMAIN-SUFFIX,ytimg.com
 DOMAIN-KEYWORD,youtube
 USER-AGENT,*com.google.ios.youtubemusic*

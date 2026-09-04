@@ -1,9 +1,10 @@
 # NAME: Multi-source-GoogleVoice
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-08-26 01:57:08 UTC
+# UPDATED: 2026-09-04 18:59:51 UTC
 # RULE COUNT: 1
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GoogleVoice/GoogleVoice.list
+# MERGED SOURCE: https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Google/GoogleVoice.list
 # NOTE: BM7 coverage is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and compacted.
 
 DOMAIN,lens.l.google.com

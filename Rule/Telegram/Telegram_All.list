@@ -1,9 +1,11 @@
 # NAME: Telegram_All
 # AUTHOR: cbzy-3p
 # SORT: PROCESS-NAME > DOMAIN > DOMAIN-SUFFIX > DOMAIN-KEYWORD > IP-CIDR > IP-CIDR6 > IP-ASN
+# SOURCE: SukkaW List/non_ip/telegram.conf and List/ip/telegram.conf
 # SOURCE: Rabbit-Spec/Surge Rules/TelegramASN.list
 # SOURCE: blackmatrix7/ios_rule_script rule/Surge/Telegram/Telegram.list
 # SOURCE: ConnersHua/RuleGo Surge/Ruleset/Extra/Telegram.list
+# SOURCE: Loyalsoldier/surge-rules ruleset/telegramcidr.txt
 # SOURCE: Yuu518/Yuu-rules surge/geosite/telegram.list
 # AutoUpdate: daily at 00:17 Beijing time
 
@@ -47,10 +49,12 @@ DOMAIN-KEYWORD,nicegram
 IP-CIDR,5.28.192.0/18,no-resolve
 IP-CIDR,91.105.192.0/23,no-resolve
 IP-CIDR,91.108.0.0/16,no-resolve
+IP-CIDR,95.161.64.0/20,no-resolve
 IP-CIDR,109.239.140.0/24,no-resolve
 IP-CIDR,139.59.210.98/32,no-resolve
 IP-CIDR,149.154.160.0/20,no-resolve
 IP-CIDR,185.76.151.0/24,no-resolve
+IP-CIDR,194.221.250.50/32,no-resolve
 IP-CIDR,196.55.216.167/32,no-resolve
 
 IP-CIDR6,2001:67c:4e8::/48,no-resolve

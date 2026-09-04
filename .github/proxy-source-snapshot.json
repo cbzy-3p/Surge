@@ -1,7 +1,10 @@
 {
   "counts": {
     "bm7": 131,
-    "output": 6959,
+    "conners": 512,
+    "loyal": 27007,
+    "loyal-covered": 4160,
+    "output": 7046,
     "rabbit": 6953,
     "yuu": 16
   },

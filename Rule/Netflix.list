@@ -1,14 +1,13 @@
 # NAME: Multi-source-Netflix
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-02 12:49:07 UTC
+# UPDATED: 2026-09-04 19:00:09 UTC
 # RULE COUNT: 1157
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Netflix.list
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Netflix/Netflix.list
+# SOURCE: https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Streaming/Video/Netflix.list
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/netflix.list
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geoip/netflix.list
-# SOURCE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.list
-# SOURCE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.list
 # NOTE: Sources are normalized, merged, deduplicated and compacted without reducing coverage.
 
 DOMAIN,e13252.dscg.akamaiedge.net

@@ -1,12 +1,11 @@
 # NAME: Multi-source-ChinaMedia
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-02 12:51:02 UTC
+# UPDATED: 2026-09-04 19:00:09 UTC
 # RULE COUNT: 796
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/ChinaMedia.list
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMedia/ChinaMedia.list
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/category-media-cn.list
-# SOURCE: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-media-cn.list
 # NOTE: Sources are normalized, merged, deduplicated and compacted without reducing coverage.
 
 DOMAIN,00713915daab0be43def5c338c02c80b.dlied1.cdntips.net
@@ -63,6 +62,7 @@ DOMAIN,4go41hcjtgazdoctqge4o.ourdvsss.com
 DOMAIN,apd-pcdnvodstat.teg.tencent-cloud.net
 DOMAIN,api.iplay.163.com
 DOMAIN,aqqmusic.tc.qq.com
+DOMAIN,ctdsb.clouddiffuse.xyz
 DOMAIN,dldir1.qq.com
 DOMAIN,iacc.qq.com
 DOMAIN,ins-eeww7kom.ias.tencent-cloud.net
@@ -250,7 +250,6 @@ DOMAIN-SUFFIX,cqnews.net
 DOMAIN-SUFFIX,cqsjb.com
 DOMAIN-SUFFIX,cri.cn
 DOMAIN-SUFFIX,cs.com.cn
-DOMAIN-SUFFIX,ctdsb.clouddiffuse.xyz
 DOMAIN-SUFFIX,ctdsb.net
 DOMAIN-SUFFIX,ctoutiao.com
 DOMAIN-SUFFIX,cww.net.cn
