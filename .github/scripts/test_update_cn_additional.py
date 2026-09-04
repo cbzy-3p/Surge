@@ -22,6 +22,25 @@ class CNAdditionalTests(unittest.TestCase):
         self.assertEqual(domains, ["example.com"])
         self.assertEqual(invalid, ["not a domain"])
 
+    def test_valid_source_count_is_normalized_and_deduplicated(self):
+        count = UPDATE.count_valid_unique_domains(
+            "example.com\nEXAMPLE.com\n.foo.com\nDOMAIN-SUFFIX,bar.com\n"
+        )
+        self.assertEqual(count, 3)
+
+    def test_snapshot_rejects_suspicious_changes(self):
+        with self.assertRaises(RuntimeError):
+            UPDATE.validate_snapshot({"output": 100}, {"output": 64})
+        with self.assertRaises(RuntimeError):
+            UPDATE.validate_snapshot({"output": 100}, {"output": 251})
+        UPDATE.validate_snapshot({"output": 100}, {"output": 80})
+
+    def test_domain_set_output_uses_leading_dot(self):
+        self.assertEqual(
+            UPDATE.render_output(["example.com", "other.example"]),
+            ".example.com\n.other.example\n",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
