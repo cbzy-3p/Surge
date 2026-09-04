@@ -26,7 +26,6 @@ CONFIGS = {
     "AIGC": [
         ("skk-non-ip", f"{SKK}/non_ip/ai.conf", "surge", 20),
         ("skk-ip", f"{SKK}/ip/ai.conf", "surge", 5),
-        ("bm7", f"{BM7}/AIGC/AIGC.list", "surge", 50),
         ("rabbit", f"{RABBIT}/AIGC.list", "surge", 100),
         ("conners", f"{CONNERS}/AI.list", "surge", 20),
         ("yuu", f"{YUU}/geosite/category-ai-!cn.list", "surge", 50),
