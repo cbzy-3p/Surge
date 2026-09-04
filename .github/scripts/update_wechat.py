@@ -12,7 +12,6 @@ ROOT = Path(__file__).resolve().parents[2]
 TARGET = ROOT / "Rule" / "WeChat.list"
 SOURCE_URLS = [
     "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/WeChat/WeChat.list",
-    "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Wechat.list",
     "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/WeChat.list",
 ]
 TYPE_ORDER = {
@@ -140,7 +139,7 @@ def render(rules: set[str]) -> str:
         f"# UpdateTime: {now}\n"
         f"# RuleCount: {len(rules)}\n"
         "# AutoUpdate: daily at 00:17 Beijing time; current rules preserved; upstream rules merged and semantically deduplicated\n"
-        "# Sources: blackmatrix7 WeChat, ACL4SSR Wechat, ConnersHua RuleGo WeChat\n"
+        "# Sources: blackmatrix7 WeChat, ConnersHua RuleGo WeChat; existing verified rules are preserved\n"
         "\n"
         f"{body}\n"
     )

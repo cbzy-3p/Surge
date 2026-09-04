@@ -37,6 +37,14 @@ jobs:
           mkdir -p "$OUT_DIR"
 
           curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 90 \
+            "https://ruleset.skk.moe/List/non_ip/telegram.conf" \
+            -o "$OUT_DIR/SukkaW-Telegram.list"
+
+          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 90 \
+            "https://ruleset.skk.moe/List/ip/telegram.conf" \
+            -o "$OUT_DIR/SukkaW-TelegramCIDR.list"
+
+          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 90 \
             "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/TelegramASN.list" \
             -o "$OUT_DIR/RabbitSpec-TelegramASN.list"
 
@@ -49,27 +57,37 @@ jobs:
             -o "$OUT_DIR/ConnersHua-Telegram.list"
 
           curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 90 \
+            "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/telegramcidr.txt" \
+            -o "$OUT_DIR/Loyalsoldier-TelegramCIDR.list"
+
+          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 90 \
             "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/telegram.list" \
             -o "$OUT_DIR/Yuu518-Telegram.list"
 
           cat \
+            "$OUT_DIR/SukkaW-Telegram.list" \
+            "$OUT_DIR/SukkaW-TelegramCIDR.list" \
             "$OUT_DIR/RabbitSpec-TelegramASN.list" \
             "$OUT_DIR/blackmatrix7-Telegram.list" \
             "$OUT_DIR/ConnersHua-Telegram.list" \
+            "$OUT_DIR/Loyalsoldier-TelegramCIDR.list" \
             "$OUT_DIR/Yuu518-Telegram.list" \
             | sed 's/\r$//' \
             | sed 's/[[:space:]]*\/\/.*$//' \
             | awk '{$1=$1; print}' \
             | awk 'NF && $0 !~ /^#/ && $0 !~ /^OR,/' \
+            | grep -v '7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe' \
             | awk '!seen[$0]++' > "$RAW_FILE"
 
           {
             echo "# NAME: Telegram_All"
             echo "# AUTHOR: cbzy-3p"
             echo "# SORT: PROCESS-NAME > DOMAIN > DOMAIN-SUFFIX > DOMAIN-KEYWORD > IP-CIDR > IP-CIDR6 > IP-ASN"
+            echo "# SOURCE: SukkaW List/non_ip/telegram.conf and List/ip/telegram.conf"
             echo "# SOURCE: Rabbit-Spec/Surge Rules/TelegramASN.list"
             echo "# SOURCE: blackmatrix7/ios_rule_script rule/Surge/Telegram/Telegram.list"
             echo "# SOURCE: ConnersHua/RuleGo Surge/Ruleset/Extra/Telegram.list"
+            echo "# SOURCE: Loyalsoldier/surge-rules ruleset/telegramcidr.txt"
             echo "# SOURCE: Yuu518/Yuu-rules surge/geosite/telegram.list"
             echo
             awk -F, '$1 == "PROCESS-NAME"' "$RAW_FILE" | LC_ALL=C sort -t, -k2,2 -u

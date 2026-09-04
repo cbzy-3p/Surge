@@ -15,10 +15,12 @@ SNAPSHOT = ROOT / ".github" / "apple-source-snapshot.json"
 SOURCES = {
     "skk": "https://ruleset.skk.moe/List/non_ip/apple_services.conf",
     "bm7": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Apple/Apple_All_No_Resolve.list",
+    "rabbit": "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Apple.list",
+    "conners": "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Apple/Apple.list",
+    "loyal": "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/apple.txt",
     "yuu": "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/apple.list",
-    "meta": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.list",
 }
-MINIMUMS = {"skk": 20, "bm7": 1_500, "yuu": 1_500, "meta": 1_500}
+MINIMUMS = {"skk": 20, "bm7": 1_500, "rabbit": 20, "conners": 20, "loyal": 20, "yuu": 1_500}
 RULE_TYPES = {
     "DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD",
     "IP-CIDR", "IP-CIDR6", "IP-ASN", "USER-AGENT", "PROCESS-NAME",
@@ -185,8 +187,10 @@ def main() -> None:
     fetched = {
         "skk": parse_surge(fetch(SOURCES["skk"])),
         "bm7": parse_surge(fetch(SOURCES["bm7"])),
+        "rabbit": parse_surge(fetch(SOURCES["rabbit"])),
+        "conners": parse_surge(fetch(SOURCES["conners"])),
+        "loyal": parse_surge(fetch(SOURCES["loyal"])),
         "yuu": parse_surge(fetch(SOURCES["yuu"])),
-        "meta": parse_plain(fetch(SOURCES["meta"])),
     }
     counts = {name: len(rules) for name, rules in fetched.items()}
     for name, minimum in MINIMUMS.items():

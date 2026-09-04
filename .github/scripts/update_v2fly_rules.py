@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build selected Surge rule sets from canonical V2Fly geosite data."""
+"""Build small service rule sets from Yuu518, with V2Fly as a fallback."""
 
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "Rule"
 BASE = "https://raw.githubusercontent.com/v2fly/domain-list-community/master/data"
+YUU_BASE = "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite"
 TARGETS = {
     "Bybit": {"entry": "bybit", "minimum": 8, "required": "bybit.com"},
     "N26": {"entry": "n26", "minimum": 3, "required": "n26.com"},
@@ -94,18 +95,37 @@ def compact(rules: set[Rule]) -> set[Rule]:
     return {*(('DOMAIN', value) for value in exact), *(('DOMAIN-SUFFIX', value) for value in suffixes), *(('DOMAIN-KEYWORD', value) for value in keywords)}
 
 
+def parse_yuu(entry: str, loader=fetch) -> tuple[set[Rule], set[str]]:
+    url = f"{YUU_BASE}/{entry}.list"
+    rules: set[Rule] = set()
+    for raw in loader(url).replace("\r", "").splitlines():
+        line = raw.split("#", 1)[0].strip()
+        if not line:
+            continue
+        parts = [part.strip() for part in line.split(",")]
+        if len(parts) < 2 or parts[0] not in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD"}:
+            continue
+        value = parts[1].lower().rstrip(".")
+        if parts[0] in {"DOMAIN", "DOMAIN-SUFFIX"}:
+            value = normalize_domain(value)
+        elif not value or any(char.isspace() for char in value):
+            continue
+        rules.add((parts[0], value))
+    return compact(rules), {url}
+
+
 def render(name: str, rules: set[Rule], sources: set[str]) -> str:
     order = {"DOMAIN": 0, "DOMAIN-SUFFIX": 1, "DOMAIN-KEYWORD": 2}
     lines = [f"{kind},{value}" for kind, value in sorted(rules, key=lambda r: (order[r[0]], r[1]))]
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     header = [
-        f"# NAME: V2Fly-{name}",
+        f"# NAME: Multi-source-{name}",
         "# AUTHOR: cbzy-3p",
         "# FORMAT: Surge Rule Set",
         f"# UPDATED: {now}",
         f"# RULE COUNT: {len(lines)}",
         *[f"# SOURCE: {source}" for source in sorted(sources)],
-        "# NOTE: Generated from canonical V2Fly geosite data; unsupported regexp rules fail closed.",
+        "# NOTE: Yuu518 is preferred; canonical V2Fly data is used only as a fail-closed fallback.",
         "",
     ]
     return "\n".join(header + lines) + "\n"
@@ -121,7 +141,12 @@ def count_rules(text: str) -> int:
 
 def main() -> None:
     for name, config in TARGETS.items():
-        rules, sources = parse_entry(config["entry"])
+        try:
+            rules, sources = parse_yuu(config["entry"])
+            if len(rules) < config["minimum"]:
+                raise RuntimeError("Yuu518 source is unexpectedly small")
+        except Exception:
+            rules, sources = parse_entry(config["entry"])
         values = {value for _, value in rules}
         if len(rules) < config["minimum"] or config["required"] not in values:
             raise RuntimeError(f"unexpectedly small or incomplete {name} source: {len(rules)} rules")

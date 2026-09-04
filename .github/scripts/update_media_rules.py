@@ -18,58 +18,62 @@ SNAPSHOT_VERSION = 1
 
 RABBIT = "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules"
 BM7 = "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge"
+SKK = "https://ruleset.skk.moe/List"
+CONNERS = "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra"
 YUU = "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge"
-META = "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo"
 
 CONFIGS = {
     "AIGC": [
+        ("skk-non-ip", f"{SKK}/non_ip/ai.conf", "surge", 20),
+        ("skk-ip", f"{SKK}/ip/ai.conf", "surge", 5),
+        ("bm7", f"{BM7}/AIGC/AIGC.list", "surge", 50),
         ("rabbit", f"{RABBIT}/AIGC.list", "surge", 100),
+        ("conners", f"{CONNERS}/AI.list", "surge", 20),
         ("yuu", f"{YUU}/geosite/category-ai-!cn.list", "surge", 50),
-        ("meta", f"{META}/geosite/category-ai-!cn.list", "domain", 150),
     ],
     "YouTube": [
         ("rabbit", f"{RABBIT}/YouTube.list", "surge", 150),
         ("bm7", f"{BM7}/YouTube/YouTube.list", "surge", 150),
+        ("conners", f"{CONNERS}/Streaming/Video/YouTube.list", "surge", 20),
         ("yuu", f"{YUU}/geosite/youtube.list", "surge", 150),
-        ("meta", f"{META}/geosite/youtube.list", "domain", 150),
     ],
     "Netflix": [
         ("rabbit", f"{RABBIT}/Netflix.list", "surge", 1_000),
         ("bm7", f"{BM7}/Netflix/Netflix.list", "surge", 1_000),
+        ("conners", f"{CONNERS}/Streaming/Video/Netflix.list", "surge", 10),
         ("yuu-domain", f"{YUU}/geosite/netflix.list", "surge", 20),
         ("yuu-ip", f"{YUU}/geoip/netflix.list", "surge", 100),
-        ("meta-domain", f"{META}/geosite/netflix.list", "domain", 20),
-        ("meta-ip", f"{META}/geoip/netflix.list", "cidr", 100),
     ],
     "ChinaMedia": [
         ("rabbit", f"{RABBIT}/ChinaMedia.list", "surge", 400),
         ("bm7", f"{BM7}/ChinaMedia/ChinaMedia.list", "surge", 400),
         ("yuu", f"{YUU}/geosite/category-media-cn.list", "surge", 350),
-        ("meta", f"{META}/geosite/category-media-cn.list", "domain", 350),
     ],
     "GlobalMedia": [
+        ("skk-non-ip", f"{SKK}/non_ip/stream.conf", "surge", 100),
+        ("skk-ip", f"{SKK}/ip/stream.conf", "surge", 15),
         ("rabbit", f"{RABBIT}/GlobalMedia.list", "surge", 2_000),
         ("bm7", f"{BM7}/GlobalMedia/GlobalMedia_All_No_Resolve.list", "surge", 2_000),
         ("yuu", f"{YUU}/geosite/category-media.list", "surge", 1_400),
-        ("meta", f"{META}/geosite/category-media.list", "domain", 1_400),
     ],
     "China": [
         ("rabbit", f"{RABBIT}/China.list", "surge", 3_500),
         ("bm7", f"{BM7}/China/China_Domain.list", "domain", 3_500),
         ("yuu", f"{YUU}/geosite/geolocation-cn.list", "surge", 5_000),
-        ("meta", f"{META}/geosite/geolocation-cn.list", "domain", 5_000),
     ],
     "ChinaCIDR": [
+        ("skk-ipv4", f"{SKK}/ip/china_ip.conf", "surge", 1_000),
+        ("skk-ipv6", f"{SKK}/ip/china_ip_ipv6.conf", "surge", 100),
         ("rabbit", f"{RABBIT}/ChinaCIDR.list", "surge", 9_000),
         ("bm7", f"{BM7}/ChinaIPs/ChinaIPs.list", "surge", 20_000),
         ("yuu", f"{YUU}/geoip/cn.list", "surge", 8_500),
-        ("meta", f"{META}/geoip/cn.list", "cidr", 9_000),
     ],
 }
 
 RULE_TYPES = {
     "DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD",
     "IP-CIDR", "IP-CIDR6", "IP-ASN", "USER-AGENT", "PROCESS-NAME",
+    "URL-REGEX",
 }
 DOMAIN_RE = re.compile(
     r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+"
@@ -128,8 +132,10 @@ def normalize_rule(rule_type: str, value: str) -> tuple[str, str] | None:
     if rule_type == "DOMAIN-WILDCARD":
         wildcard = value.lower().rstrip(".")
         return (rule_type, wildcard) if wildcard.startswith("*.") and normalize_domain(wildcard) else None
-    if rule_type in {"DOMAIN-KEYWORD", "USER-AGENT", "PROCESS-NAME"}:
+    if rule_type == "DOMAIN-KEYWORD":
         return (rule_type, value) if value and not any(char.isspace() for char in value) else None
+    if rule_type in {"USER-AGENT", "PROCESS-NAME", "URL-REGEX"}:
+        return (rule_type, value) if value else None
     if rule_type == "IP-ASN":
         return (rule_type, str(int(value))) if value.isdecimal() and int(value) > 0 else None
     try:
@@ -252,7 +258,7 @@ def render(name: str, rules: set[tuple[str, str]], sources: list[str], updated: 
     order = {
         "DOMAIN": 0, "DOMAIN-SUFFIX": 1, "DOMAIN-KEYWORD": 2,
         "DOMAIN-WILDCARD": 3, "USER-AGENT": 4, "PROCESS-NAME": 5,
-        "IP-CIDR": 6, "IP-CIDR6": 7, "IP-ASN": 8,
+        "URL-REGEX": 6, "IP-CIDR": 7, "IP-CIDR6": 8, "IP-ASN": 9,
     }
     updated = updated or datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     header = [

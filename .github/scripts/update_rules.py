@@ -14,31 +14,31 @@ ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "Rule"
 SNAPSHOT = ROOT / ".github" / "rule-source-snapshot.json"
 BM7_BASE = "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge"
-V2FLY_BASE = "https://raw.githubusercontent.com/v2fly/domain-list-community/master/data"
 RABBIT_BASE = "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules"
 LOYAL_BASE = "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset"
-META_BASE = "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite"
+CONNERS_BASE = "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra"
 YUU_BASE = "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite"
 
 Rule = tuple[str, str]
 
-# BM7 remains the baseline. Supplemental sources are used only for direct category matches.
+# BM7 defines fine-grained category boundaries. Fixed supplemental sources are
+# merged only when they provide the same category.
 TARGETS = {
-    "GitHub": {"v2fly": "github", "rabbit": None, "loyal": None, "meta": None, "yuu": "github"},
-    "Kingsoft": {"v2fly": "kingsoft", "rabbit": None, "loyal": None, "meta": None, "yuu": "kingsoft"},
-    "AppleMusic": {"v2fly": "apple-music", "rabbit": None, "loyal": None, "meta": "apple-music", "yuu": "apple-music"},
-    "AppleTV": {"v2fly": "apple-tvplus", "rabbit": None, "loyal": None, "meta": "apple-tvplus", "yuu": "apple-tvplus"},
-    "OpenAI": {"v2fly": "openai", "rabbit": None, "loyal": None, "meta": None, "yuu": "openai"},
-    "GoogleVoice": {"v2fly": None, "rabbit": None, "loyal": None, "meta": None, "yuu": None},
-    "Google": {"v2fly": "google", "rabbit": "Google.list", "loyal": "google.txt", "meta": None, "yuu": "google"},
-    "TikTok": {"v2fly": "tiktok", "rabbit": "TikTok.list", "loyal": None, "meta": None, "yuu": "tiktok"},
-    "Instagram": {"v2fly": "instagram", "rabbit": "Instagram.list", "loyal": None, "meta": None, "yuu": "instagram"},
-    "Facebook": {"v2fly": "facebook", "rabbit": "Facebook.list", "loyal": None, "meta": None, "yuu": "facebook"},
-    "PayPal": {"v2fly": "paypal", "rabbit": None, "loyal": None, "meta": None, "yuu": "paypal"},
-    "OKX": {"v2fly": "okx", "rabbit": None, "loyal": None, "meta": None, "yuu": "okx"},
-    "Binance": {"v2fly": "binance", "rabbit": None, "loyal": None, "meta": "binance", "yuu": "binance"},
-    "Crypto": {"v2fly": None, "rabbit": None, "loyal": None, "meta": None, "yuu": None},
-    "Cryptocurrency": {"v2fly": "category-cryptocurrency", "rabbit": None, "loyal": None, "meta": "category-cryptocurrency", "yuu": "category-cryptocurrency"},
+    "GitHub": {"rabbit": None, "conners": None, "loyal": None, "yuu": "github"},
+    "Kingsoft": {"rabbit": None, "conners": None, "loyal": None, "yuu": "kingsoft"},
+    "AppleMusic": {"rabbit": None, "conners": "Apple/Music.list", "loyal": None, "yuu": "apple-music"},
+    "AppleTV": {"rabbit": None, "conners": "Apple/TV.list", "loyal": None, "yuu": "apple-tvplus"},
+    "OpenAI": {"rabbit": None, "conners": "GenAI/OpenAI.list", "loyal": None, "yuu": "openai"},
+    "GoogleVoice": {"rabbit": None, "conners": "Google/GoogleVoice.list", "loyal": None, "yuu": None},
+    "Google": {"rabbit": "Google.list", "conners": "Google/Google.list", "loyal": "google.txt", "yuu": "google"},
+    "TikTok": {"rabbit": "TikTok.list", "conners": "Streaming/Video/TikTok.list", "loyal": None, "yuu": "tiktok"},
+    "Instagram": {"rabbit": "Instagram.list", "conners": "Streaming/Music/Instagram.list", "loyal": None, "yuu": "instagram"},
+    "Facebook": {"rabbit": "Facebook.list", "conners": None, "loyal": None, "yuu": "facebook"},
+    "PayPal": {"rabbit": None, "conners": "PayPal.list", "loyal": None, "yuu": "paypal"},
+    "OKX": {"rabbit": None, "conners": None, "loyal": None, "yuu": "okx"},
+    "Binance": {"rabbit": None, "conners": None, "loyal": None, "yuu": "binance"},
+    "Crypto": {"rabbit": None, "conners": "Crypto.list", "loyal": None, "yuu": None},
+    "Cryptocurrency": {"rabbit": None, "conners": "Crypto.list", "loyal": None, "yuu": "category-cryptocurrency"},
 }
 
 DOMAIN_TYPES = {"DOMAIN", "DOMAIN-SUFFIX"}
@@ -64,28 +64,20 @@ VERIFIED_SUPPLEMENTS = {
 }
 
 MIN_SOURCE_RULES = {
-    ("v2fly", "github"): 40,
-    ("v2fly", "kingsoft"): 25,
-    ("v2fly", "apple-music"): 10,
-    ("v2fly", "apple-tvplus"): 5,
-    ("v2fly", "openai"): 15,
-    ("v2fly", "google"): 800,
-    ("v2fly", "tiktok"): 20,
-    ("v2fly", "instagram"): 50,
-    ("v2fly", "facebook"): 300,
-    ("v2fly", "paypal"): 180,
-    ("v2fly", "okx"): 7,
-    ("v2fly", "binance"): 30,
-    ("v2fly", "category-cryptocurrency"): 180,
     ("rabbit", "Google.list"): 500,
     ("rabbit", "TikTok.list"): 20,
     ("rabbit", "Instagram.list"): 2,
     ("rabbit", "Facebook.list"): 400,
     ("loyal", "google.txt"): 80,
-    ("meta", "apple-music"): 12,
-    ("meta", "apple-tvplus"): 5,
-    ("meta", "binance"): 30,
-    ("meta", "category-cryptocurrency"): 180,
+    ("conners", "Apple/Music.list"): 5,
+    ("conners", "Apple/TV.list"): 5,
+    ("conners", "GenAI/OpenAI.list"): 5,
+    ("conners", "Google/GoogleVoice.list"): 1,
+    ("conners", "Google/Google.list"): 10,
+    ("conners", "Streaming/Video/TikTok.list"): 5,
+    ("conners", "Streaming/Music/Instagram.list"): 2,
+    ("conners", "PayPal.list"): 5,
+    ("conners", "Crypto.list"): 5,
     ("yuu", "github"): 40,
     ("yuu", "kingsoft"): 25,
     ("yuu", "apple-music"): 8,
@@ -320,38 +312,6 @@ def parse_source_rules(content: str, plain: bool = False) -> set[Rule]:
     return rules
 
 
-def parse_v2fly(entry: str, visited: set[str] | None = None) -> set[Rule]:
-    visited = visited or set()
-    if entry in visited:
-        return set()
-    visited.add(entry)
-    rules: set[Rule] = set()
-    for raw in fetch(f"{V2FLY_BASE}/{entry}").replace("\r", "").splitlines():
-        line = raw.split("#", 1)[0].strip()
-        if not line:
-            continue
-        fields = line.split()
-        token = fields[0]
-        if token.startswith("include:"):
-            if len(fields) > 1:
-                raise RuntimeError(f"selective v2fly include is not supported: {entry}: {line}")
-            for rule in parse_v2fly(token[8:], visited):
-                merge_rule(rules, rule)
-            continue
-        rule_type = "DOMAIN-SUFFIX"
-        if token.startswith("full:"):
-            token = token[5:]
-            rule_type = "DOMAIN"
-        elif token.startswith("domain:"):
-            token = token[7:]
-        elif token.startswith(("keyword:", "regexp:")):
-            continue
-        domain = norm_domain(token)
-        if domain:
-            merge_rule(rules, (rule_type, domain))
-    return rules
-
-
 def validate_source(kind: str, entry: str, rules: set[Rule]) -> None:
     minimum = MIN_SOURCE_RULES[(kind, entry)]
     if len(rules) < minimum:
@@ -481,14 +441,6 @@ def main() -> None:
         source_rules: set[Rule] = set()
         sources: list[str] = []
 
-        if mapping["v2fly"]:
-            entry = mapping["v2fly"]
-            rules = parse_v2fly(entry)
-            validate_source("v2fly", entry, rules)
-            source_counts[f"v2fly/{entry}"] = len(rules)
-            for rule in rules:
-                merge_rule(source_rules, rule)
-            sources.append(f"{V2FLY_BASE}/{entry}")
         if mapping["rabbit"]:
             entry = mapping["rabbit"]
             rules = parse_source_rules(fetch(f"{RABBIT_BASE}/{entry}"))
@@ -497,6 +449,14 @@ def main() -> None:
             for rule in rules:
                 merge_rule(source_rules, rule)
             sources.append(f"{RABBIT_BASE}/{entry}")
+        if mapping["conners"]:
+            entry = mapping["conners"]
+            rules = parse_source_rules(fetch(f"{CONNERS_BASE}/{entry}"))
+            validate_source("conners", entry, rules)
+            source_counts[f"conners/{entry}"] = len(rules)
+            for rule in rules:
+                merge_rule(source_rules, rule)
+            sources.append(f"{CONNERS_BASE}/{entry}")
         if mapping["loyal"]:
             entry = mapping["loyal"]
             rules = parse_source_rules(fetch(f"{LOYAL_BASE}/{entry}"))
@@ -505,14 +465,6 @@ def main() -> None:
             for rule in rules:
                 merge_rule(source_rules, rule)
             sources.append(f"{LOYAL_BASE}/{entry}")
-        if mapping["meta"]:
-            entry = mapping["meta"]
-            rules = parse_source_rules(fetch(f"{META_BASE}/{entry}.list"), plain=True)
-            validate_source("meta", entry, rules)
-            source_counts[f"meta/{entry}"] = len(rules)
-            for rule in rules:
-                merge_rule(source_rules, rule)
-            sources.append(f"{META_BASE}/{entry}.list")
         if mapping["yuu"]:
             entry = mapping["yuu"]
             rules = parse_source_rules(fetch(f"{YUU_BASE}/{entry}.list"))

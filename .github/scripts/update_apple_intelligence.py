@@ -14,6 +14,8 @@ TARGET = ROOT / "Rule" / "AppleIntelligence.list"
 SOURCE_URLS = [
     "https://ruleset.skk.moe/List/non_ip/apple_intelligence.conf",
     "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Siri/Siri.list",
+    "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Apple/Intelligence.list",
+    "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/apple-intelligence.list",
 ]
 
 TYPE_ORDER = {
@@ -160,7 +162,7 @@ def render(rules: set[str]) -> str:
         f"# UpdateTime: {now}\n"
         f"# RuleCount: {len(rules)}\n"
         "# AutoUpdate: daily at 00:17 Beijing time; upstream rules merged and deduplicated\n"
-        "# Sources: SukkaW apple_intelligence, blackmatrix7 Siri\n"
+        "# Sources: SukkaW apple_intelligence, blackmatrix7 Siri, ConnersHua Intelligence, Yuu518 apple-intelligence\n"
         "\n"
         f"{body}\n"
     )

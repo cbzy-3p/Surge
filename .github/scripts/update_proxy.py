@@ -17,9 +17,11 @@ SNAPSHOT_VERSION = 2
 SOURCES = {
     "bm7": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Proxy/Proxy.list",
     "rabbit": "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Proxy.list",
+    "conners": "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Proxy.list",
+    "loyal": "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt",
     "yuu": "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/category-proxy-tunnels.list",
 }
-MINIMUMS = {"bm7": 100, "rabbit": 6_000, "yuu": 10}
+MINIMUMS = {"bm7": 100, "rabbit": 6_000, "conners": 400, "loyal": 10_000, "yuu": 10}
 DOMAIN_TYPES = {"DOMAIN", "DOMAIN-SUFFIX"}
 RULE_TYPES = DOMAIN_TYPES | {
     "DOMAIN-KEYWORD", "DOMAIN-WILDCARD", "IP-CIDR", "IP-CIDR6", "IP-ASN",
@@ -184,7 +186,7 @@ def render(rules: set[tuple[str, str]], updated: str | None = None) -> str:
         f"# UPDATED: {updated}",
         f"# RULE COUNT: {len(rules)}",
         *[f"# SOURCE: {url}" for url in SOURCES.values()],
-        "# NOTE: Sources are normalized, merged and compacted without reducing domain or CIDR coverage.",
+        "# NOTE: Fixed sources are normalized and compacted; Loyalsoldier is used for cross-checking to avoid inflating this focused proxy-service set.",
         "",
     ]
     body = []
@@ -198,6 +200,8 @@ def main() -> None:
     fetched = {
         "bm7": parse_surge(fetch(SOURCES["bm7"])),
         "rabbit": parse_surge(fetch(SOURCES["rabbit"])),
+        "conners": parse_surge(fetch(SOURCES["conners"])),
+        "loyal": parse_surge(fetch(SOURCES["loyal"])),
         "yuu": parse_surge(fetch(SOURCES["yuu"])),
     }
     counts = {name: len(rules) for name, rules in fetched.items()}
@@ -205,8 +209,10 @@ def main() -> None:
         if counts[name] < minimum:
             raise RuntimeError(f"{name} source unexpectedly small: {counts[name]} < {minimum}")
     rules: set[tuple[str, str]] = set()
-    for source in fetched.values():
+    for name in ("bm7", "rabbit", "conners", "yuu"):
+        source = fetched[name]
         rules = merge(rules, source)
+    counts["loyal-covered"] = sum(1 for rule in fetched["loyal"] if rule in rules)
     counts["output"] = len(rules)
     validate_snapshot(load_snapshot(), counts)
     previous_text = TARGET.read_text(encoding="utf-8") if TARGET.exists() else ""
