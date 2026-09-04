@@ -33,7 +33,7 @@ CONFIGS = {
     "YouTube": [
         ("rabbit", f"{RABBIT}/YouTube.list", "surge", 150),
         ("bm7", f"{BM7}/YouTube/YouTube.list", "surge", 150),
-        ("conners", f"{CONNERS}/Streaming/Video/YouTube.list", "surge", 20),
+        ("conners", f"{CONNERS}/Streaming/Video/YouTube.list", "surge", 10),
         ("yuu", f"{YUU}/geosite/youtube.list", "surge", 150),
     ],
     "Netflix": [
