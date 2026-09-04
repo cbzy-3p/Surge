@@ -39,9 +39,9 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Set up Python
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
       - name: Run updater tests
@@ -59,6 +59,7 @@ jobs:
           python .github/scripts/test_update_v2fly_rules.py
           python .github/scripts/test_validate_rule_files.py
           python .github/scripts/test_compact_rule_file.py
+          python .github/scripts/test_audit_cross_file_rules.py
       - name: Validate generated rule files
         run: python .github/scripts/validate_rule_files.py
       - name: Rebuild baseline multi-source rules
@@ -68,11 +69,19 @@ jobs:
           python .github/scripts/update_proxy.py
           python .github/scripts/update_apple.py
           python .github/scripts/update_media_rules.py
-      - name: Verify committed baseline output
+      - name: Report baseline upstream drift
         if: github.event_name == 'pull_request'
+        shell: bash
         run: |
-          git diff --exit-code -- Rule/*.list .github/rule-source-snapshot.json
-          test -z "$(git status --porcelain --untracked-files=all)"
+          set -euo pipefail
+          if git diff --quiet -- Rule/*.list .github/rule-source-snapshot.json; then
+            echo "Committed baseline matches current upstream data."
+          else
+            echo "::notice::Mutable upstream data changed during PR validation; scheduled updater will sync it."
+            git diff --stat -- Rule/*.list .github/rule-source-snapshot.json
+          fi
+          untracked="$(git status --porcelain --untracked-files=all | awk '$1 == "??" {print}')"
+          test -z "$untracked" || { echo "$untracked"; exit 1; }
 
   update:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
@@ -82,9 +91,9 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Set up Python
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
       - name: Run updater tests
@@ -102,6 +111,7 @@ jobs:
           python .github/scripts/test_update_v2fly_rules.py
           python .github/scripts/test_validate_rule_files.py
           python .github/scripts/test_compact_rule_file.py
+          python .github/scripts/test_audit_cross_file_rules.py
       - name: Update all rule sources
         run: |
           python .github/scripts/update_rules.py
