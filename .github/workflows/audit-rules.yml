@@ -1,0 +1,46 @@
+name: Audit Surge Rules
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 00:35 Beijing time
+    - cron: "35 16 * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - "Rule/**"
+      - ".github/scripts/audit_cross_file_rules.py"
+      - ".github/scripts/test_audit_cross_file_rules.py"
+      - ".github/workflows/audit-rules.yml"
+  pull_request:
+    paths:
+      - "Rule/**"
+      - ".github/scripts/audit_cross_file_rules.py"
+      - ".github/scripts/test_audit_cross_file_rules.py"
+      - ".github/workflows/audit-rules.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: audit-surge-rules-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Test cross-file audit
+        run: python .github/scripts/test_audit_cross_file_rules.py
+      - name: Validate rule files
+        run: python .github/scripts/validate_rule_files.py
+      - name: Audit cross-file overlaps
+        run: python .github/scripts/audit_cross_file_rules.py
