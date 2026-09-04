@@ -190,6 +190,17 @@ jobs:
           } > "$OUT_DIR/Telegram_All.list"
           rm -f "$RAW_FILE"
           python .github/scripts/compact_rule_file.py "$OUT_DIR/Telegram_All.list"
+      - name: Report actual generated changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          changed="$(git diff --name-only -- Rule .github/*-snapshot.json)"
+          if [ -z "$changed" ]; then
+            echo "Actual generated changes: none"
+          else
+            echo "Actual generated changes:"
+            printf '%s\n' "$changed"
+          fi
       - name: Validate all generated rules
         run: python .github/scripts/validate_rule_files.py
       - name: Commit changes
