@@ -11,6 +11,12 @@ SPEC.loader.exec_module(MEDIA)
 
 
 class MediaRuleTests(unittest.TestCase):
+    def test_user_agent_with_space_is_preserved(self):
+        self.assertEqual(
+            MEDIA.normalize_rule("USER-AGENT", "Prime Video*"),
+            ("USER-AGENT", "Prime Video*"),
+        )
+
     def test_plain_domain_variants_are_suffixes(self):
         rules = MEDIA.parse_domains(".example.com\n+.example.net\ndomain:example.org\n")
         self.assertEqual(rules, {

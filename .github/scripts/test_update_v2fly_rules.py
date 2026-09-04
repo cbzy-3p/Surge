@@ -12,6 +12,12 @@ SPEC.loader.exec_module(MODULE)
 
 
 class UpdateV2FlyRulesTest(unittest.TestCase):
+    def test_parse_yuu_surge_rules(self):
+        data = "# comment\nDOMAIN,api.example.com\nDOMAIN-SUFFIX,example.com\nIP-CIDR,1.1.1.0/24\n"
+        rules, sources = MODULE.parse_yuu("test", lambda _: data)
+        self.assertEqual(rules, {("DOMAIN-SUFFIX", "example.com")})
+        self.assertEqual(sources, {f"{MODULE.YUU_BASE}/test.list"})
+
     def test_parse_supported_rules_and_attributes(self):
         data = "example.com\nfull:api.example.net @cn\ndomain:cdn.example.org\nkeyword:wallet\n"
         rules, _ = MODULE.parse_entry("test", lambda _: data)

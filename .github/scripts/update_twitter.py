@@ -11,12 +11,8 @@ TARGET = ROOT / "Rule" / "Twitter.list"
 
 SURGE_SOURCES = [
     "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Twitter/Twitter.list",
-    "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Twitter.list",
     "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/twitter.list",
 ]
-V2FLY_SOURCE = (
-    "https://raw.githubusercontent.com/v2fly/domain-list-community/master/data/twitter"
-)
 
 TYPE_ORDER = {
     "DOMAIN": 0,
@@ -82,28 +78,6 @@ def collect_surge_rules(text: str) -> set[str]:
         for line in text.splitlines()
         if (rule := normalize_rule(line)) is not None
     }
-
-
-def collect_v2fly_rules(text: str) -> set[str]:
-    rules: set[str] = set()
-    for raw_line in text.splitlines():
-        line = strip_comment(raw_line)
-        if not line:
-            continue
-        value = line.split()[0].lower().rstrip(".")
-        if value.startswith(("include:", "regexp:")):
-            continue
-        if value.startswith("full:"):
-            value = value.removeprefix("full:")
-            rule_type = "DOMAIN"
-        elif value.startswith("domain:"):
-            value = value.removeprefix("domain:")
-            rule_type = "DOMAIN-SUFFIX"
-        else:
-            rule_type = "DOMAIN-SUFFIX"
-        if value:
-            rules.add(f"{rule_type},{value}")
-    return rules
 
 
 def compact_rules(rules: set[str]) -> set[str]:
@@ -183,8 +157,6 @@ def render(rules: set[str]) -> str:
         f"# RuleCount: {len(rules)}\n"
         "# Sources:\n"
         "# - blackmatrix7/ios_rule_script rule/Surge/Twitter/Twitter.list\n"
-        "# - ACL4SSR/ACL4SSR Clash/Ruleset/Twitter.list\n"
-        "# - v2fly/domain-list-community data/twitter\n"
         "# - Yuu518/Yuu-rules surge/geosite/twitter.list\n"
         "# AutoUpdate: daily at 00:17 Beijing time; rebuilt, normalized and compacted\n"
         "\n"
@@ -196,16 +168,15 @@ def main() -> int:
     rules: set[str] = set()
     for url in SURGE_SOURCES:
         rules |= collect_surge_rules(fetch_text(url))
-    rules |= collect_v2fly_rules(fetch_text(V2FLY_SOURCE))
     rules = compact_rules(rules)
     validate(rules)
 
     if sorted(rules, key=sort_key) == current_rules():
-        print(f"No rule changes. Checked {len(rules)} rules from 4 sources.")
+        print(f"No rule changes. Checked {len(rules)} rules from 2 fixed sources.")
         return 0
 
     TARGET.write_text(render(rules), encoding="utf-8", newline="\n")
-    print(f"Updated Twitter.list with {len(rules)} rules from 4 sources.")
+    print(f"Updated Twitter.list with {len(rules)} rules from 2 fixed sources.")
     return 0
 
 
