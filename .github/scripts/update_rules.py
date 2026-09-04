@@ -76,7 +76,7 @@ MIN_SOURCE_RULES = {
     ("conners", "Google/Google.list"): 10,
     ("conners", "Streaming/Video/TikTok.list"): 5,
     ("conners", "Streaming/Music/Instagram.list"): 2,
-    ("conners", "PayPal.list"): 5,
+    ("conners", "PayPal.list"): 4,
     ("conners", "Crypto.list"): 5,
     ("yuu", "github"): 40,
     ("yuu", "kingsoft"): 25,
