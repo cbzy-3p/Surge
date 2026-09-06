@@ -1,8 +1,8 @@
 # NAME: Multi-source-Proxy
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-04 19:00:05 UTC
-# RULE COUNT: 7046
+# UPDATED: 2026-09-06 18:20:05 UTC
+# RULE COUNT: 7048
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Proxy/Proxy.list
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Proxy.list
 # SOURCE: https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Proxy.list
@@ -1356,6 +1356,7 @@ DOMAIN-SUFFIX,csuchen.de
 DOMAIN-SUFFIX,csw.org.uk
 DOMAIN-SUFFIX,ct.org.tw
 DOMAIN-SUFFIX,ctao.org
+DOMAIN-SUFFIX,ctee.com.tw
 DOMAIN-SUFFIX,ctfriend.net
 DOMAIN-SUFFIX,ctinets.com
 DOMAIN-SUFFIX,ctinews.com
@@ -3442,6 +3443,7 @@ DOMAIN-SUFFIX,linode.com
 DOMAIN-SUFFIX,linpie.com
 DOMAIN-SUFFIX,linux.do
 DOMAIN-SUFFIX,linux.org.hk
+DOMAIN-SUFFIX,linux.sb
 DOMAIN-SUFFIX,linuxtoy.org
 DOMAIN-SUFFIX,lionsroar.com
 DOMAIN-SUFFIX,lipuman.com
