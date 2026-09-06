@@ -2,6 +2,8 @@
 """Sync fixed upstream Surge modules and rebuild local aggregate modules."""
 from __future__ import annotations
 
+import hashlib
+import json
 import re
 import urllib.request
 from pathlib import Path
@@ -109,11 +111,54 @@ def write(path: Path, content: str) -> bool:
     return True
 
 
+def fetch_script(url: str) -> bytes:
+    request = urllib.request.Request(url, headers={"User-Agent": UA})
+    with urllib.request.urlopen(request, timeout=45) as response:
+        content = response.read()
+    if len(content) < 16 or content.lstrip().lower().startswith(b"<!doctype html"):
+        raise RuntimeError(f"invalid remote script content: {url}")
+    return content
+
+
+def mirror_scripts() -> list[str]:
+    """Mirror every remote script and rewrite modules to the repository copy."""
+    script_dir = ROOT / "Module/Scripts"
+    manifest: dict[str, dict[str, str]] = {}
+    changed: list[str] = []
+    for relative in SOURCES:
+        path = ROOT / relative
+        text = path.read_text(encoding="utf-8")
+        urls = list(dict.fromkeys(re.findall(r"script-path=(https?[^,\s]+)", text)))
+        for url in urls:
+            digest = hashlib.sha256(url.encode("utf-8")).hexdigest()
+            filename = f"{digest}.js"
+            destination = script_dir / filename
+            content = fetch_script(url)
+            old = destination.read_bytes() if destination.exists() else b""
+            if old != content:
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(content)
+                changed.append(destination.relative_to(ROOT).as_posix())
+            manifest[url] = {
+                "file": filename,
+                "sha256": hashlib.sha256(content).hexdigest(),
+            }
+            local = f"https://raw.githubusercontent.com/cbzy-3p/Surge/main/Module/Scripts/{filename}"
+            text = text.replace(url, local)
+        if write(path, text):
+            changed.append(relative)
+    manifest_text = json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    if write(script_dir / "manifest.json", manifest_text):
+        changed.append("Module/Scripts/manifest.json")
+    return changed
+
+
 def main() -> int:
     changed = []
     for relative, url in SOURCES.items():
         path = ROOT / relative
         if write(path, fetch(url)): changed.append(relative)
+    changed.extend(mirror_scripts())
     for relative, content in (("Module/18+/18+-recommended.sgmodule", aggregate_18()), ("Module/Tools/Tools-recommended.sgmodule", aggregate_tools())):
         if write(ROOT / relative, content): changed.append(relative)
     print("Updated: " + ", ".join(changed) if changed else "No module source changes.")
