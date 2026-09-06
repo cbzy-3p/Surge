@@ -10,21 +10,21 @@
 force-http-engine-hosts = %APPEND% boxjs.com, boxjs.net, *.boxjs.com, *.boxjs.net, script.hub, *.script.hub
 
 [Script]
-Rewrite: BoxJs = type=http-request,pattern=^https?:\/\/(.+\.)?boxjs\.(com|net),script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/box/chavy.boxjs.js, requires-body=true, timeout=120
-Script Hub: 前端 = type=http-request, pattern=^https?:\/\/script\.hub\/($|edit\/|reload), script-path=https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/script-hub.beta.js, timeout=300
+Rewrite: BoxJs = type=http-request,pattern=^https?:\/\/(.+\.)?boxjs\.(com|net),script-path=https://raw.githubusercontent.com/cbzy-3p/Surge/main/Module/Scripts/7055226f4f1d8737245b28b7d05289f1b42880a418825ead3fe101b538e87409.js, requires-body=true, timeout=120
+Script Hub: 前端 = type=http-request, pattern=^https?:\/\/script\.hub\/($|edit\/|reload), script-path=https://raw.githubusercontent.com/cbzy-3p/Surge/main/Module/Scripts/bb6707990055d08a648069d4b67891f8d723cdbd337de20f2d4c261390a96a54.js, timeout=300
 
-Script Hub: 重写转换 = type=http-request, pattern=^https?:\/\/script\.hub\/file\/_start_\/.+type=(?:qx-rewrite|surge-module|loon-plugin|all-module), script-path=https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/Rewrite-Parser.beta.js, timeout=300, argument=Notify={{{Notify}}}
+Script Hub: 重写转换 = type=http-request, pattern=^https?:\/\/script\.hub\/file\/_start_\/.+type=(?:qx-rewrite|surge-module|loon-plugin|all-module), script-path=https://raw.githubusercontent.com/cbzy-3p/Surge/main/Module/Scripts/1a270e11c684f5288821d32690ca285ea5fd4e95a1291d940fad341c991a8e77.js, timeout=300, argument=Notify={{{Notify}}}
 
-Script Hub: 规则集转换 = type=http-request, pattern=^https?:\/\/script\.hub\/file\/_start_\/.+type=rule-set, script-path=https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/rule-parser.beta.js, timeout=300, argument=Notify={{{Notify}}}
+Script Hub: 规则集转换 = type=http-request, pattern=^https?:\/\/script\.hub\/file\/_start_\/.+type=rule-set, script-path=https://raw.githubusercontent.com/cbzy-3p/Surge/main/Module/Scripts/618342e21e814b712b18528990ca2ec91d722d101876dd88c86430471fd52607.js, timeout=300, argument=Notify={{{Notify}}}
 
-Script Hub: 脚本转换 = type=http-request, pattern=^https?:\/\/script\.hub\/convert\/, script-path=https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/script-converter.beta.js, timeout=300
-Sub-Store Core=type=http-request,pattern=^https?:\/\/sub\.store\/((download)|api\/(preview|sync|(utils\/node-info))),script-path=https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-1.min.js,requires-body=true,timeout={{{timeout}}},ability="{{{ability}}}",engine={{{engine}}},max-size={{{max_size}}},argument="cors={{{cors}}}"
+Script Hub: 脚本转换 = type=http-request, pattern=^https?:\/\/script\.hub\/convert\/, script-path=https://raw.githubusercontent.com/cbzy-3p/Surge/main/Module/Scripts/16fd3c262aff1dcc505ba01a6850854286d0ef53480542ddf971041aa5a45ee9.js, timeout=300
+Sub-Store Core=type=http-request,pattern=^https?:\/\/sub\.store\/((download)|api\/(preview|sync|(utils\/node-info))),script-path=https://raw.githubusercontent.com/cbzy-3p/Surge/main/Module/Scripts/966e5950297fd9c8166f0e43d57592c7de94bf10e82e39e2b72d0ed4c78360a8.js,requires-body=true,timeout={{{timeout}}},ability="{{{ability}}}",engine={{{engine}}},max-size={{{max_size}}},argument="cors={{{cors}}}"
 
-Sub-Store Simple=type=http-request,pattern=^https?:\/\/sub\.store,script-path=https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js,requires-body=true,timeout={{{timeout}}},engine={{{engine}}},max-size={{{max_size}}},argument="cors={{{cors}}}"
+Sub-Store Simple=type=http-request,pattern=^https?:\/\/sub\.store,script-path=https://raw.githubusercontent.com/cbzy-3p/Surge/main/Module/Scripts/7ded59db32c0c77c33713693decff15c179879b2e8129bb690d0abf8766c8530.js,requires-body=true,timeout={{{timeout}}},engine={{{engine}}},max-size={{{max_size}}},argument="cors={{{cors}}}"
 
-{{{sync}}}=type=cron,cronexp="{{{cronexp}}}",wake-system=1,timeout={{{timeout}}},script-path=https://github.com/sub-store-org/Sub-Store/releases/latest/download/cron-sync-artifacts.min.js,engine={{{engine}}},argument="sync_success_notify={{{sync_success_notify}}}"
+{{{sync}}}=type=cron,cronexp="{{{cronexp}}}",wake-system=1,timeout={{{timeout}}},script-path=https://raw.githubusercontent.com/cbzy-3p/Surge/main/Module/Scripts/504806e4bf45ae11edb2c8d90c283ae59fe9c86330a19d3d107c2f15d6b42a90.js,engine={{{engine}}},argument="sync_success_notify={{{sync_success_notify}}}"
 
-{{{produce}}}=type=cron,cronexp="{{{produce_cronexp}}}",wake-system=1,timeout={{{timeout}}},script-path=https://github.com/sub-store-org/Sub-Store/releases/latest/download/cron-sync-artifacts.min.js,engine={{{engine}}},argument="sub={{{produce_sub}}}&col={{{produce_col}}}"
+{{{produce}}}=type=cron,cronexp="{{{produce_cronexp}}}",wake-system=1,timeout={{{timeout}}},script-path=https://raw.githubusercontent.com/cbzy-3p/Surge/main/Module/Scripts/504806e4bf45ae11edb2c8d90c283ae59fe9c86330a19d3d107c2f15d6b42a90.js,engine={{{engine}}},argument="sub={{{produce_sub}}}&col={{{produce_col}}}"
 
 [MITM]
 hostname = %APPEND% boxjs.com, boxjs.net, *.boxjs.com, *.boxjs.net, script.hub, *.script.hub, sub.store

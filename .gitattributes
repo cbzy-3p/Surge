@@ -1,0 +1,2 @@
+# Mirrored upstream scripts are stored byte-for-byte; preserve their original whitespace.
+Module/Scripts/*.js -whitespace

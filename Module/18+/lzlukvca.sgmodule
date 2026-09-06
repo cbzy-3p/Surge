@@ -5,8 +5,8 @@
 #!homepage=https://github.com/7452323/QuantumultX
 
 [Script]
-lzlukvca-req = type=http-request, pattern=^https://lzlukvca\.cc/api/(drama/(detail|play|doBuy)|user/(info|recharge)), requires-body=true, binary-body-mode=true, script-path=https://raw.githubusercontent.com/7452323/QuantumultX/main/script/pornography/lzlukvca.js
-lzlukvca-resp = type=http-response, pattern=^https://lzlukvca\.cc/api/(drama/(detail|play|doBuy)|user/(info|recharge)), requires-body=true, binary-body-mode=true, script-path=https://raw.githubusercontent.com/7452323/QuantumultX/main/script/pornography/lzlukvca.js
+lzlukvca-req = type=http-request, pattern=^https://lzlukvca\.cc/api/(drama/(detail|play|doBuy)|user/(info|recharge)), requires-body=true, binary-body-mode=true, script-path=https://raw.githubusercontent.com/cbzy-3p/Surge/main/Module/Scripts/a6ab8a5ed84b8debaf6ee58f7e507bb7b11d2fae4594fb09323e424e26ea4c5b.js
+lzlukvca-resp = type=http-response, pattern=^https://lzlukvca\.cc/api/(drama/(detail|play|doBuy)|user/(info|recharge)), requires-body=true, binary-body-mode=true, script-path=https://raw.githubusercontent.com/cbzy-3p/Surge/main/Module/Scripts/a6ab8a5ed84b8debaf6ee58f7e507bb7b11d2fae4594fb09323e424e26ea4c5b.js
 
 [MITM]
 hostname = %APPEND% lzlukvca.cc
