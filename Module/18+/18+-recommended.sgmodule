@@ -4,7 +4,7 @@
 #!homepage=https://github.com/cbzy-3p/Surge
 #!category=18+
 #!arguments=日志级别:info,播放器:lenna,自定义scheme:none,URL编码:default,播放器跳转:yes
-#!arguments-desc=日志级别：off / error / warn / info / debug / all；播放器和跳转参数仅供 porntube 使用
+#!arguments-desc=日志级别: off / error / warn / info(默认) / debug / all\n播放器: lenna / SenPlayer / SenPlayer-dl / Infuse / Fileball / VidHub / IINA / Alook / VLC / KMPlayer / NPlayer / Safari\n自定义scheme: 填写后覆盖播放器，例如 myplayer://play?url= ；留默认 none 表示不启用\nURL编码: yes / no / default(默认，走播放器默认行为)\n播放器跳转: yes(默认) / no
 
 [URL Rewrite]
 ^https?:\/\/((?:\w*api|jmtp)[\w\.-]+\.com)\/(v\d+\.\d+)\/(.+) https://one-api.zzxu.de/one/$1/$2/$3 header
