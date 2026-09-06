@@ -1,0 +1,58 @@
+{
+  "https://github.com/sub-store-org/Sub-Store/releases/latest/download/cron-sync-artifacts.min.js": {
+    "file": "504806e4bf45ae11edb2c8d90c283ae59fe9c86330a19d3d107c2f15d6b42a90.js",
+    "sha256": "9c2f1dd38cf4b48e1080877427d66dd7a14e899b23469cfe77f507f10e1a3470"
+  },
+  "https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js": {
+    "file": "7ded59db32c0c77c33713693decff15c179879b2e8129bb690d0abf8766c8530.js",
+    "sha256": "9f915ebf48a82a817c31f94fcf5f5daa7d64290d2fca06a2691921d70407bf03"
+  },
+  "https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-1.min.js": {
+    "file": "966e5950297fd9c8166f0e43d57592c7de94bf10e82e39e2b72d0ed4c78360a8.js",
+    "sha256": "a43e22de83e490aa9873edbb7ba61ec7290882e056e8ab5ece91cf4b117290e3"
+  },
+  "https://raw.githubusercontent.com/7452323/QuantumultX/main/script/pornography/lzlukvca.js": {
+    "file": "a6ab8a5ed84b8debaf6ee58f7e507bb7b11d2fae4594fb09323e424e26ea4c5b.js",
+    "sha256": "641a92929c2c9bb68d2c85e22cd1fe9b7c5e8a8ae74bd856dd74febbd07dbf59"
+  },
+  "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/Rewrite-Parser.beta.js": {
+    "file": "1a270e11c684f5288821d32690ca285ea5fd4e95a1291d940fad341c991a8e77.js",
+    "sha256": "b5a1451b498e86d072209cae5746948f48265e7553f6e07805826d8cb35cc13f"
+  },
+  "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/rule-parser.beta.js": {
+    "file": "618342e21e814b712b18528990ca2ec91d722d101876dd88c86430471fd52607.js",
+    "sha256": "6d30380cc68e112b5bcb5d9b2013d553d3c48612b1c61e78f0e0bfae3e48ca2c"
+  },
+  "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/script-converter.beta.js": {
+    "file": "16fd3c262aff1dcc505ba01a6850854286d0ef53480542ddf971041aa5a45ee9.js",
+    "sha256": "27fc22ac5a40364fbe0728d7264e163431656e7b142cde6337ecad11e5d60b78"
+  },
+  "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/script-hub.beta.js": {
+    "file": "bb6707990055d08a648069d4b67891f8d723cdbd337de20f2d4c261390a96a54.js",
+    "sha256": "6a0c1d8e05136e7f134bfbf0dd94a8ab7356b22607a1ba7bace57820e2bc7af1"
+  },
+  "https://raw.githubusercontent.com/Yu9191/Rewrite/main/huangdouduanju/dist/huangdou.js": {
+    "file": "6baf28b1ce69a9356b0871acfdabf3e3929224d15986bac2c03d5f92d0c41d83.js",
+    "sha256": "a1e7e24c87d2e641be0e2a4bdffb327b5dba0b4e969d5bffae74543d11e59449"
+  },
+  "https://raw.githubusercontent.com/Yu9191/Rewrite/refs/heads/main/TgRedirect.js": {
+    "file": "84a09a069d92838e524ae4be2eb543c669366ca6727166c8bdfa2b6293246c41.js",
+    "sha256": "b1cc4e493b988393cb9a3992b49e01414cfca1dbcea0a3daa5be7e3cb0cfbb63"
+  },
+  "https://raw.githubusercontent.com/Yu9191/Rewrite/refs/heads/main/porntube/dist/porntube-frontend.js": {
+    "file": "4dfac57569e6608241b8921473d611235efe6629f34dc619c6379d123f22655c.js",
+    "sha256": "9a585cc2def7acbbb9179c40047719888d0ec21472c25c8eaaa24df4ef4e6275"
+  },
+  "https://raw.githubusercontent.com/Yu9191/Rewrite/refs/heads/main/porntube/dist/porntube-request.js": {
+    "file": "aced3c54ea030da773149815e2644f1cbc164e1e665108d84deebd3795df748f.js",
+    "sha256": "01e005eb89890aed12b6d3fa24203e62c0d1958b27f99b35c3af1003ca3486f7"
+  },
+  "https://raw.githubusercontent.com/Yu9191/Rewrite/refs/heads/main/porntube/dist/porntube.js": {
+    "file": "f35b6d225f2a03a0e0119056be996060b9c4363bf6b61f847f975e1800e1d568.js",
+    "sha256": "3f9ade9b56a6f8d015eb6156f8bca3749ce98a79bb7fa672a2b553d882ad8c27"
+  },
+  "https://raw.githubusercontent.com/chavyleung/scripts/master/box/chavy.boxjs.js": {
+    "file": "7055226f4f1d8737245b28b7d05289f1b42880a418825ead3fe101b538e87409.js",
+    "sha256": "24ab4513d9b210d3921f87660175ddf408f2c4728a01ecb391082e82d8f8ffa6"
+  }
+}
