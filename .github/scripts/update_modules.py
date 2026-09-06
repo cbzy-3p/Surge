@@ -20,13 +20,34 @@ SOURCES = {
 }
 
 
+HOSTNAME_RE = re.compile(r"^(?:\*\.)?[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$")
+
+
+def validate_source(text: str, url: str) -> None:
+    if len(text.encode("utf-8")) < 100 or not re.search(r"(?m)^#!name\s*=", text):
+        raise RuntimeError(f"missing module metadata: {url}")
+    if "[MITM]" not in text:
+        raise RuntimeError(f"MITM section missing: {url}")
+    for line in text.splitlines():
+        if line.startswith("hostname ="):
+            if line.count("%APPEND%") + line.count("%INSERT%") > 1:
+                raise RuntimeError(f"duplicate MITM insertion marker: {url}")
+            values = items(line.split("=", 1)[1])
+            if not values or any(not HOSTNAME_RE.fullmatch(value) for value in values):
+                raise RuntimeError(f"invalid MITM hostname list: {url}")
+        if "script-path=" in line:
+            script_url = re.search(r"script-path=(https?[^,\s]+)", line)
+            if not script_url or not script_url.group(1).startswith("https://"):
+                raise RuntimeError(f"invalid remote script URL: {url}")
+
+
 def fetch(url: str) -> str:
     request = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(request, timeout=30) as response:
         text = response.read().decode("utf-8", errors="replace")
-    if not text.startswith("#!name") or "[MITM]" not in text:
-        raise RuntimeError(f"invalid Surge module source: {url}")
-    return text.replace("\r\n", "\n").replace("\r", "\n")
+    text = text.replace("\r\n", "\n").replace("\r", "\n")
+    validate_source(text, url)
+    return text
 
 
 def section(text: str, name: str) -> str:
