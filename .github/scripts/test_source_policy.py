@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import importlib.util
 import unittest
+import ast
+from urllib.parse import urlparse
 from pathlib import Path
 
 
@@ -27,6 +29,34 @@ def load(name: str):
 
 
 class SourcePolicyTest(unittest.TestCase):
+    def test_all_rule_updaters_have_no_unrecorded_external_sources(self):
+        # Existing supplements remain until their unique coverage is compared.
+        # This records exceptions, not a claim that all six preferred sources lack them.
+        exceptions = {
+            "update_cn_additional.py": {"static-file-global.353355.xyz"},
+            "update_douyin.py": {"v2fly/domain-list-community"},
+            "update_xiaohongshu.py": {"v2fly/domain-list-community", "wresource/hxmy-proxy", "bgpeer/rules", "dl123100/clash-geosite"},
+            "update_v2fly_rules.py": {"v2fly/domain-list-community"},
+        }
+        preferred = {"blackmatrix7", "Rabbit-Spec", "ConnersHua", "Loyalsoldier", "Yuu518"}
+        for path in SCRIPT_DIR.glob("update_*.py"):
+            if path.name == "update_modules.py":
+                continue
+            for node in ast.walk(ast.parse(path.read_text())):
+                if not isinstance(node, ast.Constant) or not isinstance(node.value, str) or not node.value.startswith("https://"):
+                    continue
+                url = urlparse(node.value)
+                parts = url.path.strip("/").split("/")
+                if url.hostname == "ruleset.skk.moe":
+                    continue
+                if url.hostname in {"github.com", "raw.githubusercontent.com"}:
+                    if parts[0] in preferred or parts[0] == "cbzy-3p":
+                        continue
+                    key = "/".join(parts[:2])
+                else:
+                    key = url.hostname
+                self.assertIn(key, exceptions.get(path.name, set()), (path.name, node.value))
+
     def test_core_source_maps_use_only_fixed_sources(self):
         apple = load("update_apple")
         proxy = load("update_proxy")

@@ -6,6 +6,9 @@ import hashlib
 import json
 import re
 import sys
+import shutil
+import subprocess
+import tempfile
 import urllib.request
 from urllib.parse import urlparse
 from pathlib import Path
@@ -26,6 +29,33 @@ SOURCES = {
 
 HOSTNAME_RE = re.compile(r"^(?:\*\.)?[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$")
 SCRIPT_HOSTS = {"github.com", "raw.githubusercontent.com"}
+SCRIPT_REPOS = {"7452323/QuantumultX", "Yu9191/Rewrite", "Script-Hub-Org/Script-Hub", "sub-store-org/Sub-Store", "chavyleung/scripts"}
+
+
+def check_url(url: str) -> None:
+    parsed = urlparse(url)
+    repo = "/".join(parsed.path.strip("/").split("/")[:2])
+    if parsed.scheme != "https" or parsed.username or parsed.port not in (None, 443):
+        raise RuntimeError(f"unapproved URL: {url}")
+    if parsed.hostname == "one-api.zzxu.de" and parsed.path == "/one/one.sgmodule":
+        return
+    if parsed.hostname not in SCRIPT_HOSTS or repo not in SCRIPT_REPOS:
+        raise RuntimeError(f"unapproved repository: {url}")
+
+
+class CheckedRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        parsed = urlparse(newurl)
+        release = (req.host == "github.com" and "/sub-store-org/Sub-Store/releases/" in req.full_url)
+        if not (release and parsed.scheme == "https" and parsed.hostname == "release-assets.githubusercontent.com" and not parsed.username):
+            check_url(newurl)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+def open_checked(url: str, timeout: int):
+    check_url(url)
+    return urllib.request.build_opener(CheckedRedirect()).open(
+        urllib.request.Request(url, headers={"User-Agent": UA}), timeout=timeout)
 MAX_SCRIPT_BYTES = 5 * 1024 * 1024
 MAX_CHANGED_SCRIPTS = 10
 
@@ -50,7 +80,7 @@ def validate_source(text: str, url: str) -> None:
 
 def fetch(url: str) -> str:
     request = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(request, timeout=30) as response:
+    with open_checked(url, timeout=30) as response:
         text = response.read().decode("utf-8", errors="replace")
     text = text.replace("\r\n", "\n").replace("\r", "\n")
     validate_source(text, url)
@@ -117,6 +147,7 @@ def write(path: Path, content: str) -> bool:
 
 
 def validate_script(content: bytes, url: str, previous: bytes = b"") -> None:
+    check_url(url)
     host = (urlparse(url).hostname or "").lower()
     if host not in SCRIPT_HOSTS:
         raise RuntimeError(f"unapproved script host: {url}")
@@ -137,8 +168,8 @@ def validate_script(content: bytes, url: str, previous: bytes = b"") -> None:
 
 def fetch_script(url: str, previous: bytes = b"") -> bytes:
     request = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(request, timeout=45) as response:
-        content = response.read()
+    with open_checked(url, timeout=45) as response:
+        content = response.read(MAX_SCRIPT_BYTES + 1)
     validate_script(content, url, previous)
     return content
 
@@ -200,6 +231,9 @@ def validate_repository() -> None:
             raise RuntimeError(f"manifest script missing: {filename}")
         content = path.read_bytes()
         validate_script(content, url)
+        checked = subprocess.run(["node", "--check", str(path)], capture_output=True, text=True)
+        if checked.returncode:
+            raise RuntimeError(f"JavaScript syntax error: {filename}\n{checked.stderr[:1000]}")
         if hashlib.sha256(content).hexdigest() != entry.get("sha256"):
             raise RuntimeError(f"manifest hash mismatch: {filename}")
         expected_files.add(filename)
@@ -207,6 +241,9 @@ def validate_repository() -> None:
     for module in sorted((ROOT / "Module").glob("**/*.sgmodule")):
         content = module.read_text(encoding="utf-8")
         validate_source(content, module.as_posix())
+        for url in re.findall(r"script-path=(https?[^,\s]+)", content):
+            if not url.startswith(local_prefix):
+                raise RuntimeError(f"unmirrored script in {module}: {url}")
         names: set[str] = set()
         for line in section(content, "Script").splitlines():
             if not line.strip() or line.lstrip().startswith("#") or "=" not in line:
@@ -227,7 +264,7 @@ def validate_repository() -> None:
         raise RuntimeError(f"module script references do not match manifest; missing={missing}, unknown={unknown}")
 
 
-def main() -> int:
+def update_staged() -> int:
     if len(sys.argv) == 2 and sys.argv[1] == "--validate-only":
         validate_repository()
         print("Module validation passed.")
@@ -241,6 +278,32 @@ def main() -> int:
         if write(ROOT / relative, content): changed.append(relative)
     validate_repository()
     print("Updated: " + ", ".join(changed) if changed else "No module source changes.")
+    return 0
+
+
+def main() -> int:
+    global ROOT
+    if sys.argv[1:] == ["--validate-only"]:
+        return update_staged()
+    original = ROOT
+    # No source download, validation failure, or aggregate error touches the live tree.
+    with tempfile.TemporaryDirectory(prefix="surge-modules-") as directory:
+        staged = Path(directory)
+        shutil.copytree(original / "Module", staged / "Module")
+        try:
+            ROOT = staged
+            update_staged()
+        finally:
+            ROOT = original
+        for path in sorted((staged / "Module").rglob("*")):
+            if path.is_file():
+                target = original / path.relative_to(staged)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                if not target.exists() or target.read_bytes() != path.read_bytes():
+                    shutil.copyfile(path, target)
+        for path in (original / "Module/Scripts").glob("*.js"):
+            if not (staged / path.relative_to(original)).exists():
+                path.unlink()
     return 0
 
 if __name__ == "__main__":
