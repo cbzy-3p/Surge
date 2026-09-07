@@ -30,18 +30,7 @@ jobs:
         run: python .github/scripts/update_modules.py
       - name: Validate generated module files
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          for module in Path("Module").glob("**/*.sgmodule"):
-              content = module.read_text(encoding="utf-8")
-              assert content.startswith("#!name"), module
-              assert "[MITM]" in content, module
-              for line in content.splitlines():
-                  if line.startswith("hostname ="):
-                      assert line.count("%APPEND%") + line.count("%INSERT%") <= 1, (module, line)
-                      assert "%APPEND% %APPEND%" not in line, (module, line)
-          print("Module validation passed.")
-          PY
+          python .github/scripts/update_modules.py --validate-only
           git diff --check -- . ':(exclude)Module/Scripts/*.js'
       - name: Commit validated changes to main
         shell: bash
