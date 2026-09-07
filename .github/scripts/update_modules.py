@@ -5,7 +5,9 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import sys
 import urllib.request
+from urllib.parse import urlparse
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -23,6 +25,9 @@ SOURCES = {
 
 
 HOSTNAME_RE = re.compile(r"^(?:\*\.)?[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$")
+SCRIPT_HOSTS = {"github.com", "raw.githubusercontent.com"}
+MAX_SCRIPT_BYTES = 5 * 1024 * 1024
+MAX_CHANGED_SCRIPTS = 10
 
 
 def validate_source(text: str, url: str) -> None:
@@ -111,12 +116,30 @@ def write(path: Path, content: str) -> bool:
     return True
 
 
-def fetch_script(url: str) -> bytes:
+def validate_script(content: bytes, url: str, previous: bytes = b"") -> None:
+    host = (urlparse(url).hostname or "").lower()
+    if host not in SCRIPT_HOSTS:
+        raise RuntimeError(f"unapproved script host: {url}")
+    if len(content) < 16 or len(content) > MAX_SCRIPT_BYTES:
+        raise RuntimeError(f"unexpected script size: {url}")
+    lowered = content.lstrip().lower()
+    if b"\x00" in content or lowered.startswith((b"<!doctype html", b"<html")):
+        raise RuntimeError(f"invalid remote script content: {url}")
+    try:
+        content.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise RuntimeError(f"script is not UTF-8 text: {url}") from exc
+    if previous:
+        ratio = len(content) / len(previous)
+        if ratio < 0.2 or ratio > 5:
+            raise RuntimeError(f"abnormal script size change ({ratio:.2f}x): {url}")
+
+
+def fetch_script(url: str, previous: bytes = b"") -> bytes:
     request = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(request, timeout=45) as response:
         content = response.read()
-    if len(content) < 16 or content.lstrip().lower().startswith(b"<!doctype html"):
-        raise RuntimeError(f"invalid remote script content: {url}")
+    validate_script(content, url, previous)
     return content
 
 
@@ -133,8 +156,8 @@ def mirror_scripts() -> list[str]:
             digest = hashlib.sha256(url.encode("utf-8")).hexdigest()
             filename = f"{digest}.js"
             destination = script_dir / filename
-            content = fetch_script(url)
             old = destination.read_bytes() if destination.exists() else b""
+            content = fetch_script(url, old)
             if old != content:
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 destination.write_bytes(content)
@@ -150,10 +173,65 @@ def mirror_scripts() -> list[str]:
     manifest_text = json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
     if write(script_dir / "manifest.json", manifest_text):
         changed.append("Module/Scripts/manifest.json")
+    stale = {path.name for path in script_dir.glob("*.js")} - {entry["file"] for entry in manifest.values()}
+    for filename in sorted(stale):
+        (script_dir / filename).unlink()
+        changed.append(f"Module/Scripts/{filename}")
+    changed_scripts = [path for path in changed if path.startswith("Module/Scripts/") and path.endswith(".js")]
+    if len(changed_scripts) > MAX_CHANGED_SCRIPTS:
+        raise RuntimeError(f"too many script changes in one run: {len(changed_scripts)}")
     return changed
 
 
+def validate_repository() -> None:
+    script_dir = ROOT / "Module/Scripts"
+    manifest_path = script_dir / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    expected_files: set[str] = set()
+    local_prefix = "https://raw.githubusercontent.com/cbzy-3p/Surge/main/Module/Scripts/"
+    referenced_files: set[str] = set()
+
+    for url, entry in manifest.items():
+        filename = entry.get("file", "")
+        if filename != f"{hashlib.sha256(url.encode('utf-8')).hexdigest()}.js":
+            raise RuntimeError(f"manifest filename mismatch: {url}")
+        path = script_dir / filename
+        if not path.is_file():
+            raise RuntimeError(f"manifest script missing: {filename}")
+        content = path.read_bytes()
+        validate_script(content, url)
+        if hashlib.sha256(content).hexdigest() != entry.get("sha256"):
+            raise RuntimeError(f"manifest hash mismatch: {filename}")
+        expected_files.add(filename)
+
+    for module in sorted((ROOT / "Module").glob("**/*.sgmodule")):
+        content = module.read_text(encoding="utf-8")
+        validate_source(content, module.as_posix())
+        names: set[str] = set()
+        for line in section(content, "Script").splitlines():
+            if not line.strip() or line.lstrip().startswith("#") or "=" not in line:
+                continue
+            name = line.split("=", 1)[0].strip()
+            if name in names:
+                raise RuntimeError(f"duplicate script name in {module}: {name}")
+            names.add(name)
+        for local in re.findall(r"script-path=" + re.escape(local_prefix) + r"([^,\s]+)", content):
+            referenced_files.add(local)
+
+    actual_files = {path.name for path in script_dir.glob("*.js")}
+    if actual_files != expected_files:
+        raise RuntimeError("script directory and manifest do not match")
+    if referenced_files != expected_files:
+        missing = sorted(expected_files - referenced_files)
+        unknown = sorted(referenced_files - expected_files)
+        raise RuntimeError(f"module script references do not match manifest; missing={missing}, unknown={unknown}")
+
+
 def main() -> int:
+    if len(sys.argv) == 2 and sys.argv[1] == "--validate-only":
+        validate_repository()
+        print("Module validation passed.")
+        return 0
     changed = []
     for relative, url in SOURCES.items():
         path = ROOT / relative
@@ -161,6 +239,7 @@ def main() -> int:
     changed.extend(mirror_scripts())
     for relative, content in (("Module/18+/18+-recommended.sgmodule", aggregate_18()), ("Module/Tools/Tools-recommended.sgmodule", aggregate_tools())):
         if write(ROOT / relative, content): changed.append(relative)
+    validate_repository()
     print("Updated: " + ", ".join(changed) if changed else "No module source changes.")
     return 0
 
