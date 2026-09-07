@@ -14,6 +14,19 @@ They remain provisional legacy exceptions: this comparison does not prove
 absence from all six preferred sources. Their removal is not yet justified.
 Their ASN and unrelated individual entries are not blindly merged.
 
-CN-Additional still uses its existing external source. Its full coverage
-comparison remains outstanding. Bybit and N26 already prefer Yuu518, with
+CN-Additional was compared against these six principal domestic feeds:
+SukkaW List/non_ip/domestic.conf (865 parsed entries), Rabbit-Spec China.list
+(3700), blackmatrix7 China_Domain.list (3689), Yuu518 geolocation-cn.list
+(5286), Loyalsoldier ruleset/direct.txt (111159), and ConnersHua Direct.list
+(21). Of 43837 existing suffix rules, 18761 were not suffix-covered by
+their union. Exact-domain entries do not replace suffix rules. Retain the
+existing source: switching to these feeds would reduce current coverage.
+This is a comparison of principal feeds, not every file in each repository,
+and does not independently establish the legitimacy of each domain.
+
+Generic domestic rules also cannot substitute for service-specific
+XiaoHongShu classification. Retain its three legacy supplements under the
+existing merge restrictions pending service-specific replacement evidence.
+
+Bybit and N26 already prefer Yuu518, with
 V2Fly used as fallback. Neither exception is newly introduced by this change.
