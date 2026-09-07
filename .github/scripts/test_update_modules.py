@@ -6,6 +6,13 @@ import update_modules as updater
 
 
 class ModuleProtectionTests(unittest.TestCase):
+    def test_release_redirect_with_proxy_host(self):
+        import urllib.request
+        request = urllib.request.Request("https://github.com/sub-store-org/Sub-Store/releases/download/v1/a.js")
+        request.set_proxy("proxy.example:80", "http")
+        redirected = updater.CheckedRedirect().redirect_request(request, None, 302, "Found", {}, "https://release-assets.githubusercontent.com/asset")
+        self.assertIsNotNone(redirected)
+
     def test_repository_boundary(self):
         for url in ("https://raw.githubusercontent.com/other/Rewrite/main/a.js",
                     "http://raw.githubusercontent.com/Yu9191/Rewrite/main/a.js",

@@ -46,7 +46,8 @@ def check_url(url: str) -> None:
 class CheckedRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         parsed = urlparse(newurl)
-        release = (req.host == "github.com" and "/sub-store-org/Sub-Store/releases/" in req.full_url)
+        source = urlparse(req.full_url)
+        release = (source.hostname == "github.com" and source.path.lower().startswith("/sub-store-org/sub-store/releases/"))
         if not (release and parsed.scheme == "https" and parsed.hostname == "release-assets.githubusercontent.com" and not parsed.username):
             check_url(newurl)
         return super().redirect_request(req, fp, code, msg, headers, newurl)
