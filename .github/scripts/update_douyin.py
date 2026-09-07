@@ -156,7 +156,6 @@ def render(rules: set[tuple[str, str]]) -> str:
         f"# UPDATED: {updated}",
         f"# RULE COUNT: {len(rules)}",
         f"# SOURCE: {BM7_URL}",
-        f"# SOURCE: {V2FLY_URL}",
         f"# SOURCE: {YUU_URL}",
         "# NOTE: Existing rules are preserved; upstream rules are merged and compacted without reducing coverage.",
         "",
@@ -167,17 +166,14 @@ def render(rules: set[tuple[str, str]]) -> str:
 def main() -> None:
     current = parse_surge_rules(TARGET.read_text(encoding="utf-8")) if TARGET.exists() else set()
     bm7 = parse_surge_rules(fetch_text(BM7_URL))
-    v2fly = parse_v2fly(fetch_text(V2FLY_URL))
     yuu = parse_surge_rules(fetch_text(YUU_URL))
     if len(bm7) < MIN_SOURCE_RULES["bm7"]:
         raise RuntimeError(f"BM7 source count unexpectedly low: {len(bm7)}")
-    if len(v2fly) < MIN_SOURCE_RULES["v2fly"]:
-        raise RuntimeError(f"v2fly source count unexpectedly low: {len(v2fly)}")
     if len(yuu) < MIN_SOURCE_RULES["yuu"]:
         raise RuntimeError(f"Yuu518 source count unexpectedly low: {len(yuu)}")
 
     rules = set(current)
-    for source in (bm7, v2fly, yuu):
+    for source in (bm7, yuu):
         for rule in source:
             merge_rule(rules, rule)
     rules = compact_rules(rules)
@@ -191,7 +187,7 @@ def main() -> None:
         if len(rules) > len(previous) * 5 // 2:
             raise RuntimeError(f"output count grew too much: {len(previous)} -> {len(rules)}")
 
-    counts = {"bm7": len(bm7), "v2fly": len(v2fly), "yuu": len(yuu), "output": len(rules)}
+    counts = {"bm7": len(bm7), "yuu": len(yuu), "output": len(rules)}
     validate_snapshot_change(load_snapshot(), counts)
     output = render(rules)
     if not TARGET.exists() or TARGET.read_text(encoding="utf-8").splitlines()[4:] != output.splitlines()[4:]:

@@ -68,7 +68,6 @@ MIN_SOURCE_RULES = {
     "dl123100": 40,
 }
 SOURCE_LABELS = (
-    "v2fly/domain-list-community data/xiaohongshu (recursive includes)",
     "blackmatrix7/ios_rule_script XiaoHongShu.list",
     "Yuu518/Yuu-rules surge/geosite/xiaohongshu.list",
     "wresource/hxmy-proxy app-xiaohongshu.txt",
@@ -282,14 +281,12 @@ def render(rules: set[Rule]) -> str:
 
 
 def main() -> None:
-    v2fly = parse_v2fly("xiaohongshu")
     blackmatrix7 = parse_surge_rules(fetch_text(BLACKMATRIX_URL))
     yuu518 = parse_surge_rules(fetch_text(YUU_URL))
     wresource = parse_plain_domains(fetch_text(APP_RULE_URL))
     bgpeer = parse_surge_rules(fetch_text(BGPEER_URL))
     dl123100 = parse_surge_rules(fetch_text(DL123_URL))
     sources = {
-        "v2fly": v2fly,
         "blackmatrix7": blackmatrix7,
         "yuu518": yuu518,
         "wresource": wresource,
@@ -300,7 +297,7 @@ def main() -> None:
         validate_source(name, rules)
 
     rules: set[Rule] = set()
-    for source_rules in (blackmatrix7, yuu518, v2fly, wresource):
+    for source_rules in (blackmatrix7, yuu518, wresource):
         for rule in source_rules:
             merge_rule(rules, rule)
     for domain in VERIFIED_FIRST_PARTY_DOMAINS:
