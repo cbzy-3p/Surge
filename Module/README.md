@@ -5,3 +5,4 @@
 - [`18+/`](./18%2B/)：18+ 模块分类与推荐合集
 - [`Tools/`](./Tools/)：BoxJs、Script Hub、Sub-Store 等工具模块
 - [`Telegram/`](./Telegram/)：Telegram 跳转等专项模块
+- [`AdBlock/`](./AdBlock/)：应用净化、去广告及功能增强模块

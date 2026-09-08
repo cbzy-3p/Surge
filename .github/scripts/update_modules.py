@@ -26,10 +26,25 @@ SOURCES = {
     "Module/Telegram/TgRedirect.sgmodule": "https://raw.githubusercontent.com/Yu9191/Rewrite/refs/heads/main/TgRedirect.sgmodule",
 }
 
+AD_SOURCES = {
+    "Module/AdBlock/google.sgmodule": "https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/Google%E6%90%9C%E7%B4%A2%E9%87%8D%E5%AE%9A%E5%90%91.sgmodule",
+    "Module/AdBlock/soul.sgmodule": "https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/Soul%E5%8E%BB%E5%B9%BF%E5%91%8A.sgmodule",
+    "Module/AdBlock/wechat-public.sgmodule": "https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%E5%8E%BB%E5%B9%BF%E5%91%8A.sgmodule",
+    "Module/AdBlock/wechat-mini.sgmodule": "https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%8E%BB%E5%B9%BF%E5%91%8A.sgmodule",
+    "Module/AdBlock/taobao.sgmodule": "https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/%E6%B7%98%E5%AE%9D%E5%8E%BB%E5%B9%BF%E5%91%8A.sgmodule",
+    "Module/AdBlock/amap.sgmodule": "https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BE%E5%8E%BB%E5%B9%BF%E5%91%8A.sgmodule",
+    "Module/AdBlock/wechat-unlock.sgmodule": "https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/Beta/%E5%BE%AE%E4%BF%A1%E5%A4%96%E9%83%A8%E9%93%BE%E6%8E%A5%E8%A7%A3%E9%94%81.beta.sgmodule",
+}
+GOOFISH_SOURCE = "https://raw.githubusercontent.com/ddgksf2013/Rewrite/refs/heads/master/AdBlock/GoofishAds.conf"
 
-HOSTNAME_RE = re.compile(r"^(?:\*\.)?[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$")
+
+HOSTNAME_RE = re.compile(r"^[A-Za-z0-9*](?:[A-Za-z0-9*-]{0,61}[A-Za-z0-9*])?(?:\.[A-Za-z0-9*](?:[A-Za-z0-9*-]{0,61}[A-Za-z0-9*])?)+$")
 SCRIPT_HOSTS = {"github.com", "raw.githubusercontent.com"}
-SCRIPT_REPOS = {"7452323/QuantumultX", "Yu9191/Rewrite", "Script-Hub-Org/Script-Hub", "sub-store-org/Sub-Store", "chavyleung/scripts"}
+SCRIPT_REPOS = {"7452323/QuantumultX", "Yu9191/Rewrite", "Script-Hub-Org/Script-Hub", "sub-store-org/Sub-Store", "chavyleung/scripts", "QingRex/LoonKissSurge", "ddgksf2013/Rewrite", "ddgksf2013/Scripts"}
+EXTERNAL_SCRIPT_PREFIXES = (
+    "https://kelee.one/Resource/JavaScript/",
+    "https://raw.githubusercontent.com/ddgksf2013/Scripts/refs/heads/master/",
+)
 
 
 def check_url(url: str) -> None:
@@ -80,12 +95,17 @@ def validate_source(text: str, url: str) -> None:
 
 
 def fetch(url: str) -> str:
-    request = urllib.request.Request(url, headers={"User-Agent": UA})
     with open_checked(url, timeout=30) as response:
         text = response.read().decode("utf-8", errors="replace")
     text = text.replace("\r\n", "\n").replace("\r", "\n")
     validate_source(text, url)
     return text
+
+
+def fetch_text(url: str) -> str:
+    with open_checked(url, timeout=30) as response:
+        text = response.read().decode("utf-8", errors="replace")
+    return text.replace("\r\n", "\n").replace("\r", "\n")
 
 
 def section(text: str, name: str) -> str:
@@ -104,6 +124,86 @@ def items(value: str) -> list[str]:
 
 def unique(values: list[str]) -> list[str]:
     return list(dict.fromkeys(values))
+
+
+def normalize_module(text: str) -> str:
+    """Remove Loon-only metadata and make Surge script identifiers unique."""
+    lines = [line for line in text.splitlines() if not line.startswith("#!loon_version=")]
+    in_scripts = False
+    names: dict[str, int] = {}
+    normalized: list[str] = []
+    for line in lines:
+        if line.startswith("[") and line.endswith("]"):
+            in_scripts = line == "[Script]"
+        if in_scripts and line.strip() and not line.lstrip().startswith("#") and "=" in line:
+            name, value = line.split("=", 1)
+            base = name.strip()
+            names[base] = names.get(base, 0) + 1
+            if names[base] > 1:
+                line = f"{base}（{names[base]}） =" + value
+        normalized.append(line.rstrip())
+    return "\n".join(normalized).strip() + "\n"
+
+
+def convert_goofish(text: str) -> str:
+    rules: list[str] = []
+    rewrites: list[str] = []
+    body_rewrites: list[str] = []
+    scripts: list[str] = []
+    hosts: list[str] = []
+    for raw in text.splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.lower().startswith("hostname ="):
+            hosts.extend(items(line.split("=", 1)[1]))
+        elif line.lower().startswith("host-suffix,"):
+            parts = [part.strip() for part in line.split(",")]
+            if len(parts) >= 2:
+                rules.append(f"DOMAIN-SUFFIX,{parts[1]},REJECT")
+        elif match := re.match(r"^(.*?)\s+url\s+reject-200$", line):
+            rewrites.append(f"{match.group(1)} - reject-200")
+        elif match := re.match(r"^(.*?)\s+url\s+jsonjq-response-body\s+(.+)$", line):
+            body_rewrites.append(f"http-response-jq {match.group(1)} {match.group(2)}")
+        elif match := re.match(r"^(.*?)\s+url\s+script-response-body\s+(https://\S+)$", line):
+            scripts.append("闲鱼设备信息净化 = type=http-response, pattern=" + match.group(1) +
+                           ", script-path=" + match.group(2) + ", requires-body=true")
+    if not hosts or not (rewrites or body_rewrites or scripts):
+        raise RuntimeError("Goofish conversion produced an incomplete Surge module")
+    blocks = [
+        "#!name=闲鱼去广告", "#!desc=过滤闲鱼开屏、首页、搜索、推荐及设备调度内容",
+        "#!author=ddgksf2013（Surge 转换：cbzy-3p）", "#!homepage=https://github.com/cbzy-3p/Surge", "#!category=去广告",
+    ]
+    for name, values in (("Rule", rules), ("URL Rewrite", rewrites), ("Body Rewrite", body_rewrites), ("Script", scripts)):
+        if values:
+            blocks.extend(["", f"[{name}]", *unique(values)])
+    blocks.extend(["", "[MITM]", "hostname = %APPEND% " + ", ".join(unique(hosts)), ""])
+    return "\n".join(blocks)
+
+
+def aggregate_adblock() -> str:
+    order = ("wechat-public", "wechat-mini", "taobao", "amap", "goofish", "soul", "google", "wechat-unlock")
+    texts = [(ROOT / "Module/AdBlock" / f"{name}.sgmodule").read_text(encoding="utf-8") for name in order]
+    blocks = [
+        "#!name=应用净化推荐合集", "#!desc=微信、淘宝、高德、闲鱼、Soul 去广告，Google 重定向及微信外链解锁",
+        "#!author=cbzy-3p（整合；原作者见 README.md）", "#!homepage=https://github.com/cbzy-3p/Surge", "#!category=去广告",
+    ]
+    for name in ("Rule", "URL Rewrite", "Body Rewrite", "Map Local", "Script"):
+        lines = unique([
+            line.rstrip() for text in texts for line in section(text, name).splitlines()
+            if line.strip() and not line.lstrip().startswith("#")
+        ])
+        if lines:
+            blocks.extend(["", f"[{name}]", *lines])
+    hosts = unique([host for text in texts for host in items(section(text, "MITM").split("=", 1)[-1])])
+    blocks.extend(["", "[MITM]", "hostname = %APPEND% " + ", ".join(hosts), ""])
+    return normalize_module("\n".join(blocks))
+
+
+def external_script_allowed(url: str) -> bool:
+    parsed = urlparse(url)
+    return (parsed.scheme == "https" and not parsed.username and parsed.port in (None, 443)
+            and url.endswith(".js") and any(url.startswith(prefix) for prefix in EXTERNAL_SCRIPT_PREFIXES))
 
 
 def aggregate_18() -> str:
@@ -243,7 +343,7 @@ def validate_repository() -> None:
         content = module.read_text(encoding="utf-8")
         validate_source(content, module.as_posix())
         for url in re.findall(r"script-path=(https?[^,\s]+)", content):
-            if not url.startswith(local_prefix):
+            if not url.startswith(local_prefix) and not external_script_allowed(url):
                 raise RuntimeError(f"unmirrored script in {module}: {url}")
         names: set[str] = set()
         for line in section(content, "Script").splitlines():
@@ -274,8 +374,14 @@ def update_staged() -> int:
     for relative, url in SOURCES.items():
         path = ROOT / relative
         if write(path, fetch(url)): changed.append(relative)
+    for relative, url in AD_SOURCES.items():
+        content = normalize_module(fetch(url))
+        if write(ROOT / relative, content): changed.append(relative)
+    goofish_path = "Module/AdBlock/goofish.sgmodule"
+    if write(ROOT / goofish_path, convert_goofish(fetch_text(GOOFISH_SOURCE))):
+        changed.append(goofish_path)
     changed.extend(mirror_scripts())
-    for relative, content in (("Module/18+/18+-recommended.sgmodule", aggregate_18()), ("Module/Tools/Tools-recommended.sgmodule", aggregate_tools())):
+    for relative, content in (("Module/18+/18+-recommended.sgmodule", aggregate_18()), ("Module/Tools/Tools-recommended.sgmodule", aggregate_tools()), ("Module/AdBlock/AdBlock-recommended.sgmodule", aggregate_adblock())):
         if write(ROOT / relative, content): changed.append(relative)
     validate_repository()
     print("Updated: " + ", ".join(changed) if changed else "No module source changes.")

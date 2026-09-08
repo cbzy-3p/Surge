@@ -1,0 +1,31 @@
+#!name=闲鱼去广告
+#!desc=过滤闲鱼开屏、首页、搜索、推荐及设备调度内容
+#!author=ddgksf2013（Surge 转换：cbzy-3p）
+#!homepage=https://github.com/cbzy-3p/Surge
+#!category=去广告
+
+[Rule]
+DOMAIN-SUFFIX,iyes.youku.com,REJECT
+
+[URL Rewrite]
+^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.*splash\.ads - reject-200
+^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.idle.ad.expose - reject-200
+
+[Body Rewrite]
+http-response-jq ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idle.user.strategy.list '.data.strategies = [{}]'
+http-response-jq ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idlehome.home.circle.list '.data.circleList |= map(select(.bizCode != "saveMoney"))'
+http-response-jq ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idlehome.home.nextfresh '.data.homeTopList |= [ .[0] ] | .data.sections |= map(select(.data.bizType == "item"))'
+http-response-jq ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idlemtopsearch.search.shade '.data.singleShadeWords =[{}]'
+http-response-jq ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idlemtopsearch.item.search.activate '.data.cardList = [{}]'
+http-response-jq ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idlemtopsearch.search.discover 'del(.data.resultList)'
+http-response-jq ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.idle.user.page.my.adapter '.data.ability=[] | .data.container.sections |= map(select(.sectionBizCode | test("head|user|trade")))'
+http-response-jq ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idle.item.buy.feeds 'del(.data.sections)'
+http-response-jq ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idle.local.home '.data.sections |= map(select(.data.bizType == "item"))'
+http-response-jq ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idlemtopsearch.search '.data.resultList |= map(select(.data.item.main.clickParam.args.biz_type == "item"))'
+http-response-jq ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idle.item.recommend '.data.cardList |= map(select(.cardData.bizType != "mamaAD"))'
+
+[Script]
+闲鱼设备信息净化 = type=http-response, pattern=^http:\/\/[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){1,4}(:\d+)?\/amdc\/mobileDispatch, script-path=https://raw.githubusercontent.com/ddgksf2013/Scripts/refs/heads/master/amdc.js, requires-body=true
+
+[MITM]
+hostname = %APPEND% acs.m.goofish.com, g-acs.m.goofish.com
