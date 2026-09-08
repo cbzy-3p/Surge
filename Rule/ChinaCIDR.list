@@ -1,8 +1,8 @@
 # NAME: Multi-source-ChinaCIDR
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-06 18:20:07 UTC
-# RULE COUNT: 11037
+# UPDATED: 2026-09-08 19:26:54 UTC
+# RULE COUNT: 11039
 # SOURCE: https://ruleset.skk.moe/List/ip/china_ip.conf
 # SOURCE: https://ruleset.skk.moe/List/ip/china_ip_ipv6.conf
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/ChinaCIDR.list
@@ -10881,6 +10881,7 @@ IP-CIDR6,2a0a:d687:f400::/38,no-resolve
 IP-CIDR6,2a0a:d687:f800::/37,no-resolve
 IP-CIDR6,2a0b:4340:550::/44,no-resolve
 IP-CIDR6,2a0b:4340:97::/48,no-resolve
+IP-CIDR6,2a0b:a300::/29,no-resolve
 IP-CIDR6,2a0c:3b80:434e::/48,no-resolve
 IP-CIDR6,2a0c:3b80:636e::/48,no-resolve
 IP-CIDR6,2a0c:9a40:95bf:7000::/54,no-resolve
@@ -10964,6 +10965,7 @@ IP-CIDR6,2a0f:7803:ff10:2000::/51,no-resolve
 IP-CIDR6,2a0f:9400:6110::/48,no-resolve
 IP-CIDR6,2a0f:9407:f000::/36,no-resolve
 IP-CIDR6,2a0f:9fc0::/29,no-resolve
+IP-CIDR6,2a0f:a700::/29,no-resolve
 IP-CIDR6,2a10:500:4600::/40,no-resolve
 IP-CIDR6,2a10:c5c1:f016::/48,no-resolve
 IP-CIDR6,2a10:fa86::/34,no-resolve
