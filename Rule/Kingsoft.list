@@ -1,8 +1,8 @@
 # NAME: Multi-source-Kingsoft
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-04 18:59:49 UTC
-# RULE COUNT: 262
+# UPDATED: 2026-09-09 19:18:00 UTC
+# RULE COUNT: 264
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Kingsoft/Kingsoft.list
 # MERGED SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/kingsoft.list
 # NOTE: BM7 coverage is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and compacted.
@@ -269,3 +269,5 @@ DOMAIN-SUFFIX,keniu.com
 DOMAIN-SUFFIX,kimxz.com
 DOMAIN-SUFFIX,seasungames.cn
 DOMAIN-SUFFIX,seasunwbl.com
+DOMAIN-SUFFIX,yuanqidesk.com
+DOMAIN-SUFFIX,zhhainiao.com
