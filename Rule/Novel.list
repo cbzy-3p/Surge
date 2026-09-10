@@ -1,4 +1,17 @@
 # Novel - 小说站点
-# 手动维护；来源：用户提供的访问记录
-# RuleCount: 1
+# 手动维护；来源：用户提供的访问记录及搜索结果截图
+# RuleCount: 14
+DOMAIN-SUFFIX,astkp.com
+DOMAIN-SUFFIX,biqudao5.com
+DOMAIN-SUFFIX,duwenxue.net
+DOMAIN-SUFFIX,gugugg.com
+DOMAIN-SUFFIX,icaups.net
+DOMAIN-SUFFIX,jmqpx.com
+DOMAIN-SUFFIX,kisiye.com
+DOMAIN-SUFFIX,mindkm.com
+DOMAIN-SUFFIX,navww.com
 DOMAIN-SUFFIX,qzxs.net
+DOMAIN-SUFFIX,tfsls.com
+DOMAIN-SUFFIX,txt9090.cn
+DOMAIN-SUFFIX,uctxt.cc
+DOMAIN-SUFFIX,webjoss.com
