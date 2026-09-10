@@ -1,6 +1,7 @@
 # Novel - 小说站点
 # 手动维护；来源：用户提供的访问记录及搜索结果截图
-# RuleCount: 16
+# RuleCount: 17
+DOMAIN-SUFFIX,882xsw.com
 DOMAIN-SUFFIX,astkp.com
 DOMAIN-SUFFIX,bequ6.info
 DOMAIN-SUFFIX,biqudao5.com
