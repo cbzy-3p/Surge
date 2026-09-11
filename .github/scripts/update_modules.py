@@ -15,6 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 UA = "cbzy-3p-Surge-Module-Updater/1.0"
+LOCAL_SCRIPT_BASE = "https://raw.githubusercontent.com/cbzy-3p/Surge/main/Module/Scripts/"
 SOURCES = {
     "Module/18+/one.sgmodule": "https://one-api.zzxu.de/one/one.sgmodule",
     "Module/18+/porntube.sgmodule": "https://raw.githubusercontent.com/Yu9191/Rewrite/refs/heads/main/porntube/modules/porntube.sgmodule",
@@ -278,12 +279,15 @@ def fetch_script(url: str, previous: bytes = b"") -> bytes:
 def mirror_scripts() -> list[str]:
     """Mirror every remote script and rewrite modules to the repository copy."""
     script_dir = ROOT / "Module/Scripts"
-    manifest: dict[str, dict[str, str]] = {}
+    manifest_path = script_dir / "manifest.json"
+    manifest: dict[str, dict[str, str]] = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
     changed: list[str] = []
     for relative in SOURCES:
         path = ROOT / relative
         text = path.read_text(encoding="utf-8")
         urls = list(dict.fromkeys(re.findall(r"script-path=(https?[^,\s]+)", text)))
+        # Local mirror URLs are already controlled files; only fetch upstream URLs.
+        urls = [url for url in urls if not url.startswith(LOCAL_SCRIPT_BASE)]
         for url in urls:
             digest = hashlib.sha256(url.encode("utf-8")).hexdigest()
             filename = f"{digest}.js"
@@ -371,12 +375,31 @@ def update_staged() -> int:
         print("Module validation passed.")
         return 0
     changed = []
+    failures = {}
     for relative, url in SOURCES.items():
         path = ROOT / relative
-        if write(path, fetch(url)): changed.append(relative)
+        try:
+            content = fetch(url)
+            if write(path, content): changed.append(relative)
+        except Exception as exc:
+            if not path.exists():
+                raise
+            validate_source(path.read_text(encoding="utf-8"), relative)
+            failures[relative] = f"{type(exc).__name__}: {exc}"
     for relative, url in AD_SOURCES.items():
-        content = normalize_module(fetch(url))
-        if write(ROOT / relative, content): changed.append(relative)
+        path = ROOT / relative
+        try:
+            content = normalize_module(fetch(url))
+            if write(path, content): changed.append(relative)
+        except Exception as exc:
+            if not path.exists():
+                raise
+            validate_source(path.read_text(encoding="utf-8"), relative)
+            failures[relative] = f"{type(exc).__name__}: {exc}"
+    if failures:
+        print("Retained previous versions for failed sources:")
+        for relative, reason in failures.items():
+            print(f"::warning::{relative}: {reason}")
     goofish_path = "Module/AdBlock/goofish.sgmodule"
     if write(ROOT / goofish_path, convert_goofish(fetch_text(GOOFISH_SOURCE))):
         changed.append(goofish_path)
