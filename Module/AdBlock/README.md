@@ -3,13 +3,14 @@
 推荐直接使用 [`AdBlock-recommended.sgmodule`](./AdBlock-recommended.sgmodule)，其中整合并去重了以下 Surge 模块：
 
 - Google 搜索重定向
-- Soul 去广告
 - 微信公众号去广告
 - 微信小程序去广告
 - 淘宝去广告
 - 高德地图去广告
 - 闲鱼去广告
 - 微信外部链接解锁
+
+Soul 去广告保留为独立模块，不纳入推荐合集。
 
 Google、Soul、微信、淘宝和高德优先同步 QingRex/LoonKissSurge 的原生 Surge 版本；闲鱼规则由 ddgksf2013 的 Quantumult X 配置在更新时确定性转换为 Surge 的 Rule、URL Rewrite、Body Rewrite、Script 与 MITM 段。转换过程不会依赖 Script Hub 在线转换服务。
 

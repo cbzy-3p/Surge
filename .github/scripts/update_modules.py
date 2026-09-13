@@ -183,10 +183,10 @@ def convert_goofish(text: str) -> str:
 
 
 def aggregate_adblock() -> str:
-    order = ("wechat-public", "wechat-mini", "taobao", "amap", "goofish", "soul", "google", "wechat-unlock")
+    order = ("wechat-public", "wechat-mini", "taobao", "amap", "goofish", "google", "wechat-unlock")
     texts = [(ROOT / "Module/AdBlock" / f"{name}.sgmodule").read_text(encoding="utf-8") for name in order]
     blocks = [
-        "#!name=应用净化推荐合集", "#!desc=微信、淘宝、高德、闲鱼、Soul 去广告，Google 重定向及微信外链解锁",
+        "#!name=应用净化推荐合集", "#!desc=微信、淘宝、高德、闲鱼去广告，Google 重定向及微信外链解锁",
         "#!author=cbzy-3p（整合；原作者见 README.md）", "#!homepage=https://github.com/cbzy-3p/Surge", "#!category=去广告",
     ]
     for name in ("Rule", "URL Rewrite", "Body Rewrite", "Map Local", "Script"):
