@@ -10,8 +10,10 @@ permissions:
   contents: write
 
 concurrency:
-  group: update-surge-modules
+  # Module updates always target main; share its lock with the rule updater.
+  group: surge-generated-content-refs/heads/main
   cancel-in-progress: false
+  queue: max
 
 jobs:
   update:
