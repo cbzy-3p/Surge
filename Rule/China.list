@@ -1,8 +1,8 @@
 # NAME: Multi-source-China
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-21 20:26:37 UTC
-# RULE COUNT: 5738
+# UPDATED: 2026-09-23 19:41:53 UTC
+# RULE COUNT: 5739
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/China.list
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/China/China_Domain.list
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/geolocation-cn.list
@@ -4336,6 +4336,7 @@ DOMAIN-SUFFIX,sinopec.com
 DOMAIN-SUFFIX,sinopecgroup.com
 DOMAIN-SUFFIX,sinopecsales.com
 DOMAIN-SUFFIX,sipeed.com
+DOMAIN-SUFFIX,sjfls6.com
 DOMAIN-SUFFIX,sjwyx.com
 DOMAIN-SUFFIX,skimit.net
 DOMAIN-SUFFIX,sksight.com
