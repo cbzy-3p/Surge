@@ -1,8 +1,8 @@
 # NAME: Multi-source-ChinaCIDR
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-22 19:45:40 UTC
-# RULE COUNT: 11042
+# UPDATED: 2026-09-25 20:02:04 UTC
+# RULE COUNT: 11049
 # SOURCE: https://ruleset.skk.moe/List/ip/china_ip.conf
 # SOURCE: https://ruleset.skk.moe/List/ip/china_ip_ipv6.conf
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/ChinaCIDR.list
@@ -3357,8 +3357,10 @@ IP-CIDR,125.62.0.0/18,no-resolve
 IP-CIDR,125.64.0.0/11,no-resolve
 IP-CIDR,125.96.0.0/15,no-resolve
 IP-CIDR,125.98.0.0/16,no-resolve
+IP-CIDR,128.1.193.215/32,no-resolve
 IP-CIDR,128.107.24.0/23,no-resolve
 IP-CIDR,128.108.0.0/16,no-resolve
+IP-CIDR,128.14.195.78/32,no-resolve
 IP-CIDR,128.177.173.46/32,no-resolve
 IP-CIDR,129.204.0.0/16,no-resolve
 IP-CIDR,129.211.0.0/16,no-resolve
@@ -3577,6 +3579,7 @@ IP-CIDR,147.243.29.192/26,no-resolve
 IP-CIDR,147.243.30.128/27,no-resolve
 IP-CIDR,147.243.30.64/26,no-resolve
 IP-CIDR,147.78.132.0/22,no-resolve
+IP-CIDR,148.153.48.240/32,no-resolve
 IP-CIDR,148.253.231.0/24,no-resolve
 IP-CIDR,148.253.238.0/24,no-resolve
 IP-CIDR,148.253.249.0/24,no-resolve
@@ -6173,6 +6176,7 @@ IP-CIDR,27.8.0.0/13,no-resolve
 IP-CIDR,27.98.208.0/20,no-resolve
 IP-CIDR,27.98.224.0/19,no-resolve
 IP-CIDR,27.99.128.0/17,no-resolve
+IP-CIDR,3.109.116.108/32,no-resolve
 IP-CIDR,3.2.35.128/26,no-resolve
 IP-CIDR,3.5.214.0/23,no-resolve
 IP-CIDR,31.130.224.0/20,no-resolve
@@ -6261,6 +6265,8 @@ IP-CIDR,38.54.10.0/32,no-resolve
 IP-CIDR,38.60.143.0/24,no-resolve
 IP-CIDR,38.60.144.0/23,no-resolve
 IP-CIDR,38.60.214.0/32,no-resolve
+IP-CIDR,38.93.228.135/32,no-resolve
+IP-CIDR,38.93.228.139/32,no-resolve
 IP-CIDR,38.94.110.99/32,no-resolve
 IP-CIDR,39.0.0.0/24,no-resolve
 IP-CIDR,39.0.128.0/17,no-resolve
@@ -8144,6 +8150,7 @@ IP-CIDR6,2402:73e0::/32,no-resolve
 IP-CIDR6,2402:7540::/32,no-resolve
 IP-CIDR6,2402:75c0::/32,no-resolve
 IP-CIDR6,2402:7740::/32,no-resolve
+IP-CIDR6,2402:7820::/32,no-resolve
 IP-CIDR6,2402:7d00::/32,no-resolve
 IP-CIDR6,2402:7d80::/32,no-resolve
 IP-CIDR6,2402:8180::/32,no-resolve
