@@ -1,7 +1,7 @@
 # NAME: Alibaba (Taobao, Alipay, XianYu and Alibaba family)
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-10-11 14:59:13 UTC
+# UPDATED: 2026-10-11 20:20:37 UTC
 # SOURCE: sukka: https://ruleset.skk.moe/List/non_ip/domestic.conf
 # SOURCE: sukka_scope: https://raw.githubusercontent.com/SukkaW/Surge/master/Source/non_ip/domestic.ts
 # SOURCE: sukka_ua: https://raw.githubusercontent.com/SukkaW/Surge/master/Source/non_ip/domestic.conf
@@ -20,14 +20,13 @@
 # NOTE: Customer sites hosted on these networks may also match; first match wins.
 # DOMAIN: 3
 # DOMAIN-SUFFIX: 1390
-# IP-CIDR: 55
+# IP-CIDR: 57
 # IP-CIDR6: 1
 # PROCESS-NAME: 1
 # USER-AGENT: 2
 # RULE COUNT: 1454
 
 DOMAIN,ali.wosms.cn
-DOMAIN-SUFFIX,cainiao.cn
 DOMAIN,upos-sz-estgoss.bilivideo.com
 DOMAIN,upos-sz-mirrorali.bilivideo.com
 DOMAIN-SUFFIX,10029.com
@@ -349,6 +348,7 @@ DOMAIN-SUFFIX,c1a2.com
 DOMAIN-SUFFIX,c1a3.com
 DOMAIN-SUFFIX,caigoutong.net
 DOMAIN-SUFFIX,cainiao-inc.com
+DOMAIN-SUFFIX,cainiao.cn
 DOMAIN-SUFFIX,cainiao.com
 DOMAIN-SUFFIX,cainiao.com.cn
 DOMAIN-SUFFIX,cainiaoyizhan.com
@@ -1469,9 +1469,9 @@ IP-CIDR,47.74.0.0/15,no-resolve
 IP-CIDR,47.76.0.0/14,no-resolve
 IP-CIDR,47.80.0.0/12,no-resolve
 IP-CIDR,59.82.0.0/20,no-resolve
-IP-CIDR,59.82.96.0/19,no-resolve
 IP-CIDR,59.82.240.0/21,no-resolve
 IP-CIDR,59.82.248.0/22,no-resolve
+IP-CIDR,59.82.96.0/19,no-resolve
 IP-CIDR,61.243.0.0/16,no-resolve
 IP-CIDR,72.254.0.0/16,no-resolve
 IP-CIDR,8.128.0.0/10,no-resolve
