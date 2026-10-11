@@ -14,6 +14,12 @@
 
 `Proxy.list` 使用 blackmatrix7、Rabbit-Spec、ConnersHua、Loyalsoldier 和 Yuu518 的明确代理服务分类，不以宽泛的全局规则替代。
 
+`Alibaba.list` 是阿里巴巴完整总集，重点覆盖淘宝、支付宝、闲鱼，并包含天猫、1688、菜鸟、钉钉、优酷、高德、阿里云及共享 CDN。按六个固定来源合并，完整保留支付宝专用分类和已有闲鱼实机端点，已接入每日统一更新。来源与覆盖检查见 [Alibaba-Sources.md](Alibaba-Sources.md)。该总集包含共享云/CDN 与海外 IP，托管其上的第三方网站也可能命中。放在 China、CN-Additional、GEOIP 和 FINAL 等兜底规则之前；如已有闲鱼或其他细分类使用不同策略，将它们放在 Alibaba 之前。下例使用直连，可将 `DIRECT` 改成自己的策略名。
+
+```ini
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/Alibaba.list,DIRECT,extended-matching,no-resolve
+```
+
 `XianYu.list` 是闲鱼专用规则，保留 blackmatrix7 的专用基线，并用 Rabbit-Spec、Loyalsoldier、Yuu518 交叉核对官网、登录、图片视频和聊天依赖，同时保留用户 iPhone 应用隐私报告中确认的精确端点。共享依赖使用精确端点，不导入整个 Alibaba、阿里云 IP 段或共享 CDN 后缀。已接入统一每日更新，来源失败或覆盖确认异常时保留上一份有效规则。来源证据、共享边界和待实机核对项见 [XianYu-Sources.md](XianYu-Sources.md)。需要单独分流时放在 China、Alibaba、淘宝及兜底规则之前；下例使用直连，也可以将 `DIRECT` 改为自己的策略名。
 
 ```ini

@@ -92,3 +92,39 @@ deleted, and git diff whitespace checks pass. These are local/source checks,
 not a post-push GitHub Actions run or an iPhone execution result.
 
 GitHub reference: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
+
+## Alibaba family review, 2026-10-11
+
+Following the user's request for one complete Alibaba family subscription,
+added `Rule/Alibaba.list` rather than separate new Taobao/Alipay/XianYu files.
+The six preferred sources were checked in their existing priority order.
+Full BM7 Alibaba, AliPay, XianYu and DingTalk classifications and Yuu Alibaba
+and AlibabaCloud are merged. The BM7 small Alibaba variant also supplies the
+brand TLD rules absent from its All variant. Sukka's explicitly classified
+Alibaba block is cross-checked against its native generated domestic feed;
+customer endpoints compacted under unrelated parent services stay scoped to
+the classified endpoint. Conners Alibaba/Umeng sections are retained. Rabbit
+and Loyalsoldier contribute only domains within the confirmed classification.
+
+Existing XianYu rules and device evidence are preserved and checked against
+the compacted output. Unlike the independent XianYu subscription, the new
+full-family set intentionally includes shared Alibaba cloud/CDN suffixes and
+overseas IP ranges; third-party tenants on those networks can match. Details
+and subscription order are documented in `Rule/Alibaba-Sources.md`.
+
+The new updater follows XianYu in the existing daily 00:17 Beijing pipeline.
+All source/output validation occurs before writing. Counts, core domains,
+source format and every merged rule's retained semantic coverage are checked;
+source failure or abnormal drift leaves the committed rule and snapshot intact.
+Selected source counts, rather than unrelated domestic-list churn, are stored.
+
+Local live generation produced 1,449 rules: 1,389 suffixes, three exact hosts,
+53 IPv4 networks, one IPv6 network, one process name and two User-Agent rules.
+A second live rebuild left the rule and snapshot byte-identical. All 46
+existing rule files remain byte-identical. The repository now validates 47
+rule files and 82,030 rule lines. All 122 regression tests pass, including the
+new preservation, classification isolation, brand TLD, source failure and
+snapshot drift checks. Cross-file overlaps remain informational and retained.
+YAML, shell syntax, whitespace and actionlint checks pass using the same narrow
+`queue: max` schema exception described above. These are source/local checks;
+current phone execution is not verified.

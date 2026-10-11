@@ -77,6 +77,15 @@ class WorkflowPolicyTests(unittest.TestCase):
             with self.subTest(workflow=name):
                 self.assertIn(f'cron: "{cron}"', read_workflow(name))
 
+    def test_alibaba_follows_xianyu_and_is_tested_in_both_jobs(self):
+        text = read_workflow("update-rules")
+        self.assertEqual(text.count("python .github/scripts/test_update_alibaba.py"), 2)
+        update = text.split("\n  update:\n", 1)[1]
+        self.assertLess(update.index("python .github/scripts/update_xianyu.py"),
+                        update.index("python .github/scripts/update_alibaba.py"))
+        self.assertLess(update.index("python .github/scripts/update_alibaba.py"),
+                        update.index("Validate all generated rules"))
+
 
 if __name__ == "__main__":
     unittest.main()

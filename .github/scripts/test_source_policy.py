@@ -63,8 +63,10 @@ class SourcePolicyTest(unittest.TestCase):
         icloud = load("update_icloud")
         proxy = load("update_proxy")
         media = load("update_media_rules")
+        alibaba = load("update_alibaba")
         urls = list(apple.SOURCES.values()) + list(icloud.SOURCES.values()) + list(proxy.SOURCES.values())
         urls += [item[1] for config in media.CONFIGS.values() for item in config]
+        urls += list(alibaba.SOURCES.values())
         invalid = [url for url in urls if not any(marker in url for marker in FIXED_HOST_MARKERS)]
         self.assertEqual(invalid, [])
 
