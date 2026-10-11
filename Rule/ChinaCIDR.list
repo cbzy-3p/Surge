@@ -1,14 +1,14 @@
 # NAME: Multi-source-ChinaCIDR
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-10-10 20:05:47 UTC
+# UPDATED: 2026-10-11 01:40:56 UTC
 # RULE COUNT: 11114
 # SOURCE: https://ruleset.skk.moe/List/ip/china_ip.conf
 # SOURCE: https://ruleset.skk.moe/List/ip/china_ip_ipv6.conf
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/ChinaCIDR.list
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaIPs/ChinaIPs.list
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geoip/cn.list
-# NOTE: Sources are normalized, merged, deduplicated and compacted without reducing coverage.
+# NOTE: Reviewed foreign prefixes are excluded; see .github/SOURCE-REVIEW.md.
 
 IP-CIDR,1.0.1.0/24,no-resolve
 IP-CIDR,1.0.2.0/23,no-resolve

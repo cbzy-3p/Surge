@@ -431,6 +431,7 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     outputs: dict[str, str] = {}
     source_counts: dict[str, int] = {}
+    output_stats: dict[str, tuple[int, int, int]] = {}
     for name, mapping in TARGETS.items():
         bm7_url = f"{BM7_BASE}/{name}/{name}.list"
         lines, _ = parse_bm7(fetch(bm7_url))
@@ -487,6 +488,7 @@ def main() -> None:
         target = OUT / f"{name}.list"
         validate_change(name, target, output)
         outputs[name] = output
+        output_stats[name] = (source_counts[f"bm7/{name}"], len(source_rules), len(additions))
 
     validate_snapshot_change(load_snapshot(), source_counts)
     for name, output in outputs.items():
@@ -495,9 +497,10 @@ def main() -> None:
             print(f"{name}: unchanged")
         else:
             target.write_text(output, encoding="utf-8")
+            bm7_count, supplement_count, addition_count = output_stats[name]
             print(
-                f"{name}: BM7={len(lines)} sources={len(source_rules)} "
-                f"added={len(additions)} output={count_rules(output)}"
+                f"{name}: BM7={bm7_count} sources={supplement_count} "
+                f"added={addition_count} output={count_rules(output)}"
             )
     SNAPSHOT.write_text(render_snapshot(source_counts), encoding="utf-8")
 

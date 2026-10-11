@@ -396,13 +396,21 @@ def update_staged() -> int:
                 raise
             validate_source(path.read_text(encoding="utf-8"), relative)
             failures[relative] = f"{type(exc).__name__}: {exc}"
+    goofish_path = "Module/AdBlock/goofish.sgmodule"
+    path = ROOT / goofish_path
+    try:
+        content = convert_goofish(fetch_text(GOOFISH_SOURCE))
+        validate_source(content, GOOFISH_SOURCE)
+        if write(path, content): changed.append(goofish_path)
+    except Exception as exc:
+        if not path.exists():
+            raise
+        validate_source(path.read_text(encoding="utf-8"), goofish_path)
+        failures[goofish_path] = f"{type(exc).__name__}: {exc}"
     if failures:
         print("Retained previous versions for failed sources:")
         for relative, reason in failures.items():
             print(f"::warning::{relative}: {reason}")
-    goofish_path = "Module/AdBlock/goofish.sgmodule"
-    if write(ROOT / goofish_path, convert_goofish(fetch_text(GOOFISH_SOURCE))):
-        changed.append(goofish_path)
     changed.extend(mirror_scripts())
     for relative, content in (("Module/18+/18+-recommended.sgmodule", aggregate_18()), ("Module/Tools/Tools-recommended.sgmodule", aggregate_tools()), ("Module/AdBlock/AdBlock-recommended.sgmodule", aggregate_adblock())):
         if write(ROOT / relative, content): changed.append(relative)

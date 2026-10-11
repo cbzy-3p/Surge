@@ -81,6 +81,9 @@ DOMAIN_RE = re.compile(
 )
 DOMAIN_LABEL_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")
 BLOCKED_EXACT_DOMAINS = {"7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe"}
+# Reviewed 2026-10-11: APNIC assigns this range to VNPT-VN; RIPEstat
+# reports origin AS45899. See .github/SOURCE-REVIEW.md for primary evidence.
+CHINA_CIDR_EXCLUSIONS = {("IP-CIDR", "14.167.176.0/20")}
 
 
 def fetch(url: str) -> str:
@@ -268,7 +271,9 @@ def render(name: str, rules: set[tuple[str, str]], sources: list[str], updated: 
         f"# UPDATED: {updated}",
         f"# RULE COUNT: {len(rules)}",
         *[f"# SOURCE: {url}" for url in sources],
-        "# NOTE: Sources are normalized, merged, deduplicated and compacted without reducing coverage.",
+        ("# NOTE: Reviewed foreign prefixes are excluded; see .github/SOURCE-REVIEW.md."
+         if name == "ChinaCIDR" else
+         "# NOTE: Sources are normalized, merged, deduplicated and compacted without reducing coverage."),
         "",
     ]
     body = []
@@ -309,6 +314,10 @@ def main() -> None:
             snapshot[f"{name}/{source_name}"] = len(rules)
             combined.update(rules)
             urls.append(url)
+        if name == "ChinaCIDR":
+            for rule_type, value in sorted(combined & CHINA_CIDR_EXCLUSIONS):
+                print(f"::warning::ChinaCIDR excluded reviewed foreign prefix: {rule_type},{value}")
+            combined.difference_update(CHINA_CIDR_EXCLUSIONS)
         output = compact(combined)
         snapshot[f"{name}/output"] = len(output)
         outputs[name] = output, urls

@@ -36,6 +36,49 @@ class ModuleProtectionTests(unittest.TestCase):
                 self.assertEqual(updater.ROOT, root)
             self.assertEqual(live.read_text(), "old version")
 
+    def test_goofish_failure_retains_previous_module(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / "Module/AdBlock/goofish.sgmodule"
+            target.parent.mkdir(parents=True)
+            previous = updater.convert_goofish(
+                "hostname = a.example.com\n^https://a.example.com/ads url reject-200\n"
+            )
+            target.write_text(previous)
+            with patch.object(updater, "ROOT", root), \
+                 patch.object(updater, "SOURCES", {}), \
+                 patch.object(updater, "AD_SOURCES", {}), \
+                 patch.object(updater, "fetch_text", side_effect=RuntimeError("upstream failed")), \
+                 patch.object(updater, "mirror_scripts", return_value=[]), \
+                 patch.object(updater, "aggregate_18", return_value=previous), \
+                 patch.object(updater, "aggregate_tools", return_value=previous), \
+                 patch.object(updater, "aggregate_adblock", return_value=previous), \
+                 patch.object(updater, "validate_repository") as validate, \
+                 patch("builtins.print") as output:
+                self.assertEqual(updater.update_staged(), 0)
+                validate.assert_called_once()
+                self.assertTrue(any("::warning::Module/AdBlock/goofish.sgmodule" in str(call)
+                                    for call in output.call_args_list))
+            self.assertEqual(target.read_text(), previous)
+
+    def test_goofish_failure_without_valid_previous_module_aborts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / "Module/AdBlock/goofish.sgmodule"
+            target.parent.mkdir(parents=True)
+            for previous in (None, "invalid previous module"):
+                with self.subTest(previous=previous):
+                    if previous is not None:
+                        target.write_text(previous)
+                    with patch.object(updater, "ROOT", root), \
+                         patch.object(updater, "SOURCES", {}), \
+                         patch.object(updater, "AD_SOURCES", {}), \
+                         patch.object(updater, "fetch_text", side_effect=RuntimeError("upstream failed")), \
+                         patch.object(updater, "mirror_scripts") as mirror:
+                        with self.assertRaises(RuntimeError):
+                            updater.update_staged()
+                        mirror.assert_not_called()
+
     def test_abnormal_content(self):
         url = "https://raw.githubusercontent.com/Yu9191/Rewrite/main/a.js"
         for content in (b"<html>error page</html>", b"x" * 20):

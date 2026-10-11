@@ -60,6 +60,8 @@ def parse_entry(entry: str, loader=fetch, seen: set[str] | None = None) -> tuple
             continue
         token = line.split()[0]
         if token.startswith("include:"):
+            if len(line.split()) > 1:
+                raise ValueError(f"unsupported selective V2Fly include in {entry}: {line}")
             child = token.removeprefix("include:")
             child_rules, child_sources = parse_entry(child, loader, seen)
             rules.update(child_rules)
@@ -145,6 +147,8 @@ def main() -> None:
             rules, sources = parse_yuu(config["entry"])
             if len(rules) < config["minimum"]:
                 raise RuntimeError("Yuu518 source is unexpectedly small")
+            if config["required"] not in {value for _, value in rules}:
+                raise RuntimeError(f"Yuu518 source is missing {config['required']}")
         except Exception:
             rules, sources = parse_entry(config["entry"])
         values = {value for _, value in rules}

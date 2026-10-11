@@ -1,5 +1,7 @@
 import importlib.util
 import unittest
+import tempfile
+from unittest.mock import patch
 from pathlib import Path
 
 
@@ -11,6 +13,23 @@ SPEC.loader.exec_module(UPDATE_RULES)
 
 
 class SurgeRuleTests(unittest.TestCase):
+    def test_update_log_reports_each_files_own_source_counts(self):
+        mapping = {"rabbit": None, "conners": None, "loyal": None, "yuu": None}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with patch.object(UPDATE_RULES, "OUT", root), \
+                 patch.object(UPDATE_RULES, "SNAPSHOT", root / "snapshot.json"), \
+                 patch.object(UPDATE_RULES, "TARGETS", {"First": mapping, "Second": mapping}), \
+                 patch.object(UPDATE_RULES, "fetch", side_effect=[
+                     "DOMAIN-SUFFIX,one.example\n",
+                     "DOMAIN-SUFFIX,two.example\nDOMAIN-SUFFIX,three.example\n",
+                 ]), \
+                 patch.object(UPDATE_RULES, "validate_bm7"), \
+                 patch("builtins.print") as output:
+                UPDATE_RULES.main()
+                output.assert_any_call("First: BM7=1 sources=0 added=0 output=1")
+                output.assert_any_call("Second: BM7=2 sources=0 added=0 output=2")
+
     def test_official_comment_forms_are_removed(self):
         text = """
         # first

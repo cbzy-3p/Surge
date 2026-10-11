@@ -2,6 +2,8 @@
 
 import importlib.util
 import unittest
+import tempfile
+from unittest.mock import patch
 from pathlib import Path
 
 SCRIPT = Path(__file__).with_name("update_v2fly_rules.py")
@@ -39,6 +41,39 @@ class UpdateV2FlyRulesTest(unittest.TestCase):
         rules, sources = MODULE.parse_entry("root", data.__getitem__)
         self.assertEqual(rules, {("DOMAIN-SUFFIX", "root.example"), ("DOMAIN-SUFFIX", "child.example")})
         self.assertEqual(len(sources), 2)
+
+    def test_selective_include_fails_before_loading_unfiltered_child(self):
+        with self.assertRaisesRegex(ValueError, "selective V2Fly include"):
+            MODULE.parse_entry("root", lambda _: "include:child @cn\n")
+
+    def test_missing_required_yuu_domain_uses_verified_fallback(self):
+        incomplete = {("DOMAIN-SUFFIX", f"other{i}.example") for i in range(3)}
+        complete = {("DOMAIN-SUFFIX", "n26.com"),
+                    ("DOMAIN-SUFFIX", "n26.example"), ("DOMAIN-SUFFIX", "n26.net")}
+        with tempfile.TemporaryDirectory() as directory:
+            with patch.object(MODULE, "OUT", Path(directory)), \
+                 patch.object(MODULE, "TARGETS", {"N26": MODULE.TARGETS["N26"]}), \
+                 patch.object(MODULE, "parse_yuu", return_value=(incomplete, {"yuu"})), \
+                 patch.object(MODULE, "parse_entry", return_value=(complete, {"fallback"})) as fallback, \
+                 patch("builtins.print"):
+                MODULE.main()
+                fallback.assert_called_once_with("n26")
+            output = (Path(directory) / "N26.list").read_text()
+            self.assertIn("DOMAIN-SUFFIX,n26.com\n", output)
+            self.assertIn("# SOURCE: fallback\n", output)
+
+    def test_incomplete_fallback_does_not_overwrite_existing_rules(self):
+        incomplete = {("DOMAIN-SUFFIX", f"other{i}.example") for i in range(3)}
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "N26.list"
+            target.write_text("previous valid rules")
+            with patch.object(MODULE, "OUT", Path(directory)), \
+                 patch.object(MODULE, "TARGETS", {"N26": MODULE.TARGETS["N26"]}), \
+                 patch.object(MODULE, "parse_yuu", return_value=(incomplete, {"yuu"})), \
+                 patch.object(MODULE, "parse_entry", return_value=(incomplete, {"fallback"})):
+                with self.assertRaisesRegex(RuntimeError, "incomplete N26"):
+                    MODULE.main()
+            self.assertEqual(target.read_text(), "previous valid rules")
 
     def test_parent_suffix_removes_children_and_exact_domains(self):
         rules = MODULE.compact(

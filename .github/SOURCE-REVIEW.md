@@ -30,3 +30,65 @@ existing merge restrictions pending service-specific replacement evidence.
 
 Bybit and N26 already prefer Yuu518, with
 V2Fly used as fallback. Neither exception is newly introduced by this change.
+
+## Repository health review, 2026-10-11
+
+Reviewed main at `a760d9997912d574beb1f24b15de9886edc10d9a`. All 13 rule
+updaters, the existing Telegram synchronization step and the module updater
+were executed locally against their fixed live sources. The six preferred
+rule sources, existing paths, independent subscriptions and schedules remain
+unchanged. Publication of these reviewed changes was authorized by the user
+on 2026-10-11; post-publication status is tracked by GitHub Actions.
+
+Reproduced and repaired four updater behaviors: Goofish download/conversion
+failure now retains a validated previous module; Bybit/N26 missing their
+required domain now try the existing V2Fly fallback; selective V2Fly includes
+fail before importing an unfiltered child; per-file update logs use that
+file's own source counts. An invalid or absent fallback still aborts rather
+than replacing valid output.
+
+The live SukkaW IPv4 feed newly included `14.167.176.0/20`. Primary checks
+returned APNIC allocation `14.160.0.0` through `14.191.255.255`, name
+`VNPT-VN`, country `VN`, and RIPEstat prefix `14.167.176.0/20` with origin
+`AS45899`. The live blackmatrix7, Rabbit-Spec and Yuu518 China feeds did not
+cover this prefix. This combination supports treating the new entry as a
+foreign-prefix anomaly; registry country alone is not proof of physical
+location. The exact new prefix is excluded from ChinaCIDR before compaction,
+without changing other categories or dropping any previously committed
+ChinaCIDR coverage. Raw upstream counts remain in the snapshot. Revisit this
+single exclusion if the primary evidence changes.
+
+Primary evidence checked on 2026-10-11:
+
+- https://rdap.apnic.net/ip/14.167.176.0
+- https://stat.ripe.net/data/network-info/data.json?resource=14.167.176.0
+- https://ruleset.skk.moe/List/ip/china_ip.conf
+- https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaIPs/ChinaIPs.list
+- https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/ChinaCIDR.list
+- https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geoip/cn.list
+
+Module limitations remain visible: porntube, huangdou and TgRedirect upstream
+module URLs return 404, so their existing modules and mirrored scripts are
+retained. The root `wloc.module` references two Yu9191/wloc scripts returning
+404; the root `机场信息模块` references ljrgov/conf airport.js returning 404.
+These root files are not covered by the scheduled Module updater, and their
+sources have not been replaced. Sixteen external kelee.one script URLs
+returned Cloudflare 403 from this environment, including a representative
+request using a Surge user agent; this does not establish failure on the
+user's phone. No device execution has been verified.
+
+Validation uses the rule validator, updater regression tests, module
+validation including hashes and Node syntax, cross-file overlap audit, YAML
+parsing and shell syntax checks. actionlint v1.7.12 reports only the two
+existing `queue: max` keys, which current GitHub documentation explicitly
+supports; a second lint run ignores only that known schema mismatch and
+passes. No workflow was changed for this linter limitation.
+
+Final totals are 46 rule files and 80,581 rule lines, 19 module files and 14
+mirrored JavaScript files. All 110 regression tests pass. An independent
+comparison confirms every previously committed rule body remains identical;
+cross-file overlaps remain intentional. No tracked files were added or
+deleted, and git diff whitespace checks pass. These are local/source checks,
+not a post-push GitHub Actions run or an iPhone execution result.
+
+GitHub reference: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax

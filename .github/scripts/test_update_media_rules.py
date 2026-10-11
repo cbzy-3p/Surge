@@ -1,6 +1,8 @@
 import importlib.util
 import tempfile
 import unittest
+import json
+from unittest.mock import patch
 from pathlib import Path
 
 
@@ -11,6 +13,27 @@ SPEC.loader.exec_module(MEDIA)
 
 
 class MediaRuleTests(unittest.TestCase):
+    def test_reviewed_foreign_prefix_is_excluded_only_from_china_output(self):
+        source = "IP-CIDR,14.167.176.0/20\nIP-CIDR,192.0.2.0/24\n"
+        configs = {name: [("test", "https://example.com/rules", "surge", 1)]
+                   for name in ("ChinaCIDR", "GlobalMedia")}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with patch.object(MEDIA, "RULE_DIR", root), \
+                 patch.object(MEDIA, "SNAPSHOT", root / "snapshot.json"), \
+                 patch.object(MEDIA, "CONFIGS", configs), \
+                 patch.object(MEDIA, "fetch", return_value=source), \
+                 patch("builtins.print"):
+                MEDIA.main()
+            china = (root / "ChinaCIDR.list").read_text()
+            other = (root / "GlobalMedia.list").read_text()
+            self.assertNotIn("IP-CIDR,14.167.176.0/20", china)
+            self.assertIn("IP-CIDR,192.0.2.0/24,no-resolve", china)
+            self.assertIn("IP-CIDR,14.167.176.0/20,no-resolve", other)
+            counts = json.loads((root / "snapshot.json").read_text())["counts"]
+            self.assertEqual(counts["ChinaCIDR/test"], 2)
+            self.assertEqual(counts["ChinaCIDR/output"], 1)
+
     def test_user_agent_with_space_is_preserved(self):
         self.assertEqual(
             MEDIA.normalize_rule("USER-AGENT", "Prime Video*"),
