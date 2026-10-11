@@ -24,7 +24,7 @@
 # IP-CIDR6: 1
 # PROCESS-NAME: 1
 # USER-AGENT: 2
-# RULE COUNT: 1451
+# RULE COUNT: 1454
 
 DOMAIN,ali.wosms.cn
 DOMAIN-SUFFIX,cainiao.cn
@@ -1434,6 +1434,7 @@ IP-CIDR,116.251.64.0/18,no-resolve
 IP-CIDR,119.38.208.0/20,no-resolve
 IP-CIDR,119.38.224.0/20,no-resolve
 IP-CIDR,119.42.224.0/20,no-resolve
+IP-CIDR,121.31.0.0/16,no-resolve
 IP-CIDR,139.95.0.0/16,no-resolve
 IP-CIDR,14.1.112.0/22,no-resolve
 IP-CIDR,140.205.0.0/16,no-resolve
@@ -1471,6 +1472,7 @@ IP-CIDR,59.82.0.0/20,no-resolve
 IP-CIDR,59.82.96.0/19,no-resolve
 IP-CIDR,59.82.240.0/21,no-resolve
 IP-CIDR,59.82.248.0/22,no-resolve
+IP-CIDR,61.243.0.0/16,no-resolve
 IP-CIDR,72.254.0.0/16,no-resolve
 IP-CIDR,8.128.0.0/10,no-resolve
 IP-CIDR,8.208.0.0/12,no-resolve
