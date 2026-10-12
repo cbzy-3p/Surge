@@ -1,8 +1,8 @@
 # NAME: Multi-source-AIGC
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-10-10 20:05:47 UTC
-# RULE COUNT: 181
+# UPDATED: 2026-10-12 23:01:20 UTC
+# RULE COUNT: 184
 # SOURCE: https://ruleset.skk.moe/List/non_ip/ai.conf
 # SOURCE: https://ruleset.skk.moe/List/ip/ai.conf
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/AIGC.list
@@ -26,6 +26,7 @@ DOMAIN,daily-cloudcode-pa.sandbox.googleapis.com
 DOMAIN,gateway.ai.cloudflare.com
 DOMAIN,gspe1-ssl.ls.apple.com
 DOMAIN,guzzoni.apple.com
+DOMAIN,inference.codeium.com
 DOMAIN,jules.google.com
 DOMAIN,lh3.googleusercontent.com
 DOMAIN,openai-api.arkoselabs.com
@@ -35,6 +36,8 @@ DOMAIN,pplx-res.cloudinary.com
 DOMAIN,production-openaicom-storage.azureedge.net
 DOMAIN,robinfrontend-pa.googleapis.com
 DOMAIN,servd-anthropic-website.b-cdn.net
+DOMAIN,server.codeium.com
+DOMAIN,server.self-serve.windsurf.com
 DOMAIN,static.cloudflareinsights.com
 DOMAIN,sydney.bing.com
 DOMAIN,www.bing.com
