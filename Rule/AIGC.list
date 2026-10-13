@@ -1,8 +1,8 @@
 # NAME: Multi-source-AIGC
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-10-12 23:01:20 UTC
-# RULE COUNT: 184
+# UPDATED: 2026-10-13 21:18:25 UTC
+# RULE COUNT: 175
 # SOURCE: https://ruleset.skk.moe/List/non_ip/ai.conf
 # SOURCE: https://ruleset.skk.moe/List/ip/ai.conf
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/AIGC.list
@@ -18,14 +18,10 @@ DOMAIN,api.github.com
 DOMAIN,api.google.com
 DOMAIN,apple-relay.apple.com
 DOMAIN,apple-relay.cloudflare.com
-DOMAIN,apple-relay.fastly-edge.com
 DOMAIN,browser-intake-datadoghq.com
-DOMAIN,cp4.cloudflare.com
 DOMAIN,daily-cloudcode-pa.googleapis.com
 DOMAIN,daily-cloudcode-pa.sandbox.googleapis.com
 DOMAIN,gateway.ai.cloudflare.com
-DOMAIN,gspe1-ssl.ls.apple.com
-DOMAIN,guzzoni.apple.com
 DOMAIN,inference.codeium.com
 DOMAIN,jules.google.com
 DOMAIN,lh3.googleusercontent.com
@@ -51,6 +47,9 @@ DOMAIN-SUFFIX,anthropic.com
 DOMAIN-SUFFIX,antigravity-unleash.goog
 DOMAIN-SUFFIX,antigravity.google
 DOMAIN-SUFFIX,api.revenuecat.com
+DOMAIN-SUFFIX,api.statsig.com
+DOMAIN-SUFFIX,apis.google.com
+DOMAIN-SUFFIX,apple-relay.fastly-edge.com
 DOMAIN-SUFFIX,apps.mzstatic.com
 DOMAIN-SUFFIX,auth0.com
 DOMAIN-SUFFIX,bard.google.com
@@ -81,7 +80,7 @@ DOMAIN-SUFFIX,cohere.ai
 DOMAIN-SUFFIX,cohere.com
 DOMAIN-SUFFIX,copilot-proxy.githubusercontent.com
 DOMAIN-SUFFIX,copilot.microsoft.com
-DOMAIN-SUFFIX,ct.sendgrid.net
+DOMAIN-SUFFIX,cp4.cloudflare.com
 DOMAIN-SUFFIX,cursor-cdn.com
 DOMAIN-SUFFIX,cursor.com
 DOMAIN-SUFFIX,cursor.sh
@@ -90,7 +89,6 @@ DOMAIN-SUFFIX,deepmind.com
 DOMAIN-SUFFIX,deepmind.google
 DOMAIN-SUFFIX,dify.ai
 DOMAIN-SUFFIX,dola.com
-DOMAIN-SUFFIX,featureassets.org
 DOMAIN-SUFFIX,featuregates.org
 DOMAIN-SUFFIX,firebaseinstallations.googleapis.com
 DOMAIN-SUFFIX,g.ai
@@ -107,8 +105,9 @@ DOMAIN-SUFFIX,grok.com
 DOMAIN-SUFFIX,grok.x.com
 DOMAIN-SUFFIX,grokipedia.com
 DOMAIN-SUFFIX,groq.com
+DOMAIN-SUFFIX,gspe1-ssl.ls.apple.com
+DOMAIN-SUFFIX,guzzoni.apple.com
 DOMAIN-SUFFIX,identrust.com
-DOMAIN-SUFFIX,images.workoscdn.com
 DOMAIN-SUFFIX,imagine.meta.com
 DOMAIN-SUFFIX,intercom.io
 DOMAIN-SUFFIX,intercomcdn.com
@@ -138,18 +137,13 @@ DOMAIN-SUFFIX,poe.com
 DOMAIN-SUFFIX,pool.ntp.org
 DOMAIN-SUFFIX,pplx.ai
 DOMAIN-SUFFIX,proactivebackend-pa.googleapis.com
-DOMAIN-SUFFIX,prodregistryv2.org
-DOMAIN-SUFFIX,rum.browser-intake-datadoghq.com
 DOMAIN-SUFFIX,segment.io
 DOMAIN-SUFFIX,sentry.io
 DOMAIN-SUFFIX,smoot.apple.com
 DOMAIN-SUFFIX,sora.com
-DOMAIN-SUFFIX,statsig.com
 DOMAIN-SUFFIX,statsigapi.net
 DOMAIN-SUFFIX,stripe.com
 DOMAIN-SUFFIX,trae.ai
-DOMAIN-SUFFIX,workos.com
-DOMAIN-SUFFIX,workos.imgix.net
 DOMAIN-SUFFIX,x.ai
 DOMAIN-SUFFIX,zed.dev
 DOMAIN-KEYWORD,alkalimakersuite-pa.clients6.google.com
@@ -167,7 +161,6 @@ IP-CIDR,102.37.57.54/32,no-resolve
 IP-CIDR,129.146.3.78/32,no-resolve
 IP-CIDR,13.71.25.29/32,no-resolve
 IP-CIDR,135.220.40.201/32,no-resolve
-IP-CIDR,160.79.104.0/21,no-resolve
 IP-CIDR,172.203.39.49/32,no-resolve
 IP-CIDR,172.207.173.200/32,no-resolve
 IP-CIDR,172.214.226.198/32,no-resolve
@@ -190,7 +183,5 @@ IP-CIDR,64.23.132.171/32,no-resolve
 IP-CIDR,68.155.152.41/32,no-resolve
 IP-CIDR,72.146.20.246/32,no-resolve
 IP-CIDR,74.248.148.7/32,no-resolve
-IP-CIDR6,2607:6bc0::/32,no-resolve
-IP-ASN,13335,no-resolve
 IP-ASN,20473,no-resolve
 IP-ASN,399358,no-resolve
