@@ -249,12 +249,16 @@ def load_snapshot() -> dict[str, int]:
 
 
 def validate_snapshot(previous: dict[str, int], current: dict[str, int]) -> None:
+    anomalies: list[str] = []
     for name, old in previous.items():
         if name not in current or old < 20:
             continue
         new = current[name]
         if new * 100 < old * 65 or new > old * 5 // 2:
-            raise RuntimeError(f"unexpected rule count change for {name}: {old} -> {new}")
+            anomalies.append(f"{name}: {old} -> {new}")
+    if anomalies:
+        raise RuntimeError("unexpected rule count changes (no media files written): "
+                           + "; ".join(anomalies))
 
 
 def render(name: str, rules: set[tuple[str, str]], sources: list[str], updated: str | None = None) -> str:

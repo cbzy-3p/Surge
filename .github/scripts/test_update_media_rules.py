@@ -34,6 +34,33 @@ class MediaRuleTests(unittest.TestCase):
             self.assertEqual(counts["ChinaCIDR/test"], 2)
             self.assertEqual(counts["ChinaCIDR/output"], 1)
 
+    def test_snapshot_reports_all_anomalies_without_relaxing_limits(self):
+        previous = {"AIGC/output": 175, "AIGC/skk-ip": 24, "China/output": 100}
+        current = {"AIGC/output": 552, "AIGC/skk-ip": 380, "China/output": 64}
+        with self.assertRaises(RuntimeError) as caught:
+            MEDIA.validate_snapshot(previous, current)
+        for key in previous:
+            self.assertIn(key, str(caught.exception))
+
+    def test_snapshot_accepts_boundary_counts(self):
+        MEDIA.validate_snapshot({"low": 100, "high": 100}, {"low": 65, "high": 250})
+
+    def test_snapshot_failure_preserves_rules_and_snapshot(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / "AIGC.list"
+            snapshot = root / "snapshot.json"
+            target.write_text("# old\nDOMAIN-SUFFIX,old.example\n")
+            snapshot.write_text(json.dumps({"version": 1, "counts": {"AIGC/output": 20}}))
+            before = (target.read_bytes(), snapshot.read_bytes())
+            with patch.object(MEDIA, "RULE_DIR", root), \
+                 patch.object(MEDIA, "SNAPSHOT", snapshot), \
+                 patch.object(MEDIA, "CONFIGS", {"AIGC": [("test", "https://example.com", "surge", 1)]}), \
+                 patch.object(MEDIA, "fetch", return_value="DOMAIN-SUFFIX,new.example\n"):
+                with self.assertRaises(RuntimeError):
+                    MEDIA.main()
+            self.assertEqual(before, (target.read_bytes(), snapshot.read_bytes()))
+
     def test_user_agent_with_space_is_preserved(self):
         self.assertEqual(
             MEDIA.normalize_rule("USER-AGENT", "Prime Video*"),

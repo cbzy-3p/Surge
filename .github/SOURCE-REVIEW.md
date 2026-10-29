@@ -128,3 +128,34 @@ snapshot drift checks. Cross-file overlaps remain informational and retained.
 YAML, shell syntax, whitespace and actionlint checks pass using the same narrow
 `queue: max` schema exception described above. These are source/local checks;
 current phone execution is not verified.
+
+## AIGC growth review, 2026-10-29
+
+Reviewed main at `7f5f9de6c835baa76ce990a2b9bdb5da02e05af3`. The last
+three scheduled rule updates stopped at the media snapshot guard, before
+publication. Sukka's AI IP feed grew from 24 to 401 parsed rules; the
+compacted AIGC output grew from 175 to 552. All 377 added output rules are
+IP prefixes covered by the union of the prefixes in OpenAI's official
+https://openai.com/chatgpt-voice.json, creationTime
+`2026-10-27T22:28:21.782457+00:00`. Adjacent official /32 entries are
+collapsed before comparison, so the two generated /31 entries are checked
+without broadening coverage. All 175 previous AIGC rules remain unchanged.
+The other four AIGC source counts remain unchanged.
+
+Refresh the reviewed AIGC snapshot baseline together with its generated
+output. Keep the existing 65% decrease and 2.5x increase bounds, fixed
+sources, schedules and all-or-nothing publication. Future unreviewed large
+changes still stop publication. The guard now reports every anomalous count
+in one error rather than masking later anomalies behind the first one.
+Regression tests cover both threshold boundaries, simultaneous growth and
+shrinkage, and preserving output and snapshot on a failed update.
+
+Validation: all 14 rule updater scripts and the existing Telegram shell
+synchronization completed successfully against live sources locally. The
+full regenerated tree validated at 47 files / 82,752 rules. Unrelated
+generated changes were then excluded from this focused fix. The final
+five-file diff retains 47 rule files / 82,727 rules; all files except AIGC
+keep their committed rule bodies and source snapshots. All 116 non-module
+regression tests pass, including the three new guard tests. Workflow YAML,
+embedded shell syntax and git whitespace checks pass; workflows and modules
+are unchanged. These are local checks, not published Actions or device tests.
