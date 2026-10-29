@@ -1,8 +1,8 @@
 # NAME: Multi-source-ChinaCIDR
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-10-24 18:49:04 UTC
-# RULE COUNT: 11410
+# UPDATED: 2026-10-29 13:38:50 UTC
+# RULE COUNT: 11413
 # SOURCE: https://ruleset.skk.moe/List/ip/china_ip.conf
 # SOURCE: https://ruleset.skk.moe/List/ip/china_ip_ipv6.conf
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/ChinaCIDR.list
@@ -6000,6 +6000,9 @@ IP-CIDR,206.109.70.0/23,no-resolve
 IP-CIDR,206.109.75.0/24,no-resolve
 IP-CIDR,206.232.68.0/22,no-resolve
 IP-CIDR,206.232.72.0/22,no-resolve
+IP-CIDR,207.57.167.0/24,no-resolve
+IP-CIDR,207.57.168.0/24,no-resolve
+IP-CIDR,207.57.182.0/24,no-resolve
 IP-CIDR,207.68.174.8/29,no-resolve
 IP-CIDR,207.89.21.0/24,no-resolve
 IP-CIDR,208.56.30.0/27,no-resolve
