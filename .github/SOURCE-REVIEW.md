@@ -159,3 +159,25 @@ keep their committed rule bodies and source snapshots. All 116 non-module
 regression tests pass, including the three new guard tests. Workflow YAML,
 embedded shell syntax and git whitespace checks pass; workflows and modules
 are unchanged. These are local checks, not published Actions or device tests.
+
+## Post-publication Apple coverage review, 2026-10-29
+
+Fix commit `39576acfc0ecf004de49a85203bc54fc04ecaa79` passed both push
+checks. Rerun attempt 2 of Actions run `40769333182` checked out that fix,
+completed all source updates and Telegram synchronization, validated 47
+files / 82,752 rules, and published `c0b3c486284cfa09243dbf778afd13598303dd56`.
+
+The resulting Apple diff removed `DOMAIN-SUFFIX,icloud.cn` because the BM7
+and Rabbit general Apple feeds removed it. BM7's dedicated iCloud feed
+still contains it, as does this repository's independent iCloud list.
+Merge that existing preferred provider's specialist feed into the Apple
+total to preserve the previous coverage while upstream classifications
+disagree. Live comparison of its 61 rules adds exactly this one suffix;
+no other Apple rule is removed. This is a conservative source-conflict
+resolution, not an independent claim of domain ownership. Record and guard
+the specialist feed count like every other source.
+
+A new integration test also exposed a missing-output case: when Apple.list
+was absent, two empty comparison strings prevented its creation. Explicitly
+write when the target is missing. Tests cover specialist inclusion on an
+empty target and unchanged prior files on source-fetch failure.

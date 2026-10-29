@@ -15,12 +15,13 @@ SNAPSHOT = ROOT / ".github" / "apple-source-snapshot.json"
 SOURCES = {
     "skk": "https://ruleset.skk.moe/List/non_ip/apple_services.conf",
     "bm7": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Apple/Apple_All_No_Resolve.list",
+    "bm7_icloud": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/iCloud/iCloud.list",
     "rabbit": "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Apple.list",
     "conners": "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Apple/Apple.list",
     "loyal": "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/apple.txt",
     "yuu": "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/apple.list",
 }
-MINIMUMS = {"skk": 20, "bm7": 1_500, "rabbit": 20, "conners": 20, "loyal": 20, "yuu": 1_500}
+MINIMUMS = {"skk": 20, "bm7": 1_500, "bm7_icloud": 40, "rabbit": 20, "conners": 20, "loyal": 20, "yuu": 1_500}
 RULE_TYPES = {
     "DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD",
     "IP-CIDR", "IP-CIDR6", "IP-ASN", "USER-AGENT", "PROCESS-NAME",
@@ -187,6 +188,7 @@ def main() -> None:
     fetched = {
         "skk": parse_surge(fetch(SOURCES["skk"])),
         "bm7": parse_surge(fetch(SOURCES["bm7"])),
+        "bm7_icloud": parse_surge(fetch(SOURCES["bm7_icloud"])),
         "rabbit": parse_surge(fetch(SOURCES["rabbit"])),
         "conners": parse_surge(fetch(SOURCES["conners"])),
         "loyal": parse_surge(fetch(SOURCES["loyal"])),
@@ -206,7 +208,7 @@ def main() -> None:
             raise RuntimeError(f"unexpected output count change: {previous} -> {len(rules)}")
     previous_updated = re.search(r"^# UPDATED: (.+)$", previous_text, re.MULTILINE)
     unchanged_text = render(rules, previous_updated.group(1)) if previous_updated else ""
-    if unchanged_text != previous_text:
+    if not TARGET.exists() or unchanged_text != previous_text:
         TARGET.write_text(render(rules), encoding="utf-8")
     SNAPSHOT.write_text(
         json.dumps({"version": 1, "counts": counts}, indent=2, sort_keys=True) + "\n",
