@@ -221,7 +221,7 @@ def main() -> None:
         raise RuntimeError("output rule count dropped too much")
     previous_updated = re.search(r"^# UPDATED: (.+)$", previous_text, re.MULTILINE)
     unchanged_text = render(rules, previous_updated.group(1)) if previous_updated else ""
-    if unchanged_text != previous_text:
+    if not TARGET.exists() or unchanged_text != previous_text:
         TARGET.write_text(render(rules), encoding="utf-8")
     SNAPSHOT.write_text(json.dumps({"version": SNAPSHOT_VERSION, "counts": counts}, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(f"updated {TARGET.name} with {len(rules)} rules")

@@ -1,5 +1,7 @@
 import importlib.util
 import unittest
+import tempfile
+from unittest.mock import patch
 from pathlib import Path
 
 
@@ -10,6 +12,28 @@ SPEC.loader.exec_module(ICLOUD)
 
 
 class ICloudRuleTests(unittest.TestCase):
+    def test_missing_target_is_rebuilt_and_fetch_failure_preserves_files(self):
+        rules = {("DOMAIN", f"x{i}.icloud.com") for i in range(30)}
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "rules.list"
+            snapshot = Path(directory) / "snapshot.json"
+            from contextlib import ExitStack
+            with ExitStack() as stack:
+                for name, value in [("TARGET", target), ("SNAPSHOT", snapshot),
+                                    ("MINIMUMS", {}), ("fetch", lambda url: ""),
+                                    ("parse_surge", lambda *a, **kw: rules)]:
+                    stack.enter_context(patch.object(ICLOUD, name, value))
+                parser = "parse_private_relay" if hasattr(ICLOUD, "parse_private_relay") else "parse_plain"
+                stack.enter_context(patch.object(ICLOUD, parser, return_value=rules))
+                stack.enter_context(patch("builtins.print"))
+                ICLOUD.main()
+                self.assertTrue(target.exists())
+                before = (target.read_bytes(), snapshot.read_bytes())
+                with patch.object(ICLOUD, "fetch", side_effect=RuntimeError("unavailable")):
+                    with self.assertRaises(RuntimeError):
+                        ICLOUD.main()
+                self.assertEqual(before, (target.read_bytes(), snapshot.read_bytes()))
+
     def test_apple_wide_sources_are_filtered_to_icloud(self):
         text = (
             "DOMAIN-SUFFIX,icloud.com\n"

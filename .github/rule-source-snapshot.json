@@ -10,8 +10,8 @@
     "bm7/Google": 703,
     "bm7/GoogleVoice": 1,
     "bm7/Instagram": 4,
-    "bm7/Kingsoft": 256,
-    "bm7/OKX": 3,
+    "bm7/Kingsoft": 264,
+    "bm7/OKX": 10,
     "bm7/OpenAI": 35,
     "bm7/PayPal": 248,
     "bm7/TikTok": 36,
@@ -41,7 +41,7 @@
     "yuu/okx": 10,
     "yuu/openai": 24,
     "yuu/paypal": 245,
-    "yuu/tiktok": 36
+    "yuu/tiktok": 39
   },
   "version": 1
 }

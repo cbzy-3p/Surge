@@ -175,7 +175,7 @@ def main() -> None:
             raise RuntimeError(f"unexpected output count change: {previous} -> {len(rules)}")
     previous_updated = re.search(r"^# UPDATED: (.+)$", previous_text, re.MULTILINE)
     unchanged_text = render(rules, previous_updated.group(1)) if previous_updated else ""
-    if unchanged_text != previous_text:
+    if not TARGET.exists() or unchanged_text != previous_text:
         TARGET.write_text(render(rules), encoding="utf-8")
     SNAPSHOT.write_text(
         json.dumps({"version": 1, "counts": counts}, indent=2, sort_keys=True) + "\n",

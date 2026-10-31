@@ -63,6 +63,15 @@ class WorkflowPolicyTests(unittest.TestCase):
         self.assertLess(update.index("python .github/scripts/validate_rule_files.py"), update.index("git add Rule .github/*-snapshot.json"))
         self.assertLess(update.index("git diff --check"), update.index("git commit"))
 
+    def test_update_validates_before_fetch_and_audits_before_commit(self):
+        update = read_workflow("update-rules").split("\n  update:\n", 1)[1]
+        self.assertLess(update.index("Validate committed rules before fetching"),
+                        update.index("Update all rule sources"))
+        self.assertLess(update.index("Validate all generated rules"),
+                        update.index("python .github/scripts/audit_cross_file_rules.py"))
+        self.assertLess(update.index("python .github/scripts/audit_cross_file_rules.py"),
+                        update.index("git commit"))
+
     def test_existing_pr_checks_are_retained(self):
         for name in ("update-douyin", "update-xiaohongshu"):
             with self.subTest(workflow=name):

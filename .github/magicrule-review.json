@@ -1,0 +1,239 @@
+{
+  "reviewed_on": "2026-10-31",
+  "index_generated_at": "2026-10-30T08:09:40.870816+00:00",
+  "active_categories": [
+    "Kingsoft",
+    "GoogleVoice",
+    "OKX"
+  ],
+  "missing_exact_categories": [
+    "Crypto",
+    "Proxy"
+  ],
+  "results": [
+    {
+      "category": "AliPay",
+      "declared_rules": 21,
+      "manifest_generated_at": "2026-08-27T02:08:40.423812+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/AliPay_rules_2433d4e5155a71c8.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "Alibaba",
+      "declared_rules": 1625,
+      "manifest_generated_at": "2026-08-27T02:11:11.859223+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/Alibaba_rules_822688cdc38112cb.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "Apple",
+      "declared_rules": 2081,
+      "manifest_generated_at": "2026-10-29T02:44:15.185362+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/Apple_rules_50be57f093bd1fff.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "AppleMusic",
+      "declared_rules": 18,
+      "manifest_generated_at": "2026-08-27T02:13:59.430922+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/AppleMusic_rules_bd777e9454bcae79.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "AppleTV",
+      "declared_rules": 8,
+      "manifest_generated_at": "2026-08-27T02:12:21.884568+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/AppleTV_rules_f9dcb0d2f34bf797.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "Binance",
+      "declared_rules": 48,
+      "manifest_generated_at": "2026-08-27T02:03:25.234945+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/Binance_rules_50609329ecf8b551.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "China",
+      "declared_rules": 10264,
+      "manifest_generated_at": "2026-10-30T01:50:58.663505+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/China_rules_25adbc0394103807.list",
+      "checksum_matches": false
+    },
+    {
+      "category": "ChinaIPs",
+      "declared_rules": 23524,
+      "manifest_generated_at": "2026-10-30T07:52:03.706239+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/ChinaIPs_rules_34a9221fa066bb18.list",
+      "checksum_matches": false
+    },
+    {
+      "category": "ChinaMedia",
+      "declared_rules": 358,
+      "manifest_generated_at": "2026-08-27T02:13:13.398963+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/ChinaMedia_rules_ea2d0c525bf1fe29.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "Cryptocurrency",
+      "declared_rules": 240,
+      "manifest_generated_at": "2026-10-29T03:07:25.396283+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/Cryptocurrency_rules_68269739f2640ae4.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "DingTalk",
+      "declared_rules": 14,
+      "manifest_generated_at": "2026-08-27T01:57:25.011179+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/DingTalk_rules_ab21d005b84c1901.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "DouYin",
+      "declared_rules": 90,
+      "manifest_generated_at": "2026-10-16T15:35:23.208740+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/DouYin_rules_b3dc4221b07a0f28.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "Facebook",
+      "declared_rules": 592,
+      "manifest_generated_at": "2026-10-16T14:29:33.528392+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/Facebook_rules_d466caed63d7550c.list",
+      "checksum_matches": false
+    },
+    {
+      "category": "GitHub",
+      "declared_rules": 73,
+      "manifest_generated_at": "2026-10-16T14:24:28.827153+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/GitHub_rules_02fb1aed89680882.list",
+      "checksum_matches": false
+    },
+    {
+      "category": "GlobalMedia",
+      "declared_rules": 1723,
+      "manifest_generated_at": "2026-08-27T02:03:31.743485+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/GlobalMedia_rules_cbbbcb6dca56af83.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "Google",
+      "declared_rules": 1188,
+      "manifest_generated_at": "2026-10-29T03:31:55.053872+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/Google_rules_0804a8c31c599a1e.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "GoogleVoice",
+      "declared_rules": 1,
+      "manifest_generated_at": "2026-08-27T02:16:50.242577+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/GoogleVoice_rules_7e2a5efa51b704e2.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "Instagram",
+      "declared_rules": 76,
+      "manifest_generated_at": "2026-08-27T02:11:31.397672+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/Instagram_rules_7a25b214a1a8549b.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "Kingsoft",
+      "declared_rules": 264,
+      "manifest_generated_at": "2026-09-18T01:31:43.227548+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/Kingsoft_rules_0a66290ba099212b.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "Netflix",
+      "declared_rules": 1620,
+      "manifest_generated_at": "2026-10-29T02:53:34.028511+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/Netflix_rules_56d52a775e1c2240.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "OKX",
+      "declared_rules": 10,
+      "manifest_generated_at": "2026-08-27T01:43:27.760901+00:00",
+      "artifact_url": "https://rule-26r.pages.dev/data/_shared/artifacts/OKX_rules_b4a882ddff8a4b8d.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "OpenAI",
+      "declared_rules": 60,
+      "manifest_generated_at": "2026-10-29T01:52:49.954933+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/OpenAI_rules_f362ba1006ae0e0c.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "PayPal",
+      "declared_rules": 248,
+      "manifest_generated_at": "2026-08-27T02:09:02.680498+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/PayPal_rules_e33777c2ef792abd.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "Siri",
+      "declared_rules": 2,
+      "manifest_generated_at": "2026-08-27T02:06:38.199983+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/Siri_rules_a9100d2cd5959b20.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "Telegram",
+      "declared_rules": 69,
+      "manifest_generated_at": "2026-10-09T16:21:53.234023+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/Telegram_rules_4acef626d1aec7ca.list",
+      "checksum_matches": false
+    },
+    {
+      "category": "TikTok",
+      "declared_rules": 64,
+      "manifest_generated_at": "2026-10-29T03:09:38.726123+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/TikTok_rules_f1418ba5f368c034.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "Twitter",
+      "declared_rules": 36,
+      "manifest_generated_at": "2026-08-27T02:03:42.947667+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/Twitter_rules_0924ca0971e18745.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "WeChat",
+      "declared_rules": 21,
+      "manifest_generated_at": "2026-08-27T02:06:16.125197+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/WeChat_rules_5a1a50742ab40ca3.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "XianYu",
+      "declared_rules": 16,
+      "manifest_generated_at": "2026-08-27T01:59:56.218366+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/XianYu_rules_b347bcb9b152025b.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "XiaoHongShu",
+      "declared_rules": 12,
+      "manifest_generated_at": "2026-10-09T16:01:19.764126+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/XiaoHongShu_rules_ce24b09eca177197.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "YouTube",
+      "declared_rules": 190,
+      "manifest_generated_at": "2026-08-27T01:57:32.741009+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/YouTube_rules_329ca26de78c21fe.list",
+      "checksum_matches": true
+    },
+    {
+      "category": "iCloud",
+      "declared_rules": 56,
+      "manifest_generated_at": "2026-10-29T02:45:01.721949+00:00",
+      "artifact_url": "https://magicrule.pages.dev/data/_shared/artifacts/iCloud_rules_2ed29d3d438b7646.list",
+      "checksum_matches": true
+    }
+  ]
+}

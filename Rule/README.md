@@ -43,3 +43,9 @@ DOMAIN-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/CN-Addition
 ```
 
 格式依据：[Surge DOMAIN-SET 官方说明](https://manual.nssurge.com/rules/domain.html#domain-set-file-format)。跨规则集重复保留，以支持独立引用和不同策略；需要单独分流的细分类规则应放在可能覆盖它的总集之前。
+
+## MagicRule 迁移与更新检查
+
+bm7 的新入口为 https://magicrule.pages.dev/#/c/Surge 。目前 Kingsoft、GoogleVoice、OKX 已改为从目录解析对应 manifest，再获取完整文本产物，检查分类、数量和 SHA-256 后合并。三项迁移前后规则正文一致。其余分类继续使用原来源，待分类差异和清单一致性核实后迁移，不直接替换成目录页面或固定带版本的产物地址。详细检查结果见 `.github/magicrule-review.json`。
+
+后续可按覆盖、分类准确性和稳定性自主替换或补充其他上游；SukkaW 仍为优先来源。无法确认可删除的覆盖保留，来源变更须记录证据并检查独立订阅。每次自动更新在拉取前校验已提交规则，拉取后校验全部输出并执行跨文件覆盖审计，最后一次提交规则和快照。来源失败、清单不一致或数量异常时不发布部分结果。

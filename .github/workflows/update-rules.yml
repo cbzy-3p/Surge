@@ -43,6 +43,7 @@ jobs:
           python-version: "3.12"
       - name: Run updater tests
         run: |
+          python .github/scripts/test_magicrule_source.py
           python .github/scripts/test_update_rules.py
           python .github/scripts/test_update_xiaohongshu.py
           python .github/scripts/test_update_douyin.py
@@ -108,6 +109,7 @@ jobs:
           python-version: "3.12"
       - name: Run updater tests
         run: |
+          python .github/scripts/test_magicrule_source.py
           python .github/scripts/test_update_rules.py
           python .github/scripts/test_update_xiaohongshu.py
           python .github/scripts/test_update_douyin.py
@@ -127,6 +129,8 @@ jobs:
           python .github/scripts/test_audit_cross_file_rules.py
           python .github/scripts/test_source_policy.py
           python .github/scripts/test_workflow_policy.py
+      - name: Validate committed rules before fetching
+        run: python .github/scripts/validate_rule_files.py
       - name: Update all rule sources
         run: |
           python .github/scripts/update_rules.py
@@ -240,6 +244,7 @@ jobs:
       - name: Validate all generated rules
         run: |
           python .github/scripts/validate_rule_files.py
+          python .github/scripts/audit_cross_file_rules.py
           git diff --check -- Rule .github/*-snapshot.json
       - name: Commit changes
         shell: bash

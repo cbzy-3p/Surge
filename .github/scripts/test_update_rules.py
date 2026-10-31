@@ -13,6 +13,22 @@ SPEC.loader.exec_module(UPDATE_RULES)
 
 
 class SurgeRuleTests(unittest.TestCase):
+    def test_magicrule_failure_does_not_replace_existing_output_or_snapshot(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / "Kingsoft.list"
+            snapshot = root / "snapshot.json"
+            target.write_text("old rules")
+            snapshot.write_text("old snapshot")
+            with patch.object(UPDATE_RULES, "OUT", root), \
+                 patch.object(UPDATE_RULES, "SNAPSHOT", snapshot), \
+                 patch.object(UPDATE_RULES, "TARGETS", {"Kingsoft": {}}), \
+                 patch.object(UPDATE_RULES, "fetch_category", side_effect=RuntimeError("checksum mismatch")):
+                with self.assertRaises(RuntimeError):
+                    UPDATE_RULES.main()
+            self.assertEqual(target.read_text(), "old rules")
+            self.assertEqual(snapshot.read_text(), "old snapshot")
+
     def test_update_log_reports_each_files_own_source_counts(self):
         mapping = {"rabbit": None, "conners": None, "loyal": None, "yuu": None}
         with tempfile.TemporaryDirectory() as directory:

@@ -181,3 +181,34 @@ A new integration test also exposed a missing-output case: when Apple.list
 was absent, two empty comparison strings prevented its creation. Explicitly
 write when the target is missing. Tests cover specialist inclusion on an
 empty target and unchanged prior files on source-fetch failure.
+
+## Pre/post-fetch and MagicRule review, 2026-10-31
+
+Fixed missing-target creation in the iCloud and Proxy updaters. Regression
+tests cover creation and preservation of both output and snapshot when a
+source fails. The update job now validates committed rules before fetching
+and runs the cross-file audit after output validation, before publication.
+
+Reviewed the MagicRule Surge index and 32 available category manifests.
+Kingsoft, GoogleVoice and OKX have verified artifact hashes and rule bodies
+identical to the existing merged outputs, and now use index/manifest discovery.
+The adapter rejects wrong clients/categories, missing or duplicate artifacts,
+unexpected hosts, hash mismatches and count mismatches before any rule write.
+Existing drift thresholds and all-or-nothing publication are retained.
+
+Five downloaded artifacts (GitHub, Facebook, China, ChinaIPs, Telegram) did
+not match the manifest bytes_sha256. The cause is not established; this is
+not evidence that their rules are malicious. Crypto and Proxy had no exact
+category match. Other categories have semantic or coverage differences
+requiring review, so their existing sources remain active. This is a staged
+migration, not a completed replacement of every BM7 feed. Machine-readable
+metadata and results are recorded in .github/magicrule-review.json.
+
+Local validation: all 129 non-module regression tests pass. Live execution
+of the baseline updater fetched all configured sources and regenerated the
+three migrated categories without changing their rule bodies. Yuu's TikTok
+feed additionally supplied tiktokshop.com, tiktokstaticb.com and
+tiktokvapp.com; the previous 60 TikTok rules remain present. Final output
+validation covers 47 files / 82,748 rules. Cross-file auditing, workflow
+YAML parsing, embedded bash syntax and git whitespace checks pass. No
+module files, schedules or subscription paths were changed.

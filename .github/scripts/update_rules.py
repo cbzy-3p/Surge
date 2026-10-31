@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from magicrule_source import fetch_category
+
 import ipaddress
 import json
 import re
@@ -23,6 +25,8 @@ Rule = tuple[str, str]
 
 # BM7 defines fine-grained category boundaries. Fixed supplemental sources are
 # merged only when they provide the same category.
+MAGICRULE_TARGETS = {"Kingsoft", "GoogleVoice", "OKX"}
+
 TARGETS = {
     "GitHub": {"rabbit": None, "conners": None, "loyal": None, "yuu": "github"},
     "Kingsoft": {"rabbit": None, "conners": None, "loyal": None, "yuu": "kingsoft"},
@@ -382,6 +386,7 @@ def render(
     additions: list[Rule],
     sources: list[str],
     verified_supplements: set[Rule],
+    baseline_source: str | None = None,
 ) -> str:
     all_lines = list(lines)
     all_lines.extend(f"{rule_type},{domain}" for rule_type, domain in additions)
@@ -393,7 +398,7 @@ def render(
         "# FORMAT: Surge Rule Set",
         f"# UPDATED: {now}",
         f"# RULE COUNT: {len(all_lines)}",
-        f"# SOURCE: {BM7_BASE}/{name}/{name}.list",
+        f"# SOURCE: {baseline_source or f'{BM7_BASE}/{name}/{name}.list'}",
         *[f"# MERGED SOURCE: {source}" for source in sources],
         *[f"# VERIFIED SUPPLEMENT: {rule_type},{value} from iOS App Privacy Report" for rule_type, value in sorted(verified_supplements)],
         "# NOTE: BM7 coverage is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and compacted.",
@@ -434,7 +439,11 @@ def main() -> None:
     output_stats: dict[str, tuple[int, int, int]] = {}
     for name, mapping in TARGETS.items():
         bm7_url = f"{BM7_BASE}/{name}/{name}.list"
-        lines, _ = parse_bm7(fetch(bm7_url))
+        if name in MAGICRULE_TARGETS:
+            baseline_text, bm7_url = fetch_category(name, fetch)
+        else:
+            baseline_text = fetch(bm7_url)
+        lines, _ = parse_bm7(baseline_text)
         validate_bm7(name, lines)
         source_counts[f"bm7/{name}"] = len(lines)
         lines = compact_rule_lines(lines)
@@ -479,7 +488,7 @@ def main() -> None:
         for rule in verified_supplements:
             merge_rule(source_rules, rule)
         additions = select_additions(base_rules, source_rules)
-        output = render(name, lines, additions, sources, verified_supplements)
+        output = render(name, lines, additions, sources, verified_supplements, baseline_source=bm7_url)
         for index, line in enumerate(
             (line for line in output.splitlines() if line and not line.startswith("#")), 1
         ):
