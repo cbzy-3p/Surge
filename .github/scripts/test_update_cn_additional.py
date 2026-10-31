@@ -1,5 +1,7 @@
 import importlib.util
 import unittest
+import tempfile
+from unittest.mock import patch
 from pathlib import Path
 
 
@@ -12,6 +14,34 @@ SPEC.loader.exec_module(UPDATE)
 
 
 class CNAdditionalTests(unittest.TestCase):
+    def test_invalid_source_preserves_output_and_snapshot(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "CN-Additional.list"
+            snapshot = Path(directory) / "snapshot.json"
+            target.write_text(".example.com\n")
+            snapshot.write_text("old snapshot")
+            with patch.object(UPDATE, "OUTPUT_PATH", target), patch.object(UPDATE, "SNAPSHOT_PATH", snapshot), \
+                 patch.object(UPDATE, "MINIMUM_OUTPUT", 1), \
+                 patch.object(UPDATE, "fetch_source", return_value="example.com\n<html>\n"):
+                with self.assertRaises(RuntimeError):
+                    UPDATE.main()
+            self.assertEqual(target.read_text(), ".example.com\n")
+            self.assertEqual(snapshot.read_text(), "old snapshot")
+
+    def test_missing_snapshot_does_not_disable_output_drop_guard(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "CN-Additional.list"
+            snapshot = Path(directory) / "snapshot.json"
+            old = "".join(f".x{i}.example.com\n" for i in range(30))
+            target.write_text(old)
+            with patch.object(UPDATE, "OUTPUT_PATH", target), patch.object(UPDATE, "SNAPSHOT_PATH", snapshot), \
+                 patch.object(UPDATE, "MINIMUM_OUTPUT", 1), \
+                 patch.object(UPDATE, "fetch_source", return_value="other.example\n"):
+                with self.assertRaises(RuntimeError):
+                    UPDATE.main()
+            self.assertEqual(target.read_text(), old)
+            self.assertFalse(snapshot.exists())
+
     def test_parent_suffix_removes_child_domain(self):
         domains, invalid = UPDATE.convert("api.example.com\nexample.com\nother.example\n")
         self.assertEqual(domains, ["example.com", "other.example"])

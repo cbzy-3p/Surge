@@ -49,3 +49,17 @@ DOMAIN-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/CN-Addition
 bm7 的新入口为 https://magicrule.pages.dev/#/c/Surge 。目前 Kingsoft、GoogleVoice、OKX 已改为从目录解析对应 manifest，再获取完整文本产物，检查分类、数量和 SHA-256 后合并。三项迁移前后规则正文一致。其余分类继续使用原来源，待分类差异和清单一致性核实后迁移，不直接替换成目录页面或固定带版本的产物地址。详细检查结果见 `.github/magicrule-review.json`。
 
 后续可按覆盖、分类准确性和稳定性自主替换或补充其他上游；SukkaW 仍为优先来源。无法确认可删除的覆盖保留，来源变更须记录证据并检查独立订阅。每次自动更新在拉取前校验已提交规则，拉取后校验全部输出并执行跨文件覆盖审计，最后一次提交规则和快照。来源失败、清单不一致或数量异常时不发布部分结果。
+
+## CN 与 NonCN
+
+`China.list` 是国内服务域名分类，`ChinaCIDR.list` 是中国 IP 网段；`CN-Additional.list` 保持 DOMAIN-SET 格式。三者都保留现有来源、独立订阅及每日更新。CN 补充来源若出现异常行会停止本次发布，缺少快照时仍检查相对已提交输出的数量变化。
+
+新增 `NonCN.list`，来自 Yuu518 的 `geolocation-!cn` Surge 域名分类，接入同一每日更新流程。它不是 CN 列表或中国 IP 的数学补集，也不意味着名单中每个域名都只能在境外访问。与国内服务、Apple、iCloud 及共享云分类存在交叉；本次审阅的交叉数量与例子见 `.github/non-cn-overlap-review.json`，不自动删除交叉项，以便保持各集合可独立订阅。
+
+配置顺序应先放局域网、用户自定义与服务专项策略（包括 iCloud 直连），再放国内直连规则，随后使用 Proxy、NonCN 等代理集合，最后才是 FINAL。已有不同用途的规则应保留明确的优先级。NonCN 可选订阅如下，Proxy 替换为自己的策略组名：
+
+```ini
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/NonCN.list,Proxy,extended-matching,no-resolve
+```
+
+NonCN 拉取前校验旧文件，严格检查上游仅含 DOMAIN/DOMAIN-SUFFIX；生成后检查规则格式、条数、去重、父子域覆盖和异常增减。上游失败或验证异常时保留已提交文件，完整更新流程不发布部分结果。

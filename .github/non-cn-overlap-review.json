@@ -1,0 +1,58 @@
+{
+  "reviewed_on": "2026-10-31",
+  "meaning": "Counts of NonCN entries equal to or under a domain suffix in each existing set; not conflicts in a supplied user profile. No entries removed automatically.",
+  "results": {
+    "China.list": {
+      "overlapping_noncn_entries": 118,
+      "examples": [
+        "1password.com",
+        "1passwordusercontent.com",
+        "aaplimg.com",
+        "acm.org",
+        "acs.org",
+        "adobesc.com",
+        "agilebits.com",
+        "aiaa.org"
+      ]
+    },
+    "CN-Additional.list": {
+      "overlapping_noncn_entries": 19,
+      "examples": [
+        "bx.in.th",
+        "c.mi.com",
+        "genshinimpact.com",
+        "gitlab-assets.oss-cn-hongkong.aliyuncs.com",
+        "icbcmoscow.ru",
+        "joox.com",
+        "licdn.cn.cdn20.com",
+        "miniso.com"
+      ]
+    },
+    "iCloud.list": {
+      "overlapping_noncn_entries": 48,
+      "examples": [
+        "apple-cloudkit.com",
+        "apple-livephotoskit.com",
+        "applemx-icloud.com",
+        "apzones.com",
+        "cdn-apple.com",
+        "icloud-content.com",
+        "icloud-isupport.com",
+        "icloud-sandbox.com"
+      ]
+    },
+    "Proxy.list": {
+      "overlapping_noncn_entries": 4382,
+      "examples": [
+        "000webhost.com",
+        "0rz.tw",
+        "1-apple.com.tw",
+        "1000giri.net",
+        "10beasts.net",
+        "10musume.com",
+        "123av.com",
+        "123av.me"
+      ]
+    }
+  }
+}

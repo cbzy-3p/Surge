@@ -140,6 +140,8 @@ def render_output(domains: list[str]) -> str:
 def main() -> None:
     source = fetch_source()
     domains, invalid = convert(source)
+    if invalid:
+        raise RuntimeError(f"CN-Additional source contains {len(invalid)} invalid lines; previous files retained")
     if len(domains) < MINIMUM_OUTPUT:
         raise RuntimeError(f"Unexpected rule count: {len(domains)}")
 
@@ -151,6 +153,9 @@ def main() -> None:
 
     output = render_output(domains)
     previous = OUTPUT_PATH.read_text(encoding="utf-8") if OUTPUT_PATH.exists() else ""
+    if previous:
+        validate_snapshot({"committed-output": count_valid_unique_domains(previous)},
+                          {"committed-output": len(domains)})
     if output == previous:
         print(f"CN-Additional.list unchanged with {len(domains)} domains")
     else:

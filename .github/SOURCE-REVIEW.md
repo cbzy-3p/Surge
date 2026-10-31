@@ -238,3 +238,33 @@ fetches and rendered output before writing. Added regression coverage for
 the legacy-header bypass, growth without a snapshot, and the narrow scope
 of supplements. 132 tests pass; 47 files / 82,752 rules validate locally,
 and an independent old/new comparison confirms retained Proxy coverage.
+
+## CN / NonCN review, 2026-10-31
+
+Rebuilt all media categories live, including China and ChinaCIDR, and
+CN-Additional against its retained source. Existing domestic rule bodies
+remain unchanged. CN-Additional no longer silently discards invalid source
+lines; it aborts before writing. Committed output size is independently
+checked if the source snapshot is missing. Tests reproduce both failures
+and verify unchanged output/snapshot.
+
+Added an independent NonCN.list from the preferred Yuu518 geolocation-!cn
+Surge feed. 26,626 distinct source entries compact to 26,616 rules. Only
+DOMAIN and DOMAIN-SUFFIX are accepted; formats, output counts and snapshot
+drift are checked before writing. Exact hosts remain exact. Missing targets
+are created. This classifies domains, not the complement of CN IP space.
+It does not replace or expand Proxy.list. Existing source priorities are
+retained and no module files or schedules change.
+
+Boundary review found 118 NonCN entries equal to or under a China.list
+domain, 19 under CN-Additional and 48 under iCloud. These reflect differing
+classifications and may be affected by policy order; they are not proof of
+a conflict in the user's unseen profile. Report examples and counts in
+.github/non-cn-overlap-review.json. Retain cross-file overlap for independent
+subscriptions and document domestic/service precedence. The update job now
+generates NonCN alongside the existing rules and runs its regression tests.
+
+Local checks: 138 non-module tests pass; 48 rule files / 109,368 rules
+validate; media and CN-Additional live rebuilds pass. Source failures, malformed
+lines, format shifts, missing snapshots and suffix compaction have regression
+coverage. These are local checks before publication, not device tests.
