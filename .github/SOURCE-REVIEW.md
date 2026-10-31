@@ -212,3 +212,29 @@ tiktokvapp.com; the previous 60 TikTok rules remain present. Final output
 validation covers 47 files / 82,748 rules. Cross-file auditing, workflow
 YAML parsing, embedded bash syntax and git whitespace checks pass. No
 module files, schedules or subscription paths were changed.
+
+## Focused Proxy review, 2026-10-31
+
+Live source review found exact-only normalized entries (not semantic unique
+coverage): BM7 0, Rabbit 6520, Conners 122, Yuu 16. All existing sources
+remain active; one snapshot cannot establish that a source stays redundant.
+Loyalsoldier remains a cross-check instead of a wholesale import.
+
+Added only oaistatic.com and oaiusercontent.com, each confirmed as a
+DOMAIN-SUFFIX in both BM7 OpenAI and Yuu openai live feeds. These are
+reviewed supplements, not an import of the broad MagicRule Global feed.
+The old files.oaiusercontent.com suffix is compacted under its parent;
+all previous Proxy coverage remains. Output changes from 7,125 to 7,126.
+Evidence feeds:
+- https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list
+- https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/openai.list
+
+Removed the legacy source-set migration exemption from output size checks.
+It searched for Loyalsoldier in the old header, which is always present and
+therefore bypassed this independent drop check; the separate snapshot guard
+was still active. Output checks now independently guard both drops and
+growth, even without a snapshot. Validate existing output before network
+fetches and rendered output before writing. Added regression coverage for
+the legacy-header bypass, growth without a snapshot, and the narrow scope
+of supplements. 132 tests pass; 47 files / 82,752 rules validate locally,
+and an independent old/new comparison confirms retained Proxy coverage.

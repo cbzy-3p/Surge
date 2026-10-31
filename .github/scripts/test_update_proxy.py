@@ -12,6 +12,21 @@ SPEC.loader.exec_module(PROXY)
 
 
 class ProxyRuleTests(unittest.TestCase):
+    def test_legacy_loyal_header_does_not_bypass_output_drop_guard(self):
+        previous = "# SOURCE: Loyalsoldier/surge-rules\n" + "".join(
+            f"DOMAIN-SUFFIX,x{i}.example\n" for i in range(100))
+        with self.assertRaises(RuntimeError):
+            PROXY.validate_output_change(previous, {("DOMAIN-SUFFIX", "example.com")})
+
+    def test_output_growth_is_guarded_without_snapshot(self):
+        previous = "".join(f"DOMAIN-SUFFIX,x{i}.example\n" for i in range(20))
+        with self.assertRaises(RuntimeError):
+            PROXY.validate_output_change(previous, {("DOMAIN-SUFFIX", f"z{i}.example") for i in range(51)})
+
+    def test_verified_supplements_do_not_include_shared_cloud_suffixes(self):
+        self.assertEqual(PROXY.VERIFIED_SUPPLEMENTS, {
+            ("DOMAIN-SUFFIX", "oaistatic.com"), ("DOMAIN-SUFFIX", "oaiusercontent.com")})
+
     def test_missing_target_is_rebuilt_and_fetch_failure_preserves_files(self):
         rules = {("DOMAIN", f"x{i}.icloud.com") for i in range(30)}
         with tempfile.TemporaryDirectory() as directory:

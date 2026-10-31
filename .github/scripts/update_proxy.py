@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from validate_rule_files import validate_text
+
 import ipaddress
 import json
 import re
@@ -21,6 +23,10 @@ SOURCES = {
     "loyal": "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt",
     "yuu": "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/category-proxy-tunnels.list",
 }
+# Cross-checked 2026-10-31 against BM7 OpenAI and Yuu518 openai.
+VERIFIED_SUPPLEMENTS = {("DOMAIN-SUFFIX", "oaistatic.com"),
+                        ("DOMAIN-SUFFIX", "oaiusercontent.com")}
+
 MINIMUMS = {"bm7": 100, "rabbit": 6_000, "conners": 400, "loyal": 10_000, "yuu": 10}
 DOMAIN_TYPES = {"DOMAIN", "DOMAIN-SUFFIX"}
 RULE_TYPES = DOMAIN_TYPES | {
@@ -174,6 +180,12 @@ def validate_snapshot(previous: dict[str, int], current: dict[str, int]) -> None
             raise RuntimeError(f"unexpected source count change for {name}: {old} -> {new}")
 
 
+def validate_output_change(previous_text, rules):
+    previous = len(parse_surge(previous_text))
+    if previous >= 20 and (len(rules) * 100 < previous * 65 or len(rules) > previous * 5 // 2):
+        raise RuntimeError(f"unexpected output count change: {previous} -> {len(rules)}")
+
+
 def render(rules: set[tuple[str, str]], updated: str | None = None) -> str:
     order = {"DOMAIN": 0, "DOMAIN-SUFFIX": 1, "DOMAIN-KEYWORD": 2, "DOMAIN-WILDCARD": 3, "USER-AGENT": 4, "PROCESS-NAME": 5, "IP-CIDR": 6, "IP-CIDR6": 7, "IP-ASN": 8}
     def key(rule: tuple[str, str]) -> tuple[int, str]:
@@ -186,6 +198,7 @@ def render(rules: set[tuple[str, str]], updated: str | None = None) -> str:
         f"# UPDATED: {updated}",
         f"# RULE COUNT: {len(rules)}",
         *[f"# SOURCE: {url}" for url in SOURCES.values()],
+        "# VERIFIED SUPPLEMENTS: oaistatic.com, oaiusercontent.com; BM7 OpenAI and Yuu518 openai, reviewed 2026-10-31.",
         "# NOTE: Fixed sources are normalized and compacted; Loyalsoldier is used for cross-checking to avoid inflating this focused proxy-service set.",
         "",
     ]
@@ -197,6 +210,9 @@ def render(rules: set[tuple[str, str]], updated: str | None = None) -> str:
 
 
 def main() -> None:
+    previous_text = TARGET.read_text(encoding="utf-8") if TARGET.exists() else ""
+    if previous_text:
+        validate_text(TARGET, previous_text)
     fetched = {
         "bm7": parse_surge(fetch(SOURCES["bm7"])),
         "rabbit": parse_surge(fetch(SOURCES["rabbit"])),
@@ -212,17 +228,20 @@ def main() -> None:
     for name in ("bm7", "rabbit", "conners", "yuu"):
         source = fetched[name]
         rules = merge(rules, source)
+    rules = merge(rules, VERIFIED_SUPPLEMENTS)
+    for name in ("bm7", "rabbit", "conners", "yuu"):
+        others = set().union(*(fetched[key] for key in ("bm7", "rabbit", "conners", "yuu") if key != name))
+        print(f"{name}: normalized entries={len(fetched[name])}; exact-only entries={len(fetched[name] - others)} (not semantic coverage)")
     counts["loyal-covered"] = sum(1 for rule in fetched["loyal"] if rule in rules)
     counts["output"] = len(rules)
     validate_snapshot(load_snapshot(), counts)
-    previous_text = TARGET.read_text(encoding="utf-8") if TARGET.exists() else ""
-    source_set_changed = "Loyalsoldier/surge-rules" in previous_text
-    if not source_set_changed and previous_text and len(rules) * 100 < sum(1 for line in previous_text.splitlines() if line and not line.startswith("#")) * 65:
-        raise RuntimeError("output rule count dropped too much")
+    validate_output_change(previous_text, rules)
     previous_updated = re.search(r"^# UPDATED: (.+)$", previous_text, re.MULTILINE)
     unchanged_text = render(rules, previous_updated.group(1)) if previous_updated else ""
     if not TARGET.exists() or unchanged_text != previous_text:
-        TARGET.write_text(render(rules), encoding="utf-8")
+        output = render(rules)
+        validate_text(TARGET, output)
+        TARGET.write_text(output, encoding="utf-8")
     SNAPSHOT.write_text(json.dumps({"version": SNAPSHOT_VERSION, "counts": counts}, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(f"updated {TARGET.name} with {len(rules)} rules")
 
