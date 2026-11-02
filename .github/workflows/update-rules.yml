@@ -51,6 +51,7 @@ jobs:
           python .github/scripts/test_update_alibaba.py
           python .github/scripts/test_update_proxy.py
           python .github/scripts/test_update_apple.py
+          python .github/scripts/test_update_apple_download.py
           python .github/scripts/test_update_icloud.py
           python .github/scripts/test_update_apple_intelligence.py
           python .github/scripts/test_update_cn_additional.py
@@ -72,6 +73,7 @@ jobs:
           python .github/scripts/update_rules.py
           python .github/scripts/update_proxy.py
           python .github/scripts/update_apple.py
+          python .github/scripts/update_apple_download.py
           python .github/scripts/update_icloud.py
           python .github/scripts/update_media_rules.py
       - name: Report baseline upstream drift
@@ -118,6 +120,7 @@ jobs:
           python .github/scripts/test_update_alibaba.py
           python .github/scripts/test_update_proxy.py
           python .github/scripts/test_update_apple.py
+          python .github/scripts/test_update_apple_download.py
           python .github/scripts/test_update_icloud.py
           python .github/scripts/test_update_apple_intelligence.py
           python .github/scripts/test_update_cn_additional.py
@@ -145,6 +148,7 @@ jobs:
           python .github/scripts/update_alibaba.py
           python .github/scripts/update_proxy.py
           python .github/scripts/update_apple.py
+          python .github/scripts/update_apple_download.py
           python .github/scripts/update_icloud.py
           python .github/scripts/update_media_rules.py
           python .github/scripts/update_non_cn.py

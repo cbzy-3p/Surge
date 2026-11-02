@@ -63,3 +63,11 @@ RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/NonCN.list,Pr
 ```
 
 NonCN 拉取前校验旧文件，严格检查上游仅含 DOMAIN/DOMAIN-SUFFIX；生成后检查规则格式、条数、去重、父子域覆盖和异常增减。上游失败或验证异常时保留已提交文件，完整更新流程不发布部分结果。
+
+## Apple 下载
+
+`AppleDownload.list` 单独匹配商店安装包、应用更新、系统 OTA、固件与恢复、运营商配置、开发者工具和资源下载，已接入现有每日统一更新。放在 Apple 总集及兜底规则之前；账号、购买、商店地区检测仍由原有策略负责。媒体下载与在线播放存在共享端点，独立的 AppleMusic / AppleTV 策略应放在它之前。来源与边界见 [AppleDownload-Sources.md](AppleDownload-Sources.md)。
+
+```ini
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/AppleDownload.list,DIRECT,extended-matching
+```
