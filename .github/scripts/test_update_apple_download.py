@@ -11,13 +11,23 @@ class AppleDownloadTests(unittest.TestCase):
     def test_downloads_and_control_plane_are_separated(self):
         for host in ("iosapps.itunes.apple.com", "osxapps.itunes.g.aaplimg.com",
                      "appldnld.apple.com", "updates.cdn-apple.com",
-                     "mesu.apple.com", "download.developer.apple.com",
+                     "apps.mzstatic.com", "swdownload.apple.com",
                      "appldnld-lb.apple.com.akadns.net", "oscdn.origin-apple.com.akadns.net"):
             self.assertTrue(updater.is_download(host), host)
         for host in ("apple.com", "cdn-apple.com", "itunes.apple.com", "apps.apple.com",
                      "buy.itunes.apple.com", "bag.itunes.apple.com", "idmsa.apple.com",
                      "gs.apple.com", "icloud.com", "ocsp.apple.com", "akadns.net",
-                     "updates.cdn-apple.com.evil.org", "download.evil.com"):
+                     "updates.cdn-apple.com.evil.org", "download.evil.com",
+                     "mesu.apple.com", "gdmf.apple.com", "configuration.apple.com",
+                     "swscan.apple.com", "swdist.apple.com", "swcatalog.apple.com",
+                     "downloaddispatch.itunes.apple.com", "su.itunes.apple.com",
+                     "adcdownload.apple.com", "download.developer.apple.com",
+                     "devimages-cdn.apple.com", "mzstatic.com", "is1.mzstatic.com",
+                     "sylvan.apple.com", "audiocontentdownload.apple.com",
+                     "playground-cdn.apple.com", "ml.cdn-apple.com",
+                     "publicassets.cdn-apple.com", "aod.itunes.apple.com",
+                     "hls.itunes.apple.com", "mesu-cdn.apple.com.akadns.net",
+                     "adcdownload.apple.com.akadns.net", "swscan-cdn.apple.com.akadns.net"):
             self.assertFalse(updater.is_download(host), host)
 
     def test_domainset_preserves_exact_and_suffix_semantics(self):

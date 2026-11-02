@@ -18,36 +18,21 @@ SOURCES = {key: value for key, value in apple.SOURCES.items() if key != "bm7_icl
 SOURCES["skk"] = "https://ruleset.skk.moe/List/domainset/apple_cdn.conf"
 MINIMUMS = {key: value for key, value in apple.MINIMUMS.items() if key != "bm7_icloud"}
 
-# Reviewed download namespaces. Storefront/account/payment/DRM stay in Apple.list.
-# Apple official software-update and carrier-update hosts are supplemented below;
-# gs/gg/xp and signing/authentication remain with the existing Apple policy.
+# App installation packages and OS/firmware payloads only. No store APIs,
+# update catalogs, developer tools, artwork, media, models or other asset hosts.
 DOWNLOAD_ROOTS = set("""
-appldnld.apple.com secure-appldnld.apple.com
-updates.cdn-apple.com updates-http.cdn-apple.com
-oscdn.apple.com osrecovery.apple.com swcdn.apple.com swdist.apple.com
-swdownload.apple.com swscan.apple.com swcatalog.apple.com
-mesu.apple.com gdmf.apple.com gdmf-ados.apple.com configuration.apple.com
-ig.apple.com skl.apple.com
-adcdownload.apple.com download.developer.apple.com devimages-cdn.apple.com
-audiocontentdownload.apple.com playground-assets-cdn.apple.com
-playground-cdn.apple.com sylvan.apple.com
-iosapps.itunes.apple.com osxapps.itunes.apple.com
-downloaddispatch.itunes.apple.com su.itunes.apple.com
+iosapps.itunes.apple.com osxapps.itunes.apple.com apps.mzstatic.com
 iosapps.itunes.g.aaplimg.com osxapps.itunes.g.aaplimg.com
-appldnld.g.aaplimg.com swcdn.g.aaplimg.com
-appldnld.apple.com.edgesuite.net
-mzstatic.com
-publicassets.cdn-apple.com ml.cdn-apple.com
-aod.itunes.apple.com aod-ssl.itunes.apple.com
-audio.itunes.apple.com audio-ssl.itunes.apple.com
-mvod.itunes.apple.com streamingaudio.itunes.apple.com
-hls.itunes.apple.com hls-amt.itunes.apple.com hls-svod.itunes.apple.com
+appldnld.apple.com secure-appldnld.apple.com
+appldnld.g.aaplimg.com appldnld.apple.com.edgesuite.net
+updates.cdn-apple.com updates-http.cdn-apple.com
+oscdn.apple.com osrecovery.apple.com swcdn.apple.com
+swdownload.apple.com swcdn.g.aaplimg.com
 """.split())
-# Only aliases present in a fixed upstream are added; no broad akadns/Akamai rule.
+# Only reviewed payload aliases found in preferred sources are admitted.
 ALIAS_RE = re.compile(
-    r"^(?:appldnld(?:-lb)?|secure-appldnld|adcdownload2?|mesu(?:-cdn|-china)?|"
-    r"swcdn|swdist|swdownload|swscan(?:-cdn)?|swcatalog(?:-cdn)?|"
-    r"oscdn|osrecovery|configuration|updates(?:-http)?)\."
+    r"^(?:appldnld(?:-lb)?|secure-appldnld|swcdn|swdownload|"
+    r"oscdn|osrecovery|updates(?:-http)?)\."
     r"(?:apple\.com|origin-apple\.com|cdn-apple\.com)\.akadns\.net$"
 )
 
@@ -103,7 +88,7 @@ def render(rules: set[tuple[str, str]], updated: str) -> str:
         f"# UPDATED: {updated}",
         f"# RULE COUNT: {len(rules)}",
         *[f"# SOURCE: {url}" for url in SOURCES.values()],
-        "# NOTE: Reviewed download subset; see AppleDownload-Sources.md for scope and shared media hosts.",
+        "# NOTE: App installation packages and firmware payloads only; see AppleDownload-Sources.md for shared CDN limits.",
         "", *[f"{kind},{domain}" for kind, domain in sorted(rules)], "",
     ])
 

@@ -1,18 +1,18 @@
 {
   "counts": {
     "bm7": 1615,
-    "bm7/selected": 2,
+    "bm7/selected": 1,
     "conners": 20,
-    "conners/selected": 1,
+    "conners/selected": 0,
     "loyal": 165,
-    "loyal/selected": 46,
-    "output": 54,
+    "loyal/selected": 12,
+    "output": 18,
     "rabbit": 2080,
-    "rabbit/selected": 124,
+    "rabbit/selected": 30,
     "skk": 159,
-    "skk/selected": 46,
+    "skk/selected": 12,
     "yuu": 1585,
-    "yuu/selected": 10
+    "yuu/selected": 2
   },
   "version": 1
 }

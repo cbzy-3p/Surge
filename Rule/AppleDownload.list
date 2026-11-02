@@ -1,67 +1,31 @@
 # NAME: Multi-source-AppleDownload
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-11-02 03:34:22 UTC
-# RULE COUNT: 54
+# UPDATED: 2026-11-02 13:06:36 UTC
+# RULE COUNT: 18
 # SOURCE: https://ruleset.skk.moe/List/domainset/apple_cdn.conf
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Apple/Apple_All_No_Resolve.list
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Apple.list
 # SOURCE: https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Apple/Apple.list
 # SOURCE: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/apple.txt
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/apple.list
-# NOTE: Reviewed download subset; see AppleDownload-Sources.md for scope and shared media hosts.
+# NOTE: App installation packages and firmware payloads only; see AppleDownload-Sources.md for shared CDN limits.
 
-DOMAIN-SUFFIX,adcdownload.apple.com
-DOMAIN-SUFFIX,adcdownload.apple.com.akadns.net
-DOMAIN-SUFFIX,aod-ssl.itunes.apple.com
-DOMAIN-SUFFIX,aod.itunes.apple.com
 DOMAIN-SUFFIX,appldnld.apple.com
 DOMAIN-SUFFIX,appldnld.apple.com.edgesuite.net
 DOMAIN-SUFFIX,appldnld.g.aaplimg.com
-DOMAIN-SUFFIX,audio-ssl.itunes.apple.com
-DOMAIN-SUFFIX,audio.itunes.apple.com
-DOMAIN-SUFFIX,audiocontentdownload.apple.com
-DOMAIN-SUFFIX,configuration.apple.com
-DOMAIN-SUFFIX,configuration.apple.com.akadns.net
-DOMAIN-SUFFIX,devimages-cdn.apple.com
-DOMAIN-SUFFIX,download.developer.apple.com
-DOMAIN-SUFFIX,downloaddispatch.itunes.apple.com
-DOMAIN-SUFFIX,gdmf-ados.apple.com
-DOMAIN-SUFFIX,gdmf.apple.com
-DOMAIN-SUFFIX,hls-amt.itunes.apple.com
-DOMAIN-SUFFIX,hls-svod.itunes.apple.com
-DOMAIN-SUFFIX,hls.itunes.apple.com
-DOMAIN-SUFFIX,ig.apple.com
+DOMAIN-SUFFIX,apps.mzstatic.com
 DOMAIN-SUFFIX,iosapps.itunes.apple.com
 DOMAIN-SUFFIX,iosapps.itunes.g.aaplimg.com
-DOMAIN-SUFFIX,mesu-cdn.apple.com.akadns.net
-DOMAIN-SUFFIX,mesu-china.apple.com.akadns.net
-DOMAIN-SUFFIX,mesu.apple.com
-DOMAIN-SUFFIX,ml.cdn-apple.com
-DOMAIN-SUFFIX,mvod.itunes.apple.com
-DOMAIN-SUFFIX,mzstatic.com
 DOMAIN-SUFFIX,oscdn.apple.com
 DOMAIN-SUFFIX,oscdn.origin-apple.com.akadns.net
 DOMAIN-SUFFIX,osrecovery.apple.com
 DOMAIN-SUFFIX,osxapps.itunes.apple.com
 DOMAIN-SUFFIX,osxapps.itunes.g.aaplimg.com
-DOMAIN-SUFFIX,playground-assets-cdn.apple.com
-DOMAIN-SUFFIX,playground-cdn.apple.com
-DOMAIN-SUFFIX,publicassets.cdn-apple.com
 DOMAIN-SUFFIX,secure-appldnld.apple.com
-DOMAIN-SUFFIX,skl.apple.com
-DOMAIN-SUFFIX,streamingaudio.itunes.apple.com
-DOMAIN-SUFFIX,su.itunes.apple.com
-DOMAIN-SUFFIX,swcatalog-cdn.apple.com.akadns.net
-DOMAIN-SUFFIX,swcatalog.apple.com
 DOMAIN-SUFFIX,swcdn.apple.com
 DOMAIN-SUFFIX,swcdn.g.aaplimg.com
-DOMAIN-SUFFIX,swdist.apple.com
-DOMAIN-SUFFIX,swdist.apple.com.akadns.net
 DOMAIN-SUFFIX,swdownload.apple.com
-DOMAIN-SUFFIX,swscan-cdn.apple.com.akadns.net
-DOMAIN-SUFFIX,swscan.apple.com
-DOMAIN-SUFFIX,sylvan.apple.com
 DOMAIN-SUFFIX,updates-http.cdn-apple.com
 DOMAIN-SUFFIX,updates-http.cdn-apple.com.akadns.net
 DOMAIN-SUFFIX,updates.cdn-apple.com
