@@ -16,10 +16,43 @@ class ModuleProtectionTests(unittest.TestCase):
     def test_repository_boundary(self):
         for url in ("https://raw.githubusercontent.com/other/Rewrite/main/a.js",
                     "http://raw.githubusercontent.com/Yu9191/Rewrite/main/a.js",
-                    "https://raw.githubusercontent.com/Yu9191/Rewrite-evil/main/a.js"):
+                    "https://raw.githubusercontent.com/Yu9191/Rewrite-evil/main/a.js",
+                    "https://raw.githubusercontent.com/ranzhigg/Script-Hub/main/Rewrite-Parser.beta.js"):
             with self.assertRaises(RuntimeError):
                 updater.check_url(url)
         updater.check_url("https://raw.githubusercontent.com/Yu9191/Rewrite/main/a.js")
+
+    def test_script_hub_fork_reference_uses_canonical_upstream(self):
+        import hashlib
+        import json
+
+        fork_url = "https://raw.githubusercontent.com/ranzhigg/Script-Hub/main/Rewrite-Parser.beta.js"
+        canonical_url = "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/Rewrite-Parser.beta.js"
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            module_path = root / "Module/Tools/script-hub.sgmodule"
+            module_path.parent.mkdir(parents=True)
+            module_path.write_text(f"#!name=Script Hub\n[Script]\nParser = type=http-request, script-path={fork_url}\n[MITM]\nhostname = script.hub\n")
+            with patch.object(updater, "ROOT", root), \
+                 patch.object(updater, "SOURCES", {"Module/Tools/script-hub.sgmodule": ""}), \
+                 patch.object(updater, "fetch_script", return_value=b"// canonical parser\nconsole.log('ok');\n") as fetch:
+                updater.mirror_scripts()
+            fetch.assert_called_once_with(canonical_url, b"")
+            manifest = json.loads((root / "Module/Scripts/manifest.json").read_text())
+            self.assertIn(canonical_url, manifest)
+            self.assertNotIn(fork_url, manifest)
+            digest = hashlib.sha256(canonical_url.encode("utf-8")).hexdigest()
+            self.assertEqual(f"{digest}.js", manifest[canonical_url]["file"])
+            self.assertIn(f"{updater.LOCAL_SCRIPT_BASE}{digest}.js", module_path.read_text())
+
+    def test_validate_only_does_not_fetch_or_rewrite_sources(self):
+        with patch.object(updater.sys, "argv", ["updater", "--validate-only"]), \
+             patch.object(updater, "validate_repository") as validate, \
+             patch.object(updater, "update_staged") as update, \
+             patch("builtins.print"):
+            self.assertEqual(updater.main(), 0)
+        validate.assert_called_once_with()
+        update.assert_not_called()
 
     def test_failed_update_preserves_live_files(self):
         with tempfile.TemporaryDirectory() as directory:

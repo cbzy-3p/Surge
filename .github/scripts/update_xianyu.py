@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
@@ -55,6 +56,7 @@ OBSERVED_HOSTS = {
     "zconfig.alibabausercontent.com",
 }
 MIN_SOURCE_RULES = {"bm7": 10, "rabbit": 3500, "loyal": 10000, "yuu": 100}
+SOURCE_FETCH_ATTEMPTS = 3
 FORBIDDEN_SUFFIXES = {
     "taobao.com", "alicdn.com", "dingtalk.com", "dingtalk.cn",
     "aliyuncs.com", "aliyun.com", "alibaba.com", "alipay.com",
@@ -75,6 +77,33 @@ def parse_source(name: str, text: str) -> set[tuple[str, str]]:
                 raise RuntimeError(f"invalid Loyalsoldier domain: {line}")
             rules.add((kind, host))
     return rules
+
+
+def fetch_valid_source(source: tuple[str, str]) -> tuple[str, str]:
+    name, url = source
+    minimum = MIN_SOURCE_RULES[name]
+    last_count = 0
+    last_error: Exception | None = None
+    for attempt in range(1, SOURCE_FETCH_ATTEMPTS + 1):
+        try:
+            text = fetch_text(url)
+        except Exception as exc:
+            last_error = exc
+        else:
+            last_error = None
+            last_count = len(parse_source(name, text))
+            if last_count >= minimum:
+                return name, text
+        if attempt < SOURCE_FETCH_ATTEMPTS:
+            time.sleep(attempt * 2)
+    if last_error is not None:
+        raise RuntimeError(
+            f"{name} source fetch failed after {SOURCE_FETCH_ATTEMPTS} attempts: {last_error}"
+        ) from last_error
+    raise RuntimeError(
+        f"{name} source unexpectedly small after {SOURCE_FETCH_ATTEMPTS} attempts: "
+        f"{last_count} < {minimum}"
+    )
 
 
 def covered(host: str, rules: set[tuple[str, str]]) -> bool:
@@ -124,7 +153,7 @@ def render(rules: set[tuple[str, str]]) -> str:
 
 def main() -> None:
     with ThreadPoolExecutor(max_workers=4) as pool:
-        texts = dict(zip(SOURCES, pool.map(fetch_text, SOURCES.values())))
+        texts = dict(pool.map(fetch_valid_source, SOURCES.items()))
     sources = {name: parse_source(name, text) for name, text in texts.items()}
     current = TARGET.read_text(encoding="utf-8") if TARGET.exists() else ""
     previous = parse_surge_rules(current)

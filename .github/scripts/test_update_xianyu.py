@@ -49,6 +49,26 @@ class XianYuTests(unittest.TestCase):
                          {("DOMAIN-SUFFIX", "alibaba"), ("DOMAIN-SUFFIX", "goofish.com"),
                           ("DOMAIN", "login.example.com")})
 
+    def test_undersized_source_retries_and_accepts_only_valid_content(self):
+        url = updater.SOURCES["rabbit"]
+        with patch.object(updater, "MIN_SOURCE_RULES", {"rabbit": 1}), \
+             patch.object(updater, "fetch_text", side_effect=["# temporary empty response\n",
+                                                                 "DOMAIN,goofish.com\n"]) as fetch, \
+             patch.object(updater.time, "sleep") as sleep:
+            name, text = updater.fetch_valid_source(("rabbit", url))
+        self.assertEqual((name, text), ("rabbit", "DOMAIN,goofish.com\n"))
+        self.assertEqual(fetch.call_count, 2)
+        sleep.assert_called_once_with(2)
+
+    def test_undersized_source_fails_after_retries_without_lowering_threshold(self):
+        url = updater.SOURCES["rabbit"]
+        with patch.object(updater, "MIN_SOURCE_RULES", {"rabbit": 2}), \
+             patch.object(updater, "fetch_text", return_value="DOMAIN,one.example.com\n") as fetch, \
+             patch.object(updater.time, "sleep"):
+            with self.assertRaisesRegex(RuntimeError, "after 3 attempts: 1 < 2"):
+                updater.fetch_valid_source(("rabbit", url))
+        self.assertEqual(fetch.call_count, 3)
+
     def test_truncated_baseline_fails(self):
         sources = self.sources()
         sources["bm7"] = {("DOMAIN-SUFFIX", "unrelated.example.com")}
@@ -83,7 +103,8 @@ class XianYuTests(unittest.TestCase):
             target.write_text("last valid rules\n")
             snapshot.write_text('{"version": 1}\n')
             with patch.object(updater, "TARGET", target), patch.object(updater, "SNAPSHOT", snapshot), \
-                 patch.object(updater, "fetch_text", side_effect=RuntimeError("source unavailable")):
+                 patch.object(updater, "fetch_text", side_effect=RuntimeError("source unavailable")), \
+                 patch.object(updater.time, "sleep"):
                 with self.assertRaisesRegex(RuntimeError, "unavailable"):
                     updater.main()
             self.assertEqual(target.read_text(), "last valid rules\n")

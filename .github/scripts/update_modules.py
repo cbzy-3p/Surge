@@ -42,6 +42,12 @@ GOOFISH_SOURCE = "https://raw.githubusercontent.com/ddgksf2013/Rewrite/refs/head
 HOSTNAME_RE = re.compile(r"^[A-Za-z0-9*](?:[A-Za-z0-9*-]{0,61}[A-Za-z0-9*])?(?:\.[A-Za-z0-9*](?:[A-Za-z0-9*-]{0,61}[A-Za-z0-9*])?)+$")
 SCRIPT_HOSTS = {"github.com", "raw.githubusercontent.com"}
 SCRIPT_REPOS = {"7452323/QuantumultX", "Yu9191/Rewrite", "Script-Hub-Org/Script-Hub", "sub-store-org/Sub-Store", "chavyleung/scripts", "QingRex/LoonKissSurge", "ddgksf2013/Rewrite", "ddgksf2013/Scripts"}
+# The upstream module points to this fork, but the canonical repository has the
+# same beta parser with a newer fix. Mirror the canonical, already-approved copy.
+SCRIPT_URL_ALIASES = {
+    "https://raw.githubusercontent.com/ranzhigg/Script-Hub/main/Rewrite-Parser.beta.js":
+        "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/Rewrite-Parser.beta.js",
+}
 EXTERNAL_SCRIPT_PREFIXES = (
     "https://kelee.one/Resource/JavaScript/",
     "https://raw.githubusercontent.com/ddgksf2013/Scripts/refs/heads/master/",
@@ -288,7 +294,8 @@ def mirror_scripts() -> list[str]:
         urls = list(dict.fromkeys(re.findall(r"script-path=(https?[^,\s]+)", text)))
         # Local mirror URLs are already controlled files; only fetch upstream URLs.
         urls = [url for url in urls if not url.startswith(LOCAL_SCRIPT_BASE)]
-        for url in urls:
+        for source_url in urls:
+            url = SCRIPT_URL_ALIASES.get(source_url, source_url)
             digest = hashlib.sha256(url.encode("utf-8")).hexdigest()
             filename = f"{digest}.js"
             destination = script_dir / filename
@@ -302,8 +309,10 @@ def mirror_scripts() -> list[str]:
                 "file": filename,
                 "sha256": hashlib.sha256(content).hexdigest(),
             }
+            if source_url != url:
+                manifest.pop(source_url, None)
             local = f"https://raw.githubusercontent.com/cbzy-3p/Surge/main/Module/Scripts/{filename}"
-            text = text.replace(url, local)
+            text = text.replace(source_url, local)
         if write(path, text):
             changed.append(relative)
     manifest_text = json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
@@ -422,7 +431,9 @@ def update_staged() -> int:
 def main() -> int:
     global ROOT
     if sys.argv[1:] == ["--validate-only"]:
-        return update_staged()
+        validate_repository()
+        print("Validated generated module files.")
+        return 0
     original = ROOT
     # No source download, validation failure, or aggregate error touches the live tree.
     with tempfile.TemporaryDirectory(prefix="surge-modules-") as directory:
