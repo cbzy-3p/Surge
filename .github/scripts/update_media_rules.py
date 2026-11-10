@@ -44,19 +44,19 @@ CONFIGS = {
         ("yuu-ip", f"{YUU}/geoip/netflix.list", "surge", 100),
     ],
     "ChinaMedia": [
-        ("rabbit", f"{RABBIT}/ChinaMedia.list", "surge", 400),
+        ("rabbit", f"{RABBIT}/ChinaMedia.list", "surge", 350),
         ("bm7", f"{BM7}/ChinaMedia/ChinaMedia.list", "surge", 400),
         ("yuu", f"{YUU}/geosite/category-media-cn.list", "surge", 350),
     ],
     "GlobalMedia": [
         ("skk-non-ip", f"{SKK}/non_ip/stream.conf", "surge", 100),
         ("skk-ip", f"{SKK}/ip/stream.conf", "surge", 15),
-        ("rabbit", f"{RABBIT}/GlobalMedia.list", "surge", 2_000),
+        ("rabbit", f"{RABBIT}/GlobalMedia.list", "surge", 1_800),
         ("bm7", f"{BM7}/GlobalMedia/GlobalMedia_All_No_Resolve.list", "surge", 2_000),
         ("yuu", f"{YUU}/geosite/category-media.list", "surge", 1_400),
     ],
     "China": [
-        ("rabbit", f"{RABBIT}/China.list", "surge", 3_500),
+        ("rabbit", f"{RABBIT}/China.list", "surge_or_domain_set", 3_500),
         ("bm7", f"{BM7}/China/China_Domain.list", "domain", 3_500),
         ("yuu", f"{YUU}/geosite/geolocation-cn.list", "surge", 5_000),
     ],
@@ -198,7 +198,29 @@ def parse_cidrs(content: str) -> set[tuple[str, str]]:
     return rules
 
 
-PARSERS = {"surge": parse_surge, "domain": parse_domains, "cidr": parse_cidrs}
+def parse_rabbit_domain_set(content: str) -> set[tuple[str, str]]:
+    rules: set[tuple[str, str]] = set()
+    for raw in content.splitlines():
+        line = strip_comment(raw)
+        if not line or "," in line:
+            continue
+        kind = "DOMAIN-SUFFIX" if line.startswith(".") else "DOMAIN"
+        rule = normalize_rule(kind, line.removeprefix("."))
+        if rule:
+            rules.add(rule)
+    return rules
+
+
+def parse_surge_or_domain_set(content: str) -> set[tuple[str, str]]:
+    return parse_surge(content) | parse_rabbit_domain_set(content)
+
+
+PARSERS = {
+    "surge": parse_surge,
+    "surge_or_domain_set": parse_surge_or_domain_set,
+    "domain": parse_domains,
+    "cidr": parse_cidrs,
+}
 
 
 def covering_suffix(domain: str, suffixes: set[str]) -> str | None:

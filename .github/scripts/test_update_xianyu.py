@@ -49,6 +49,15 @@ class XianYuTests(unittest.TestCase):
                          {("DOMAIN-SUFFIX", "alibaba"), ("DOMAIN-SUFFIX", "goofish.com"),
                           ("DOMAIN", "login.example.com")})
 
+    def test_rabbit_domain_set_and_legacy_rules_keep_matching_semantics(self):
+        text = "# Rabbit-Spec China\n.cn\n.goofish.com\nlogin.example.com\nDOMAIN,legacy.example.com\n"
+        self.assertEqual(updater.parse_source("rabbit", text), {
+            ("DOMAIN-SUFFIX", "cn"),
+            ("DOMAIN-SUFFIX", "goofish.com"),
+            ("DOMAIN", "login.example.com"),
+            ("DOMAIN", "legacy.example.com"),
+        })
+
     def test_undersized_source_retries_and_accepts_only_valid_content(self):
         url = updater.SOURCES["rabbit"]
         with patch.object(updater, "MIN_SOURCE_RULES", {"rabbit": 1}), \

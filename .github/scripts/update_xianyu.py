@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from update_douyin import compact_rules, fetch_text, parse_surge_rules
+from update_media_rules import parse_rabbit_domain_set
 from validate_rule_files import normalize_domain, validate_text
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -65,6 +66,8 @@ FORBIDDEN_SUFFIXES = {
 
 
 def parse_source(name: str, text: str) -> set[tuple[str, str]]:
+    if name == "rabbit":
+        return parse_surge_rules(text) | parse_rabbit_domain_set(text)
     if name != "loyal":
         return parse_surge_rules(text)
     rules = set()
