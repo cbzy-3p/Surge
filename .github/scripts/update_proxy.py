@@ -18,7 +18,8 @@ SNAPSHOT = ROOT / ".github" / "proxy-source-snapshot.json"
 SNAPSHOT_VERSION = 2
 SOURCES = {
     "bm7": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Proxy/Proxy.list",
-    "rabbit": "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Proxy.list",
+    # Keep the reviewed 7,034-entry revision while the moving feed is under review.
+    "rabbit": "https://raw.githubusercontent.com/Rabbit-Spec/Surge/3898296592e55db06469b0f064d71640291f15f9/Rules/Proxy.list",
     "conners": "https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Proxy.list",
     "loyal": "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt",
     "yuu": "https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/category-proxy-tunnels.list",
