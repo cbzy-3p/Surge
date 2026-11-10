@@ -1,8 +1,8 @@
 # NAME: Multi-source-ChinaMedia
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-21 20:26:37 UTC
-# RULE COUNT: 827
+# UPDATED: 2026-11-10 02:16:07 UTC
+# RULE COUNT: 852
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/ChinaMedia.list
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMedia/ChinaMedia.list
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/category-media-cn.list
@@ -168,6 +168,7 @@ DOMAIN-SUFFIX,bilicdn2.com
 DOMAIN-SUFFIX,bilicdn3.com
 DOMAIN-SUFFIX,bilicdn4.com
 DOMAIN-SUFFIX,bilicdn5.com
+DOMAIN-SUFFIX,bilicomic.com
 DOMAIN-SUFFIX,bilicomics.com
 DOMAIN-SUFFIX,biligame.cn
 DOMAIN-SUFFIX,biligame.co
@@ -184,6 +185,7 @@ DOMAIN-SUFFIX,bilivideo.net
 DOMAIN-SUFFIX,bjd.com.cn
 DOMAIN-SUFFIX,bjnews.com.cn
 DOMAIN-SUFFIX,bkeconomy.com
+DOMAIN-SUFFIX,bowangcaijing.cn
 DOMAIN-SUFFIX,btime.com
 DOMAIN-SUFFIX,caijing.com.cn
 DOMAIN-SUFFIX,cailianpress.com
@@ -193,6 +195,7 @@ DOMAIN-SUFFIX,cbinews.com
 DOMAIN-SUFFIX,ccidcom.com
 DOMAIN-SUFFIX,ccn.com.cn
 DOMAIN-SUFFIX,ccreports.com.cn
+DOMAIN-SUFFIX,cctime.com
 DOMAIN-SUFFIX,cctv.cn
 DOMAIN-SUFFIX,cctv.com
 DOMAIN-SUFFIX,cctv4g.com
@@ -241,9 +244,11 @@ DOMAIN-SUFFIX,cmvideo.cn
 DOMAIN-SUFFIX,cneo.com.cn
 DOMAIN-SUFFIX,cnfol.com
 DOMAIN-SUFFIX,cnfolimg.com
+DOMAIN-SUFFIX,cnfood.cn
 DOMAIN-SUFFIX,cnhubei.com
 DOMAIN-SUFFIX,cnmo.com
 DOMAIN-SUFFIX,cnms.net.cn
+DOMAIN-SUFFIX,cnpharm.com
 DOMAIN-SUFFIX,cnr.cn
 DOMAIN-SUFFIX,cns.com.cn
 DOMAIN-SUFFIX,cnsimg.net
@@ -279,6 +284,7 @@ DOMAIN-SUFFIX,dahebao.cn
 DOMAIN-SUFFIX,danjuanfunds.com
 DOMAIN-SUFFIX,datasheet5.com
 DOMAIN-SUFFIX,dayoo.com
+DOMAIN-SUFFIX,dbw.cn
 DOMAIN-SUFFIX,dgtle.com
 DOMAIN-SUFFIX,dianzhenkeji.com
 DOMAIN-SUFFIX,dili360.com
@@ -324,6 +330,7 @@ DOMAIN-SUFFIX,fromgeek.com
 DOMAIN-SUFFIX,gamenow.club
 DOMAIN-SUFFIX,geekbang.org
 DOMAIN-SUFFIX,geekpark.net
+DOMAIN-SUFFIX,gelonghui.com
 DOMAIN-SUFFIX,gfan.com
 DOMAIN-SUFFIX,gitv.cn
 DOMAIN-SUFFIX,gitv.tv
@@ -349,6 +356,8 @@ DOMAIN-SUFFIX,hdslb.com.w.kunlunhuf.com
 DOMAIN-SUFFIX,hdslb.com.w.kunlunpi.com
 DOMAIN-SUFFIX,hdslb.net
 DOMAIN-SUFFIX,hdslb.org
+DOMAIN-SUFFIX,hebnews.cn
+DOMAIN-SUFFIX,hebrb.cn
 DOMAIN-SUFFIX,heimadata.com
 DOMAIN-SUFFIX,hexin.cn
 DOMAIN-SUFFIX,hexin.com.cn
@@ -363,6 +372,7 @@ DOMAIN-SUFFIX,hsw.cn
 DOMAIN-SUFFIX,huanqiu.com
 DOMAIN-SUFFIX,huanqiucdn.cn
 DOMAIN-SUFFIX,huashangtop.com
+DOMAIN-SUFFIX,huasheng.cn
 DOMAIN-SUFFIX,hubeidaily.net
 DOMAIN-SUFFIX,hunaniptv.com
 DOMAIN-SUFFIX,hunantoday.cn
@@ -372,6 +382,7 @@ DOMAIN-SUFFIX,huxiucdn.com
 DOMAIN-SUFFIX,hxnews.com
 DOMAIN-SUFFIX,i.qq.com
 DOMAIN-SUFFIX,ibkstore.com
+DOMAIN-SUFFIX,iceo.com.cn
 DOMAIN-SUFFIX,icntvcdn.com
 DOMAIN-SUFFIX,icpcw.com
 DOMAIN-SUFFIX,icswb.com
@@ -411,6 +422,7 @@ DOMAIN-SUFFIX,it168.com
 DOMAIN-SUFFIX,itc.cn
 DOMAIN-SUFFIX,ithome.com
 DOMAIN-SUFFIX,ixigua.com
+DOMAIN-SUFFIX,jcrb.com
 DOMAIN-SUFFIX,jfdaily.com
 DOMAIN-SUFFIX,jfdaily.com.cn
 DOMAIN-SUFFIX,jiangbing.cn
@@ -466,14 +478,17 @@ DOMAIN-SUFFIX,liangtv.cn
 DOMAIN-SUFFIX,lifeweek.com.cn
 DOMAIN-SUFFIX,livechina.cn
 DOMAIN-SUFFIX,livechina.com
+DOMAIN-SUFFIX,maoer.com
 DOMAIN-SUFFIX,maoercdn.com
 DOMAIN-SUFFIX,mcbbs.net
+DOMAIN-SUFFIX,mcndata.cn
 DOMAIN-SUFFIX,mgtv.com
 DOMAIN-SUFFIX,miercn.com
 DOMAIN-SUFFIX,migu.cn
 DOMAIN-SUFFIX,miguvideo.com
 DOMAIN-SUFFIX,minapp.com
 DOMAIN-SUFFIX,mincdn.com
+DOMAIN-SUFFIX,missevan.com
 DOMAIN-SUFFIX,mmstat.com
 DOMAIN-SUFFIX,mnw.cn
 DOMAIN-SUFFIX,moer.cn
@@ -489,6 +504,7 @@ DOMAIN-SUFFIX,nanyuenews.com
 DOMAIN-SUFFIX,nbd.com.cn
 DOMAIN-SUFFIX,neweekly.com.cn
 DOMAIN-SUFFIX,news.cn
+DOMAIN-SUFFIX,newscdn.cn
 DOMAIN-SUFFIX,newsimg.cn
 DOMAIN-SUFFIX,newssc.org
 DOMAIN-SUFFIX,nfpeople.com
@@ -527,6 +543,7 @@ DOMAIN-SUFFIX,ppstream.net
 DOMAIN-SUFFIX,ppstream.net.cn
 DOMAIN-SUFFIX,ppsurl.com
 DOMAIN-SUFFIX,pptv.com
+DOMAIN-SUFFIX,przwt.com
 DOMAIN-SUFFIX,qbitai.com
 DOMAIN-SUFFIX,qianlong.com
 DOMAIN-SUFFIX,qianqian.com
@@ -553,6 +570,7 @@ DOMAIN-SUFFIX,scdaily.cn
 DOMAIN-SUFFIX,scgchc.com
 DOMAIN-SUFFIX,sciencenet.cn
 DOMAIN-SUFFIX,scol.com.cn
+DOMAIN-SUFFIX,scpublic.cn
 DOMAIN-SUFFIX,scsjb.cn
 DOMAIN-SUFFIX,sctv-tf.com
 DOMAIN-SUFFIX,sctv.com
@@ -564,6 +582,7 @@ DOMAIN-SUFFIX,sharejoytech.com
 DOMAIN-SUFFIX,shedunews.net
 DOMAIN-SUFFIX,shobserver.cn
 DOMAIN-SUFFIX,shobserver.com
+DOMAIN-SUFFIX,shuwen.com
 DOMAIN-SUFFIX,sk2cdsnw.cn
 DOMAIN-SUFFIX,smtcdns.net
 DOMAIN-SUFFIX,snowballsecurities.com
@@ -604,6 +623,7 @@ DOMAIN-SUFFIX,ths123.com
 DOMAIN-SUFFIX,thsi.cn
 DOMAIN-SUFFIX,tianjimedia.com
 DOMAIN-SUFFIX,tidenews.com.cn
+DOMAIN-SUFFIX,tidesight.com
 DOMAIN-SUFFIX,tigeek.net.cn
 DOMAIN-SUFFIX,time-weekly.com
 DOMAIN-SUFFIX,timesmedia.com.cn
@@ -613,14 +633,17 @@ DOMAIN-SUFFIX,tmtsmartlife.com
 DOMAIN-SUFFIX,tmtsmartrun.com
 DOMAIN-SUFFIX,toodaylab.com
 DOMAIN-SUFFIX,topnews.cn
+DOMAIN-SUFFIX,traveldaily.cn
 DOMAIN-SUFFIX,tudou.com
 DOMAIN-SUFFIX,tvcc.cn
 DOMAIN-SUFFIX,tvcc.com.cn
 DOMAIN-SUFFIX,ukoo.com.cn
+DOMAIN-SUFFIX,updream.cn
 DOMAIN-SUFFIX,upos-bstar-mirrorakam.akamaized.net
 DOMAIN-SUFFIX,upos-bstar1-mirrorakam.akamaized.net
 DOMAIN-SUFFIX,upos-hz-mirrorakam.akamaized.net
 DOMAIN-SUFFIX,uposdash-302-bilivideo.yfcdn.net
+DOMAIN-SUFFIX,upsort.com
 DOMAIN-SUFFIX,v-56.com
 DOMAIN-SUFFIX,v.qq.com
 DOMAIN-SUFFIX,v.smtcdns.com
@@ -648,6 +671,7 @@ DOMAIN-SUFFIX,xiami.net
 DOMAIN-SUFFIX,xilu.com
 DOMAIN-SUFFIX,xinhuanet.com
 DOMAIN-SUFFIX,xinhuaxmt.com
+DOMAIN-SUFFIX,xinhuazhiyun.com
 DOMAIN-SUFFIX,xinmeng.info
 DOMAIN-SUFFIX,xinmin.cn
 DOMAIN-SUFFIX,xinminweekly.com.cn
@@ -695,6 +719,7 @@ DOMAIN-SUFFIX,zggbdszt.net.cn
 DOMAIN-SUFFIX,zgjtb.com
 DOMAIN-SUFFIX,zhichanli.com
 DOMAIN-SUFFIX,zhiding.cn
+DOMAIN-SUFFIX,zhiguf.com
 DOMAIN-SUFFIX,zimuzu.io
 DOMAIN-SUFFIX,zimuzu.tv
 DOMAIN-SUFFIX,zjol.com.cn

@@ -1,7 +1,7 @@
 # NAME: Alibaba (Taobao, Alipay, XianYu and Alibaba family)
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-10-11 20:20:37 UTC
+# UPDATED: 2026-11-10 02:16:00 UTC
 # SOURCE: sukka: https://ruleset.skk.moe/List/non_ip/domestic.conf
 # SOURCE: sukka_scope: https://raw.githubusercontent.com/SukkaW/Surge/master/Source/non_ip/domestic.ts
 # SOURCE: sukka_ua: https://raw.githubusercontent.com/SukkaW/Surge/master/Source/non_ip/domestic.conf
@@ -19,12 +19,12 @@
 # NOTE: Full Alibaba classification includes shared cloud/CDN networks and overseas ranges.
 # NOTE: Customer sites hosted on these networks may also match; first match wins.
 # DOMAIN: 3
-# DOMAIN-SUFFIX: 1390
+# DOMAIN-SUFFIX: 1392
 # IP-CIDR: 57
 # IP-CIDR6: 1
 # PROCESS-NAME: 1
 # USER-AGENT: 2
-# RULE COUNT: 1454
+# RULE COUNT: 1456
 
 DOMAIN,ali.wosms.cn
 DOMAIN,upos-sz-estgoss.bilivideo.com
@@ -899,6 +899,7 @@ DOMAIN-SUFFIX,hichina.com
 DOMAIN-SUFFIX,hichina.com.cn
 DOMAIN-SUFFIX,hichina.net
 DOMAIN-SUFFIX,hjkhjkl.com
+DOMAIN-SUFFIX,hmxs.cn
 DOMAIN-SUFFIX,hpearx.com
 DOMAIN-SUFFIX,http.cn
 DOMAIN-SUFFIX,htyssdf.com
@@ -1010,6 +1011,7 @@ DOMAIN-SUFFIX,maitix.com
 DOMAIN-SUFFIX,mappcloud.com
 DOMAIN-SUFFIX,mashort.cn
 DOMAIN-SUFFIX,material.istreamsche.com
+DOMAIN-SUFFIX,mayibao.cn
 DOMAIN-SUFFIX,mdeer.com
 DOMAIN-SUFFIX,mefenglife.cn
 DOMAIN-SUFFIX,mefenglife.com

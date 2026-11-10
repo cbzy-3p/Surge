@@ -1,7 +1,7 @@
 # NAME: Multi-source-iCloud
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-27 19:46:43 UTC
+# UPDATED: 2026-11-10 02:16:05 UTC
 # RULE COUNT: 63
 # SOURCE: https://raw.githubusercontent.com/SukkaW/Surge/master/Source/non_ip/apple_services.conf
 # SOURCE: https://raw.githubusercontent.com/SukkaW/Surge/master/Source/domainset/icloud_private_relay.conf
@@ -32,6 +32,7 @@ DOMAIN-SUFFIX,icloud.apple.com
 DOMAIN-SUFFIX,icloud.ch
 DOMAIN-SUFFIX,icloud.cn
 DOMAIN-SUFFIX,icloud.com
+DOMAIN-SUFFIX,icloud.com.akadns.net
 DOMAIN-SUFFIX,icloud.com.cn
 DOMAIN-SUFFIX,icloud.de
 DOMAIN-SUFFIX,icloud.ee
@@ -73,6 +74,5 @@ DOMAIN-SUFFIX,iwork.apple.com
 DOMAIN-SUFFIX,me.com
 DOMAIN-SUFFIX,myicloud.net
 DOMAIN-SUFFIX,mylcloud.net
-DOMAIN-SUFFIX,www-cdn.icloud.com.akadns.net
 DOMAIN-SUFFIX,wwwicloud.com
 DOMAIN-KEYWORD,icloud.com.akadns.net

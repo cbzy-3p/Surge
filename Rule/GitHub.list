@@ -1,8 +1,8 @@
 # NAME: Multi-source-GitHub
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-09-04 18:59:49 UTC
-# RULE COUNT: 64
+# UPDATED: 2026-11-10 02:15:46 UTC
+# RULE COUNT: 65
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GitHub/GitHub.list
 # MERGED SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/github.list
 # NOTE: BM7 coverage is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and compacted.
@@ -45,6 +45,7 @@ DOMAIN,github-production-repository-file-5c1aeb.s3.amazonaws.com
 DOMAIN,github-production-repository-image-32fea6.s3.amazonaws.com
 DOMAIN,github-production-upload-manifest-file-7fdce7.s3.amazonaws.com
 DOMAIN,github-production-user-asset-6210df.s3.amazonaws.com
+DOMAIN,production-copilot-host-westus.webpubsub.azure.com
 DOMAIN,productionresultssa0.blob.core.windows.net
 DOMAIN,productionresultssa1.blob.core.windows.net
 DOMAIN,productionresultssa10.blob.core.windows.net
