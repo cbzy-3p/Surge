@@ -196,6 +196,10 @@ def main() -> None:
         texts = dict(zip(SOURCES, pool.map(fetch_text, SOURCES.values())))
     sources = {name: parse_surge(name, text, general=name in {"sukka", "rabbit"})
                for name, text in texts.items() if name not in {"loyal", "sukka_scope", "sukka_ua", "conners"}}
+    sources["rabbit"].update(
+        (kind, value) for kind, value in xianyu.parse_rabbit_domain_set(texts["rabbit"])
+        if kind != "DOMAIN-SUFFIX" or "." in value or value in BRAND_TLDS
+    )
     sources["loyal"] = parse_loyal(texts["loyal"])
     sources["sukka_selected"] = select_sukka(texts["sukka_scope"], sources["sukka"])
     sources["sukka_ua"] = parse_surge("sukka_ua", sections(texts["sukka_ua"], {"Alibaba"}))
