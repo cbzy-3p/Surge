@@ -25,7 +25,15 @@ Rule = tuple[str, str]
 
 # BM7 defines fine-grained category boundaries. Fixed supplemental sources are
 # merged only when they provide the same category.
-MAGICRULE_TARGETS = {"Kingsoft", "GoogleVoice", "OKX"}
+MAGICRULE_TARGETS = {"Kingsoft", "GoogleVoice", "OKX", "Claude"}
+CLAUDE_DOMAINS = {
+    "anthropic.com", "claude.ai", "claude.com", "claude.dev", "clau.de",
+    "claudemcpclient.com", "claudemcpcontent.com", "claudeusercontent.com",
+}
+CLAUDE_EXACT_HOSTS = {
+    "anthropic.auth0.com", "anthropic-com.ghost.io",
+    "anthropic.com.cdn.cloudflare.net", "servd-anthropic-website.b-cdn.net",
+}
 
 TARGETS = {
     "GitHub": {"rabbit": None, "conners": None, "loyal": None, "yuu": "github"},
@@ -33,6 +41,7 @@ TARGETS = {
     "AppleMusic": {"rabbit": None, "conners": "Apple/Music.list", "loyal": None, "yuu": "apple-music"},
     "AppleTV": {"rabbit": None, "conners": "Apple/TV.list", "loyal": None, "yuu": "apple-tvplus"},
     "OpenAI": {"rabbit": None, "conners": "GenAI/OpenAI.list", "loyal": None, "yuu": "openai"},
+    "Claude": {"rabbit": None, "conners": "GenAI/Anthropic.list", "loyal": None, "yuu": "anthropic"},
     "GoogleVoice": {"rabbit": None, "conners": "Google/GoogleVoice.list", "loyal": None, "yuu": None},
     "Google": {"rabbit": "Google.list", "conners": "Google/Google.list", "loyal": "google.txt", "yuu": "google"},
     "TikTok": {"rabbit": "TikTok.list", "conners": "Streaming/Video/TikTok.list", "loyal": None, "yuu": "tiktok"},
@@ -57,7 +66,7 @@ RULE_TYPES = DOMAIN_TYPES | {
 }
 MIN_BM7_LINES = {
     "GitHub": 25, "Kingsoft": 200, "AppleMusic": 8, "AppleTV": 8,
-    "OpenAI": 25, "GoogleVoice": 1, "Google": 600, "TikTok": 25,
+    "OpenAI": 25, "Claude": 10, "GoogleVoice": 1, "Google": 600, "TikTok": 25,
     "Instagram": 3, "Facebook": 500, "PayPal": 200, "OKX": 3,
     "Binance": 8, "Crypto": 150, "Cryptocurrency": 35,
 }
@@ -76,6 +85,7 @@ MIN_SOURCE_RULES = {
     ("conners", "Apple/Music.list"): 5,
     ("conners", "Apple/TV.list"): 5,
     ("conners", "GenAI/OpenAI.list"): 5,
+    ("conners", "GenAI/Anthropic.list"): 7,
     ("conners", "Google/GoogleVoice.list"): 1,
     ("conners", "Google/Google.list"): 10,
     ("conners", "Streaming/Video/TikTok.list"): 5,
@@ -87,6 +97,7 @@ MIN_SOURCE_RULES = {
     ("yuu", "apple-music"): 8,
     ("yuu", "apple-tvplus"): 5,
     ("yuu", "openai"): 15,
+    ("yuu", "anthropic"): 10,
     ("yuu", "google"): 500,
     ("yuu", "tiktok"): 20,
     ("yuu", "instagram"): 50,
@@ -316,6 +327,12 @@ def parse_source_rules(content: str, plain: bool = False) -> set[Rule]:
     return rules
 
 
+def scope_claude_rules(rules: set[Rule]) -> set[Rule]:
+    scoped = {(kind, domain) for kind, domain in rules if domain in CLAUDE_DOMAINS}
+    scoped.update(("DOMAIN", domain) for _, domain in rules if domain in CLAUDE_EXACT_HOSTS)
+    return scoped
+
+
 def validate_source(kind: str, entry: str, rules: set[Rule]) -> None:
     minimum = MIN_SOURCE_RULES[(kind, entry)]
     if len(rules) < minimum:
@@ -401,7 +418,8 @@ def render(
         f"# SOURCE: {baseline_source or f'{BM7_BASE}/{name}/{name}.list'}",
         *[f"# MERGED SOURCE: {source}" for source in sources],
         *[f"# VERIFIED SUPPLEMENT: {rule_type},{value} from iOS App Privacy Report" for rule_type, value in sorted(verified_supplements)],
-        "# NOTE: BM7 coverage is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and compacted.",
+        ("# NOTE: Scoped to reviewed Claude domains and exact service endpoints." if name == "Claude"
+         else "# NOTE: BM7 coverage is preserved; supplemental DOMAIN and DOMAIN-SUFFIX semantics are retained and compacted."),
         "",
     ]
     return "\n".join(header + all_lines) + "\n"
@@ -440,10 +458,14 @@ def main() -> None:
     for name, mapping in TARGETS.items():
         bm7_url = f"{BM7_BASE}/{name}/{name}.list"
         if name in MAGICRULE_TARGETS:
-            baseline_text, bm7_url = fetch_category(name, fetch)
+            baseline_text, bm7_url = fetch_category("Anthropic" if name == "Claude" else name, fetch)
         else:
             baseline_text = fetch(bm7_url)
         lines, _ = parse_bm7(baseline_text)
+        if name == "Claude":
+            lines = [f"{kind},{domain}" for kind, domain in sorted(
+                scope_claude_rules(parse_source_rules(baseline_text))
+            )]
         validate_bm7(name, lines)
         source_counts[f"bm7/{name}"] = len(lines)
         lines = compact_rule_lines(lines)
@@ -487,6 +509,8 @@ def main() -> None:
         verified_supplements = VERIFIED_SUPPLEMENTS.get(name, set())
         for rule in verified_supplements:
             merge_rule(source_rules, rule)
+        if name == "Claude":
+            source_rules = scope_claude_rules(source_rules)
         additions = select_additions(base_rules, source_rules)
         output = render(name, lines, additions, sources, verified_supplements, baseline_source=bm7_url)
         for index, line in enumerate(

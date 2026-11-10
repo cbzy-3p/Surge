@@ -28,6 +28,8 @@ RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/XianYu.list,D
 
 `Apple.list` 是完整 Apple 服务总集，使用 SukkaW、blackmatrix7、Rabbit-Spec、ConnersHua、Loyalsoldier 和 Yuu518 合并生成，同时合入 blackmatrix7 的 iCloud 专项规则，防止总集与专项分类不同步时丢失覆盖。`iCloud.list` 是独立的 iCloud 专项规则，按同一来源顺序汇总；从 Apple 总集中只提取包含 iCloud、CloudKit 或 me.com 标识的条目，并合入 SukkaW 的 Private Relay 端点。blackmatrix7 的专用 iCloud 集合保留其标注的依赖域名，其他来源的 Apple 通用域名不会混入 iCloud 集合。两份规则可分别使用；若都订阅，需要把 iCloud 规则放在 Apple 总集之前，避免 Apple 总集先匹配。
 
+需要给 Claude 单独分流时，将 `Claude.list` 放在 `AIGC.list` 和 `Proxy.list` 前面。每日从 MagicRule、ConnersHua 和 Yuu518 的 Anthropic 分类合并，仅保留已核对的 Claude 域名和精确服务端点，适用于 Surge iOS。
+
 `AIGC.list`、`GlobalMedia.list` 和 `ChinaCIDR.list` 在分类相符时优先使用 SukkaW，再按分类补充 blackmatrix7、Rabbit-Spec、ConnersHua 和 Yuu518。YouTube、Netflix、ChinaMedia、China 等更细分类不使用 SukkaW 的宽泛集合硬凑，改由 blackmatrix7 建立分类边界，其他固定来源补充。China 以域名为主，ChinaCIDR 专门合并并压缩中国 IPv4、IPv6 网段。
 
 生成步骤保留 Surge 的规则类型语义。`DOMAIN-SUFFIX` 会移除它完整覆盖的精确域名和子级后缀，CIDR 会移除已被大网段完整覆盖的小网段；这些压缩不会放宽原有匹配范围。不同分类规则集之间允许保留相同规则，避免破坏独立订阅和策略顺序。每次更新都会检查来源数量、规则格式、CIDR、ASN、层级重复、逻辑规则内部覆盖、文件头计数以及输出数量变化，校验通过后才写入文件。

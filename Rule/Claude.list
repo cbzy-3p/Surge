@@ -1,0 +1,22 @@
+# NAME: Multi-source-Claude
+# AUTHOR: cbzy-3p
+# FORMAT: Surge Rule Set
+# UPDATED: 2026-11-10 14:47:56 UTC
+# RULE COUNT: 12
+# SOURCE: https://magicrule.pages.dev/data/rules/Surge/8369068e24d25c302aac61f4/manifest.json
+# MERGED SOURCE: https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/GenAI/Anthropic.list
+# MERGED SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/anthropic.list
+# NOTE: Scoped to reviewed Claude domains and exact service endpoints.
+
+DOMAIN,anthropic-com.ghost.io
+DOMAIN,anthropic.auth0.com
+DOMAIN,anthropic.com.cdn.cloudflare.net
+DOMAIN,servd-anthropic-website.b-cdn.net
+DOMAIN-SUFFIX,anthropic.com
+DOMAIN-SUFFIX,clau.de
+DOMAIN-SUFFIX,claude.ai
+DOMAIN-SUFFIX,claude.com
+DOMAIN-SUFFIX,claude.dev
+DOMAIN-SUFFIX,claudemcpclient.com
+DOMAIN-SUFFIX,claudemcpcontent.com
+DOMAIN-SUFFIX,claudeusercontent.com

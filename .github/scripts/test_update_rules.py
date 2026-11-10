@@ -13,6 +13,17 @@ SPEC.loader.exec_module(UPDATE_RULES)
 
 
 class SurgeRuleTests(unittest.TestCase):
+    def test_claude_keeps_shared_infrastructure_scoped_to_exact_hosts(self):
+        self.assertEqual(UPDATE_RULES.scope_claude_rules({
+            ("DOMAIN-SUFFIX", "claude.ai"),
+            ("DOMAIN-SUFFIX", "anthropic-com.ghost.io"),
+            ("DOMAIN-SUFFIX", "sentry.io"),
+            ("DOMAIN", "storage.googleapis.com"),
+        }), {
+            ("DOMAIN-SUFFIX", "claude.ai"),
+            ("DOMAIN", "anthropic-com.ghost.io"),
+        })
+
     def test_magicrule_failure_does_not_replace_existing_output_or_snapshot(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
