@@ -1,7 +1,7 @@
 # NAME: NonCN
 # FORMAT: Surge Rule Set
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/geolocation-!cn.list
-# RULE COUNT: 26641
+# RULE COUNT: 26642
 # NOTE: Maintained domain classification, not the complement of CN/IP ranges.
 # ORDER: Specific services and domestic DIRECT rules precede this broad Proxy set.
 
@@ -493,6 +493,7 @@ DOMAIN-SUFFIX,51lieqi.com
 DOMAIN-SUFFIX,51luoben.com
 DOMAIN-SUFFIX,51luoli.info
 DOMAIN-SUFFIX,51mh.app
+DOMAIN-SUFFIX,51papaya.com
 DOMAIN-SUFFIX,51pincha.cc
 DOMAIN-SUFFIX,51tuqiang.com
 DOMAIN-SUFFIX,520aa.tv
