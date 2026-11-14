@@ -1,5 +1,7 @@
 import importlib.util
 import unittest
+import tempfile
+from unittest.mock import patch
 from pathlib import Path
 
 
@@ -12,6 +14,20 @@ SPEC.loader.exec_module(UPDATE)
 
 
 class AppleIntelligenceRuleTests(unittest.TestCase):
+    def test_empty_parsed_sources_do_not_count_as_success(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "AppleIntelligence.list"
+            original = "".join(f"DOMAIN,service{i}.example\n" for i in range(8))
+            target.write_text(original)
+            with patch.object(UPDATE, "TARGET", target), \
+                 patch.object(UPDATE, "fetch_text", return_value="# no rules\n"), \
+                 patch.object(UPDATE, "record_validation_failure") as invalid, \
+                 patch("sys.stderr"):
+                with self.assertRaises(SystemExit):
+                    UPDATE.main()
+            self.assertEqual(invalid.call_count, len(UPDATE.SOURCE_URLS))
+            self.assertEqual(target.read_text(), original)
+
     def test_parent_suffix_removes_child_rules(self):
         rules = {
             "DOMAIN,api.example.com",

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from source_health import record_source
 import json
 import re
 import time
@@ -77,6 +78,7 @@ SOURCE_LABELS = (
 )
 
 
+@record_source
 def fetch_text(url: str, attempts: int = 3) -> str:
     error: Exception | None = None
     for attempt in range(1, attempts + 1):

@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "baseline_commit": "7a4a85cd28b5533eab3b51112e5d8fb7fc454a37",
+  "disjoint_pairs": [
+    [
+      "Apple.list",
+      "GlobalMedia.list"
+    ]
+  ],
+  "reviewed_current_hashes": {
+    "Rule/Apple.list": "8cb40c8debc8409f2712f44c441f30f9ad373e812e395c7eb42b0c807be15a7f"
+  },
+  "reject_review_files": [
+    "Rule/Apple.list",
+    "Rule/GlobalMedia.list",
+    "Rule/AppleDownload.list",
+    "Rule/iCloud.list"
+  ]
+}

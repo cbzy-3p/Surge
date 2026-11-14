@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from source_health import record_source
 import json
 import re
 import time
@@ -35,6 +36,7 @@ DOMAIN_LABEL_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")
 SKK_WATERMARK = "7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe"
 
 
+@record_source
 def fetch(url: str) -> str:
     last_error: Exception | None = None
     for attempt in range(3):
@@ -199,7 +201,7 @@ def main() -> None:
     for name, minimum in MINIMUMS.items():
         if counts[name] < minimum:
             raise RuntimeError(f"{name} source unexpectedly small: {counts[name]} < {minimum}")
-    fetched["rabbit"] = filter_reviewed_rules(fetched["rabbit"])
+    fetched["rabbit"] = filter_reviewed_rules(fetched["rabbit"], category="Apple")
     rules = compact(set().union(*fetched.values()))
     counts["output"] = len(rules)
     validate_snapshot(load_snapshot(), counts)

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from source_health import record_source
 import json
 import re
 import time
@@ -31,6 +32,7 @@ DOMAIN_RE = re.compile(
 )
 
 
+@record_source
 def fetch(url: str) -> str:
     last_error: Exception | None = None
     for attempt in range(3):

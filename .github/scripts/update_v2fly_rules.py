@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+from source_health import record_source
 import re
 import time
 import urllib.request
@@ -21,6 +22,7 @@ DOMAIN_RE = re.compile(r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.
 Rule = tuple[str, str]
 
 
+@record_source
 def fetch(url: str) -> str:
     request = urllib.request.Request(url, headers={"User-Agent": "cbzy-3p-surge-rule-updater"})
     error: Exception | None = None

@@ -21,6 +21,18 @@ def read_workflow(name):
 
 
 class WorkflowPolicyTests(unittest.TestCase):
+    def test_content_gates_precede_publication_and_keep_review_baseline_fixed(self):
+        update = read_workflow("update-rules").split("\n  update:\n", 1)[1]
+        for gate in ("check_rule_changes.py", "audit_classification.py"):
+            # Ignore the baseline-loader import when locating the actual command.
+            command = "python .github/scripts/" + gate
+            self.assertLess(update.index("Update all rule sources"), update.index(command))
+            self.assertLess(update.index(command), update.index("git add"))
+        self.assertNotIn("continue-on-error", update)
+        staging = next(line for line in update.splitlines() if "git add " in line)
+        self.assertNotIn("rule-review-policy.json", staging)
+        self.assertIn("if: always()", update.split("Summarize upstream evidence", 1)[1])
+
     def test_manual_entries_delegate_without_separate_commits(self):
         for name in ENTRY_POINTS:
             with self.subTest(workflow=name):

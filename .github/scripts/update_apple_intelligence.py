@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from source_health import record_source, record_validation_failure
 import ipaddress
 import re
 import sys
@@ -40,6 +41,7 @@ DOMAIN_VALUE_PATTERN = re.compile(r"^(?:\*\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)*$")
 BLOCKED_EXACT_DOMAINS = {"7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe"}
 
 
+@record_source
 def fetch_text(url: str) -> str:
     req = urllib.request.Request(url, headers={"User-Agent": "cbzy-3p-Surge-Updater"})
     with urllib.request.urlopen(req, timeout=30) as resp:
@@ -153,9 +155,9 @@ def sort_key(rule: str):
     return (order, value.lower(), rule)
 
 
-def render(rules: set[str]) -> str:
+def render(rules: set[str], updated: str | None = None) -> str:
     tz = timezone(timedelta(hours=8))
-    now = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
+    now = updated or datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
     body = "\n".join(sorted(rules, key=sort_key))
     return (
         "# > Apple Intelligence\n"
@@ -180,11 +182,15 @@ def main() -> int:
     for url in SOURCE_URLS:
         try:
             text = fetch_text(url)
+            source_rules = collect_rules(text)
+            if not source_rules:
+                record_validation_failure(url, "no usable Apple Intelligence rules")
+                raise ValueError("no usable Apple Intelligence rules")
         except Exception as exc:
             print(f"skip source: {url} ({exc})", file=sys.stderr)
             continue
         fetched_count += 1
-        rules |= collect_rules(text)
+        rules |= source_rules
         rules = dedupe_rules(rules)
 
     if fetched_count == 0:
@@ -192,11 +198,15 @@ def main() -> int:
     if len(rules) < 8:
         raise SystemExit(f"unexpectedly small Apple Intelligence rule set: {len(rules)}")
 
-    if sorted(rules, key=sort_key) == sorted(existing_rules(current_text), key=sort_key):
+    same_rules = rules == existing_rules(current_text)
+    previous_time = re.search(r"^# UpdateTime: (.+)$", current_text, re.MULTILINE)
+    updated = previous_time.group(1) if same_rules and previous_time else None
+    output = render(rules, updated)
+    if output == current_text:
         print("No rule changes.")
         return 0
 
-    TARGET.write_text(render(rules), encoding="utf-8", newline="\n")
+    TARGET.write_text(output, encoding="utf-8", newline="\n")
     print(f"Updated AppleIntelligence.list with {len(rules)} rules from {fetched_count} upstream sources.")
     return 0
 

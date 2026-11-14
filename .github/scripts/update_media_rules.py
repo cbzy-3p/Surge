@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from source_health import record_source
 import ipaddress
 import json
 import re
@@ -88,6 +89,7 @@ BLOCKED_EXACT_DOMAINS = {"7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe"}
 CHINA_CIDR_EXCLUSIONS = {("IP-CIDR", "14.167.176.0/20")}
 
 
+@record_source
 def fetch(url: str) -> str:
     last_error: Exception | None = None
     for attempt in range(3):

@@ -2,7 +2,7 @@
 # UpdateTime: 2026-08-09 04:46:34
 # RuleCount: 16
 # AutoUpdate: daily at 00:17 Beijing time; upstream rules merged and deduplicated
-# Sources: SukkaW apple_intelligence, blackmatrix7 Siri
+# Sources: SukkaW apple_intelligence, blackmatrix7 Siri, ConnersHua Intelligence, Yuu518 apple-intelligence
 
 DOMAIN,guzzoni.apple.com
 DOMAIN,mask-api.fe.apple-dns.net

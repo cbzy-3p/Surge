@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from source_health import record_source
 from magicrule_source import fetch_category
 
 import ipaddress
@@ -118,6 +119,7 @@ HOSTNAME_RE = re.compile(
 )
 
 
+@record_source
 def fetch(url: str, attempts: int = 3) -> str:
     last: Exception | None = None
     for attempt in range(attempts):

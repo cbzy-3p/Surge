@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from source_health import record_source
 import json
 import re
 import time
@@ -15,6 +16,7 @@ MINIMUM_OUTPUT = 40_000
 DOMAIN_RE = re.compile(r"^[a-z0-9-]+(?:\.[a-z0-9-]+)+$")
 
 
+@record_source(url=SOURCE_URL)
 def fetch_source(attempts: int = 3) -> str:
     error: Exception | None = None
     for attempt in range(1, attempts + 1):

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from source_health import record_source
 import ipaddress
 import urllib.request
 from datetime import datetime, timedelta, timezone
@@ -24,6 +25,7 @@ TYPE_ORDER = {
 }
 
 
+@record_source
 def fetch_text(url: str) -> str:
     request = urllib.request.Request(
         url, headers={"User-Agent": "cbzy-3p-Surge-Updater"}

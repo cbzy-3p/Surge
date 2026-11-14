@@ -302,3 +302,49 @@ The same live refresh removed four IPv4 ranges from SukkaW's China feed:
 `211.120.240.0/21`. APNIC RDAP shows country JP for all four exact ranges.
 RIPEstat reports AS2515 (JPNIC) as the origin of all four. Their removal
 from the generated ChinaCIDR list is consistent with both sources.
+
+## Publication safeguards and source review, 2026-11-15
+
+The 2026-11-10 Apple change from 1,987 to 3,234 and GlobalMedia change
+from 3,658 to 4,909 passed the old 2.5x rolling count guard. Subsequent
+updates promoted each count into the next snapshot. Cross-file auditing
+reported overlaps informationally. The new fixed-baseline gate rejects
+the original incident when replayed, checks additions and removals
+separately, and keeps routine updates from promoting the reviewed baseline.
+
+A further 141 exact type/value rules occur in both raw Rabbit feeds, match
+SukkaW Reject Base hostnames, and lack exact or suffix coverage from the
+other configured category inputs. These include the 16 exact hosts restored
+by the previous compaction rebuild. They were also absent by hostname from
+the fetched ACL4SSR, GeQ1an, Loyalsoldier, dler-io, sve1r and SukkaW inputs
+listed by the MagicRule category index. The reviewed Rabbit-only exclusion
+list now contains 3,621 entries. Both category outputs lose the 141 shared entries from the preceding
+reviewed commit. Remaining overlaps continue to
+be reported for category review, including service-owned telemetry.
+
+The source inventory covers all top-level categories and the Telegram
+aggregate. CN-Additional lacks a verified equivalent independent feed.
+NonCN's Loyalsoldier comparison and the Bybit/N26 V2Fly comparisons are
+related-data evidence. Manual/device lists remain explicitly identified.
+Original source snapshots, URL evidence and candidate differences are
+retained in per-run artifacts. These checks reduce undetected source drift;
+device behavior still requires observation in the user's Surge profile.
+
+
+A second Apple-only review identified 228 further Rabbit entries overlapping
+Reject Base. They lack exact or suffix coverage in the other configured
+Apple feeds, and their hostnames are absent from the downloaded category
+providers. V2Fly apple and all 12 transitive included files at
+`777d056afe68b2643c1ef15f80e7bde3dfa149b1` were also checked. These
+228 entries are filtered only from Rabbit's Apple input. The two remaining
+Rabbit-only GlobalMedia matches, events.statsigapi.net and featuregates.org,
+occur in the declared ACL4SSR media input and were retained. Other
+corroborated overlaps, including qwapi.com and media telemetry, were retained.
+
+The fixed-baseline classification gate reviews any newly added reject
+overlap in Apple, GlobalMedia, AppleDownload and iCloud before publication.
+This addresses both shared contamination and category-specific additions.
+The once-reviewed Apple output hash permits this explicit cleanup while
+the initial baseline remains pinned. After this change is validated, the
+baseline is advanced explicitly to its reviewed commit and that temporary
+hash exception is removed.

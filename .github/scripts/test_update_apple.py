@@ -13,6 +13,11 @@ SPEC.loader.exec_module(APPLE)
 
 
 class AppleRuleTests(unittest.TestCase):
+    def test_apple_only_exclusion_keeps_media_scope(self):
+        example = {("DOMAIN-SUFFIX", "adblockerprofessional.com")}
+        self.assertEqual(APPLE.filter_reviewed_rules(example, category="Apple"), set())
+        self.assertEqual(APPLE.filter_reviewed_rules(example), example)
+
     def test_only_rabbit_entries_are_filtered(self):
         excluded = "DOMAIN-SUFFIX,camaligraia.cyou\n"
         corroborated = "DOMAIN-SUFFIX,hulvertaluks.cyou\n"

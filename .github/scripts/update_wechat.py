@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from source_health import record_source
 import ipaddress
 import sys
 import urllib.request
@@ -29,6 +30,7 @@ TYPE_ORDER = {
 }
 
 
+@record_source
 def fetch_text(url: str) -> str:
     req = urllib.request.Request(url, headers={"User-Agent": "cbzy-3p-Surge-Updater"})
     with urllib.request.urlopen(req, timeout=30) as resp:

@@ -10,13 +10,15 @@ on:
       - main
     paths:
       - "Rule/**"
-      - ".github/scripts/audit_cross_file_rules.py"
+      - ".github/scripts/**"
+      - ".github/rule-review-policy.json"
       - ".github/scripts/test_audit_cross_file_rules.py"
       - ".github/workflows/audit-rules.yml"
   pull_request:
     paths:
       - "Rule/**"
-      - ".github/scripts/audit_cross_file_rules.py"
+      - ".github/scripts/**"
+      - ".github/rule-review-policy.json"
       - ".github/scripts/test_audit_cross_file_rules.py"
       - ".github/workflows/audit-rules.yml"
 
@@ -38,6 +40,14 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
+      - name: Load fixed reviewed baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          baseline="$(PYTHONPATH=.github/scripts python -c 'from check_rule_changes import load_policy, POLICY; print(load_policy(POLICY)["baseline_commit"])')"
+          git cat-file -e "$baseline^{commit}" || git fetch --no-tags --depth=1 origin "$baseline"
+      - name: Review cumulative rule changes
+        run: python .github/scripts/check_rule_changes.py
       - name: Test cross-file audit
         run: python .github/scripts/test_audit_cross_file_rules.py
       - name: Validate rule files
