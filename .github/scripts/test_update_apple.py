@@ -13,6 +13,27 @@ SPEC.loader.exec_module(APPLE)
 
 
 class AppleRuleTests(unittest.TestCase):
+    def test_only_rabbit_entries_are_filtered(self):
+        excluded = "DOMAIN-SUFFIX,camaligraia.cyou\n"
+        corroborated = "DOMAIN-SUFFIX,hulvertaluks.cyou\n"
+
+        def fetch(url):
+            if url == APPLE.SOURCES["rabbit"]:
+                return excluded + corroborated
+            return "DOMAIN-SUFFIX,apple.com\n" + corroborated
+
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "Apple.list"
+            snapshot = Path(directory) / "snapshot.json"
+            with patch.object(APPLE, "TARGET", target), \
+                 patch.object(APPLE, "SNAPSHOT", snapshot), \
+                 patch.object(APPLE, "MINIMUMS", {name: 1 for name in APPLE.SOURCES}), \
+                 patch.object(APPLE, "fetch", side_effect=fetch), patch("builtins.print"):
+                APPLE.main()
+            self.assertNotIn(excluded, target.read_text())
+            self.assertIn(corroborated, target.read_text())
+            self.assertEqual(json.loads(snapshot.read_text())["counts"]["rabbit"], 2)
+
     def test_specialist_icloud_source_preserves_missing_general_domain(self):
         def fetch(url):
             return ("DOMAIN-SUFFIX,icloud.cn\n" if url == APPLE.SOURCES["bm7_icloud"]

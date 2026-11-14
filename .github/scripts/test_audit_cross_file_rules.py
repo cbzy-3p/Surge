@@ -53,6 +53,33 @@ class CrossFileAuditTests(unittest.TestCase):
 
             self.assertEqual(result["exact_shared_rules"], 1)
 
+    def test_nearer_suffix_does_not_hide_other_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            narrow = root / "Narrow.list"
+            broad = root / "Broad.list"
+            tld = root / "TLD.list"
+            narrow.write_text(
+                "DOMAIN,api.example.apple\nDOMAIN-SUFFIX,example.apple\n",
+                encoding="utf-8",
+            )
+            broad.write_text(
+                "DOMAIN-SUFFIX,example.apple\nDOMAIN-SUFFIX,apple\n",
+                encoding="utf-8",
+            )
+            tld.write_text("DOMAIN-SUFFIX,apple\n", encoding="utf-8")
+
+            result = AUDIT.audit([tld, narrow, broad])
+
+            self.assertEqual(result, AUDIT.audit([broad, narrow, tld]))
+            self.assertEqual(result["exact_shared_rules"], 2)
+            self.assertEqual(result["covered_pair_counts"][("Broad.list", "Narrow.list")], 2)
+            self.assertEqual(result["covered_pair_counts"][("Narrow.list", "TLD.list")], 2)
+            self.assertIn(
+                "DOMAIN,api.example.apple covered by DOMAIN-SUFFIX,example.apple",
+                result["covered_samples"][("Broad.list", "Narrow.list")],
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

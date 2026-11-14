@@ -268,3 +268,37 @@ Local checks: 138 non-module tests pass; 48 rule files / 109,368 rules
 validate; media and CN-Additional live rebuilds pass. Source failures, malformed
 lines, format shifts, missing snapshots and suffix compaction have regression
 coverage. These are local checks before publication, not device tests.
+
+## Apple and GlobalMedia shared upstream entries, 2026-11-15
+
+Compared main at `e4780f7` with `5d4c8b6`, before the shared additions began.
+All 3,533 newly shared rules occur in both Rabbit-Spec feeds and their
+underlying MagicRule artifacts. The two artifacts matched their current
+manifest SHA-256 and rule counts. Rabbit-Spec's workflow points directly to
+those artifacts. The different URLs therefore do not corroborate each other.
+
+Of those rules, 3,480 domain entries also match exact hostnames in SukkaW's
+Reject Base domain set. For each category, neither its pre-incident rules
+nor any of its other configured sources corroborated these rules by exact
+match or parent suffix. The remaining 53 additions were retained. This
+finding uses source classification and provenance, not keyword heuristics.
+
+The reviewed exclusions apply only to the two Rabbit-Spec inputs before
+merging. Any other configured source can still contribute the same rule.
+Snapshots retain the raw upstream counts. Rebuilding from the fetched
+sources removed exactly 3,480 entries from each output and restored 16
+entries in each that had been covered by the removed rules. The resulting
+Apple and GlobalMedia outputs contain 2,047 and 3,724 rules respectively.
+
+Evidence:
+
+- https://github.com/Rabbit-Spec/Surge/blob/Master/.github/workflows/auto-rules.yml
+- https://magicrule.pages.dev/data/rules/Surge/d4a1a49a4f9301369ccbdd07/manifest.json
+- https://magicrule.pages.dev/data/rules/Surge/d4ebc6d5779db345a0689d53/manifest.json
+- https://ruleset.skk.moe/List/domainset/reject.conf
+
+The same live refresh removed four IPv4 ranges from SukkaW's China feed:
+`103.131.194.0/23`, `192.41.192.0/24`, `202.12.30.0/24`, and
+`211.120.240.0/21`. APNIC RDAP shows country JP for all four exact ranges.
+RIPEstat reports AS2515 (JPNIC) as the origin of all four. Their removal
+from the generated ChinaCIDR list is consistent with both sources.

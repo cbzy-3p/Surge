@@ -10,6 +10,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
 
+from rabbit_spec_exclusions import filter_reviewed_rules
+
 
 ROOT = Path(__file__).resolve().parents[2]
 RULE_DIR = ROOT / "Rule"
@@ -338,6 +340,8 @@ def main() -> None:
             if len(rules) < minimum:
                 raise RuntimeError(f"{name}/{source_name} source unexpectedly small: {len(rules)} < {minimum}")
             snapshot[f"{name}/{source_name}"] = len(rules)
+            if (name, source_name) == ("GlobalMedia", "rabbit"):
+                rules = filter_reviewed_rules(rules)
             combined.update(rules)
             urls.append(url)
         if name == "ChinaCIDR":

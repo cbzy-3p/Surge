@@ -13,6 +13,24 @@ SPEC.loader.exec_module(MEDIA)
 
 
 class MediaRuleTests(unittest.TestCase):
+    def test_rabbit_exclusions_are_scoped_to_global_media(self):
+        excluded = "DOMAIN-SUFFIX,camaligraia.cyou\n"
+        retained = "DOMAIN-SUFFIX,video.example\n"
+        configs = {name: [("rabbit", "https://example.com/rules", "surge", 1)]
+                   for name in ("GlobalMedia", "ChinaMedia")}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with patch.object(MEDIA, "RULE_DIR", root), \
+                 patch.object(MEDIA, "SNAPSHOT", root / "snapshot.json"), \
+                 patch.object(MEDIA, "CONFIGS", configs), \
+                 patch.object(MEDIA, "fetch", return_value=excluded + retained), \
+                 patch("builtins.print"):
+                MEDIA.main()
+            global_media = (root / "GlobalMedia.list").read_text()
+            self.assertNotIn(excluded, global_media)
+            self.assertIn(retained, global_media)
+            self.assertIn(excluded, (root / "ChinaMedia.list").read_text())
+
     def test_reviewed_foreign_prefix_is_excluded_only_from_china_output(self):
         source = "IP-CIDR,14.167.176.0/20\nIP-CIDR,192.0.2.0/24\n"
         configs = {name: [("test", "https://example.com/rules", "surge", 1)]

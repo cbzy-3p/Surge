@@ -8,6 +8,7 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+from rabbit_spec_exclusions import filter_reviewed_rules
 
 ROOT = Path(__file__).resolve().parents[2]
 TARGET = ROOT / "Rule" / "Apple.list"
@@ -198,6 +199,7 @@ def main() -> None:
     for name, minimum in MINIMUMS.items():
         if counts[name] < minimum:
             raise RuntimeError(f"{name} source unexpectedly small: {counts[name]} < {minimum}")
+    fetched["rabbit"] = filter_reviewed_rules(fetched["rabbit"])
     rules = compact(set().union(*fetched.values()))
     counts["output"] = len(rules)
     validate_snapshot(load_snapshot(), counts)

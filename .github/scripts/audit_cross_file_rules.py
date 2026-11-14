@@ -12,7 +12,7 @@ RULE_DIR = ROOT / "Rule"
 DOMAIN_TYPES = {"DOMAIN", "DOMAIN-SUFFIX"}
 RULE_SUFFIXES = {".list", ".txt"}
 DOMAIN_RE = re.compile(
-    r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+"
+    r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)*"
     r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$"
 )
 
@@ -27,13 +27,13 @@ def strip_comment(raw: str) -> str:
     return line
 
 
-def normalize_domain(value: str) -> str | None:
+def normalize_domain(value: str, allow_tld: bool = False) -> str | None:
     domain = value.strip().lower().rstrip(".")
     while domain.startswith(("+.", "*.")):
         domain = domain[2:]
     if domain.startswith("."):
         domain = domain[1:]
-    return domain if DOMAIN_RE.fullmatch(domain) else None
+    return domain if (allow_tld or "." in domain) and DOMAIN_RE.fullmatch(domain) else None
 
 
 def normalize_rule(path: Path, raw: str) -> tuple[str, str, tuple[str, ...]] | None:
@@ -55,7 +55,7 @@ def normalize_rule(path: Path, raw: str) -> tuple[str, str, tuple[str, ...]] | N
     options = tuple(part.lower() for part in parts[2:] if part)
 
     if rule_type in DOMAIN_TYPES:
-        domain = normalize_domain(value)
+        domain = normalize_domain(value, allow_tld=rule_type == "DOMAIN-SUFFIX")
         return (rule_type, domain, options) if domain else None
     if rule_type == "IP-CIDR":
         try:
@@ -106,7 +106,8 @@ def audit(paths: list[Path]) -> dict[str, object]:
     exact_pair_counts: Counter[tuple[str, str]] = Counter()
     exact_samples: dict[tuple[str, str], list[str]] = defaultdict(list)
     exact_shared_rules = 0
-    for rule_text, files in exact_index.items():
+    for rule_text in sorted(exact_index):
+        files = exact_index[rule_text]
         if len(files) < 2:
             continue
         exact_shared_rules += 1
@@ -119,8 +120,8 @@ def audit(paths: list[Path]) -> dict[str, object]:
     covered_pair_counts: Counter[tuple[str, str]] = Counter()
     covered_samples: dict[tuple[str, str], list[str]] = defaultdict(list)
     seen_covered: set[tuple[str, str, str]] = set()
-    for path, rules in rule_files.items():
-        for rule_type, value, options in rules:
+    for path, rules in sorted(rule_files.items()):
+        for rule_type, value, options in sorted(rules):
             if rule_type not in DOMAIN_TYPES:
                 continue
             candidates = covering_suffixes(value)
@@ -128,7 +129,7 @@ def audit(paths: list[Path]) -> dict[str, object]:
                 candidates = candidates[1:]
             for suffix in candidates:
                 covering_files = suffix_index.get((suffix, options), set())
-                for covering_file in covering_files:
+                for covering_file in sorted(covering_files):
                     if covering_file == path:
                         continue
                     key = (path.name, canonical((rule_type, value, options)), covering_file.name)
@@ -141,8 +142,6 @@ def audit(paths: list[Path]) -> dict[str, object]:
                         covered_samples[pair].append(
                             f"{rule_type},{value} covered by DOMAIN-SUFFIX,{suffix}"
                         )
-                if covering_files:
-                    break
 
     return {
         "files": len(rule_files),
@@ -164,7 +163,7 @@ def print_pairs(
     if not counts:
         print("  none")
         return
-    for pair, count in counts.most_common(15):
+    for pair, count in sorted(counts.items(), key=lambda item: (-item[1], item[0]))[:15]:
         sample = "; ".join(samples.get(pair, []))
         suffix = f" | sample: {sample}" if sample else ""
         print(f"  {pair[0]} <-> {pair[1]}: {count}{suffix}")
