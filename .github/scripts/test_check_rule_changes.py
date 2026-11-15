@@ -54,6 +54,14 @@ class RuleChangeTests(unittest.TestCase):
         self.assertTrue(any("missing from reviewed baseline" in error for error in errors))
         self.assertTrue(any("missing from working tree" in error for error in errors))
 
+    def test_explicit_new_file_requires_exact_content_and_presence(self):
+        baseline = {"Rule/Test.list": rules(10)}
+        new = "Rule/New.list"
+        policy = {"reviewed_new_hashes": {new: CHECK.rules_hash(rules(2))}}
+        self.assertEqual(CHECK.compare_rules(baseline, baseline, {**baseline, new: rules(2)}, policy)[1], [])
+        self.assertTrue(CHECK.compare_rules(baseline, baseline, {**baseline, new: rules(3)}, policy)[1])
+        self.assertTrue(CHECK.compare_rules(baseline, baseline, baseline, policy)[1])
+
     def test_only_exact_reviewed_hash_bypasses_change_threshold(self):
         baseline = {"Rule/Test.list": rules(100)}
         current = {"Rule/Test.list": rules(40)}

@@ -1,8 +1,8 @@
 # NAME: Multi-source-GlobalMedia
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-11-14 22:12:50 UTC
-# RULE COUNT: 3583
+# UPDATED: 2026-11-15 05:39:19 UTC
+# RULE COUNT: 3585
 # SOURCE: https://ruleset.skk.moe/List/non_ip/stream.conf
 # SOURCE: https://ruleset.skk.moe/List/ip/stream.conf
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/GlobalMedia.list
@@ -2107,6 +2107,7 @@ DOMAIN-SUFFIX,tidalhifi.com
 DOMAIN-SUFFIX,tik-tokapi.com
 DOMAIN-SUFFIX,tiktok.com
 DOMAIN-SUFFIX,tiktok.us
+DOMAIN-SUFFIX,tiktokcdn-eu.com
 DOMAIN-SUFFIX,tiktokcdn.com
 DOMAIN-SUFFIX,tiktokv.com
 DOMAIN-SUFFIX,tiktokv.us
@@ -2127,6 +2128,7 @@ DOMAIN-SUFFIX,trithucvn.net
 DOMAIN-SUFFIX,trithucvn.org
 DOMAIN-SUFFIX,ttt.cqzrlquec45klq.cfd
 DOMAIN-SUFFIX,ttvnw.net
+DOMAIN-SUFFIX,ttwstatic.com
 DOMAIN-SUFFIX,tubi.io
 DOMAIN-SUFFIX,tubi.tv
 DOMAIN-SUFFIX,tubi.video

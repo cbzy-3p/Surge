@@ -64,13 +64,17 @@ def load_policy(path: Path) -> dict:
         if left == right:
             raise ValueError("disjoint_pairs must name different files")
         pairs.append(tuple(sorted((left, right))))
-    hashes = {}
-    for path, digest in policy.get("reviewed_current_hashes", {}).items():
-        if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest):
-            raise ValueError(f"invalid reviewed rule SHA256: {path}")
-        hashes[rule_path(path)] = digest
+    def validate_hashes(field):
+        hashes = {}
+        for path, digest in policy.get(field, {}).items():
+            if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest):
+                raise ValueError(f"invalid reviewed rule SHA256: {path}")
+            hashes[rule_path(path)] = digest
+        return hashes
     review_files = sorted({rule_path(value) for value in policy.get("reject_review_files", [])})
-    return {**policy, "disjoint_pairs": sorted(set(pairs)), "reviewed_current_hashes": hashes,
+    return {**policy, "disjoint_pairs": sorted(set(pairs)),
+            "reviewed_current_hashes": validate_hashes("reviewed_current_hashes"),
+            "reviewed_new_hashes": validate_hashes("reviewed_new_hashes"),
             "reject_review_files": review_files}
 
 
@@ -129,8 +133,12 @@ def compare_rules(
     lines = []
     errors = []
     hashes = policy.get("reviewed_current_hashes", {})
-    for path in sorted(set(baseline) | set(previous) | set(current)):
+    new_hashes = policy.get("reviewed_new_hashes", {})
+    for path in sorted(set(baseline) | set(previous) | set(current) | set(new_hashes)):
         if path not in baseline:
+            if path in current and new_hashes.get(path) == rules_hash(current[path]):
+                lines.append(f"{path}: exact reviewed hash for new rule file")
+                continue
             errors.append(f"{path}: missing from reviewed baseline")
             continue
         if path not in previous:

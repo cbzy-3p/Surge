@@ -126,7 +126,9 @@ def validate_text(path: Path, text: str) -> dict[str, int]:
         line = strip_comment(raw)
         if not line:
             continue
-        if path.name == "CN-Additional.list" and "," not in line:
+        if path.name == "CN-Additional.list":
+            if "," in line:
+                raise RuntimeError(f"{path}:{number}: mixed RULE-SET and DOMAIN-SET format")
             domain = normalize_domain(line.lstrip("."))
             if not domain:
                 raise RuntimeError(f"{path}:{number}: invalid DOMAIN-SET entry: {line}")

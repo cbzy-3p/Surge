@@ -1,0 +1,5 @@
+# NAME: App Store iOS app package downloads
+# FORMAT: Surge Rule Set
+# RULE COUNT: 2
+DOMAIN,iosapps.itunes.apple.com
+DOMAIN,iosapps.itunes.g.aaplimg.com

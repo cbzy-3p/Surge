@@ -42,6 +42,18 @@ class CNAdditionalTests(unittest.TestCase):
             self.assertEqual(target.read_text(), old)
             self.assertFalse(snapshot.exists())
 
+    def test_declared_source_count_mismatch_does_not_write(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "CN-Additional.list"
+            with patch.object(UPDATE, "OUTPUT_PATH", target), \
+                 patch.object(UPDATE, "fetch_source", return_value="# Total Lines: 3 | Updated: example\nexample.com\n"):
+                with self.assertRaisesRegex(RuntimeError, "declared line count"):
+                    UPDATE.main()
+            self.assertFalse(target.exists())
+
+    def test_exact_directive_is_not_widened_to_a_suffix(self):
+        self.assertEqual(UPDATE.convert("DOMAIN,example.com\n"), ([], ["DOMAIN,example.com"]))
+
     def test_parent_suffix_removes_child_domain(self):
         domains, invalid = UPDATE.convert("api.example.com\nexample.com\nother.example\n")
         self.assertEqual(domains, ["example.com", "other.example"])

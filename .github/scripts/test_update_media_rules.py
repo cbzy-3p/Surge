@@ -52,6 +52,13 @@ class MediaRuleTests(unittest.TestCase):
             self.assertEqual(counts["ChinaCIDR/test"], 2)
             self.assertEqual(counts["ChinaCIDR/output"], 1)
 
+    def test_reviewed_foreign_prefix_cannot_return_as_parent_or_child(self):
+        rules = {("IP-CIDR", "14.167.160.0/19"), ("IP-CIDR", "14.167.176.0/21"),
+                 ("IP-CIDR6", "2400::/32")}
+        self.assertEqual(MEDIA.exclude_reviewed_networks(rules), {
+            ("IP-CIDR", "14.167.160.0/20"), ("IP-CIDR6", "2400::/32")
+        })
+
     def test_snapshot_reports_all_anomalies_without_relaxing_limits(self):
         previous = {"AIGC/output": 175, "AIGC/skk-ip": 24, "China/output": 100}
         current = {"AIGC/output": 552, "AIGC/skk-ip": 380, "China/output": 64}

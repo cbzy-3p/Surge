@@ -348,3 +348,41 @@ The once-reviewed Apple output hash permits this explicit cleanup while
 the initial baseline remains pinned. After this change is validated, the
 baseline is advanced explicitly to its reviewed commit and that temporary
 hash exception is removed.
+
+## Focused source review, 2026-11-15
+
+AppStore is a curated subset of the existing AppleDownload app-package
+classification. It keeps only the exact iOS/iPadOS package host and its
+dedicated CDN alias. Storefront, accounts, purchase, dispatch, firmware,
+Mac packages, and shared apps.mzstatic.com are excluded. This narrower scope
+does not cover downloads served through an unlisted shared hostname. The
+exact reviewed content hash allows the new file through the pinned baseline
+gate. Remove the new-file hash when deliberately advancing the baseline
+to a commit that contains the file.
+
+Proxy continues to use the reviewed Rabbit-Spec revision. Its moving feed
+currently normalizes to 24,393 rules versus 7,034 at the pin (+18,649/-1,290).
+The daily optional evidence records both the relative change against the pin
+and a bounded sample of the difference against the published Proxy list.
+It does not ingest the moving feed into the subscription.
+
+ConnersHua's Streaming/CN and Streaming/!CN are separate review sources for
+ChinaMedia and GlobalMedia. Do not bulk import the former: it also lists
+Taiwan iQIYI IPs and a broad CDN keyword. GlobalMedia takes only two exact
+suffix classifications corroborated by the existing TikTok set:
+tiktokcdn-eu.com and ttwstatic.com. ChinaMedia now checks new overlaps against
+SukkaW Reject Base using the existing reviewed-baseline gate.
+
+China adds 10086.cn and 189.cn, both suffixes in SukkaW Domestic and the
+existing CN-Additional set. The rest of SukkaW Domestic is comparison evidence.
+Loyalsoldier direct has a broader scope, including advertising and global CDN
+endpoints; it is only a comparison for CN-Additional. The active CN-Additional
+feed declares 44,546 source lines, which matched the current response.
+Its updater rejects a mismatch when present and refuses to convert explicit
+exact-host directives into suffix rules. CN-Additional stays a DOMAIN-SET.
+
+The Loyalsoldier ChinaCIDR feed parsed to 9,640 rules, all covered by the
+current compacted output, so it is a comparison source. Subtract the five
+previously reviewed foreign ranges from all candidate coverage, including
+overlapping parent and child prefixes, before CIDR compaction. The earlier
+registry and routing evidence for these exclusions is recorded above.

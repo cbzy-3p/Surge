@@ -86,3 +86,15 @@ Apple 与 GlobalMedia 的共享新增单独检查。相对固定基准新增共�
 多源按分类边界接入。CN-Additional 保留单一活动源，并与国内多源集合做语义比较；NonCN 与 Loyalsoldier 做相关数据比较；Bybit、N26 每次额外核对 V2Fly，保留原主源和备用逻辑。Novel、One、SafeW、Soul 和 Web3 按人工或实机证据维护。Rabbit 转发、Loyalsoldier/V2Fly 相关数据、Yuu 尚未证实的血缘和 Proxy 固定版本输入都会标注在来源清单中。新增可靠同分类来源时，先检查精确域名与后缀语义、差集、共享云范围及现有覆盖，再接入合并。
 
 遇到审查失败，先看该次附件的差集及原文，修正异常来源或核实有效新增，重新运行验证。确认内容后再更新固定基准。排查时应保留阈值和基准的审阅记录。
+
+## App Store 安装包下载分流
+
+`AppStore.list` 只匹配 iPhone、iPad 的 App 安装包下载主机及其专用 CDN 别名，使用两条精确域名规则。应用重新下载和更新若走同一主机也会命中。规则不包含商店页面、搜索、地区检测、购买、登录、下载调度、固件、系统更新、Mac App Store 或共享的 `apps.mzstatic.com`。
+
+如果还订阅了范围更宽的 `AppleDownload.list`，把下载专项放在它和 Apple 总集之前。以下示例沿用下载直连的策略，也可只给这些安装包主机指定其他策略。
+
+```ini
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/AppStore.list,DIRECT,no-resolve
+```
+
+Surge 根据目标主机匹配，不能判断你是否刚按下下载按钮。下载流量如使用未收录的共享 CDN，将按后续规则处理。来源范围见 [AppleDownload-Sources.md](AppleDownload-Sources.md)。
