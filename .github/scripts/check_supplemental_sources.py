@@ -1,18 +1,34 @@
 """Compare narrow/single-source outputs with related feeds without broadening them."""
 from __future__ import annotations
 
+import ipaddress
 import json
 import os
 import re
 from pathlib import Path
 
 import update_v2fly_rules as v2fly
+from update_media_rules import CONNERS, SKK, parse_surge
+from update_proxy import SOURCES as PROXY_SOURCES, parse_surge as parse_proxy
 from update_rules import fetch
 from validate_rule_files import normalize_domain, strip_comment, validate_rule_line
 from check_rule_changes import canonical_rules
 
 ROOT = Path(__file__).resolve().parents[2]
 LOYAL_PROXY = "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt"
+
+REVIEW_INPUTS = {
+    "Proxy": ("https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Proxy.list", 6000, parse_proxy),
+    "ChinaMedia": (f"{CONNERS}/Streaming/CN.list", 10, parse_surge),
+    "GlobalMedia": (f"{CONNERS}/Streaming/!CN.list", 100, parse_surge),
+    "China": (f"{SKK}/non_ip/domestic.conf", 500, parse_surge),
+    "CN-Additional / Loyalsoldier": (
+        "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/direct.txt", 10000, parse_surge
+    ),
+    "ChinaCIDR": (
+        "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/cncidr.txt", 1000, parse_surge
+    ),
+}
 
 
 def parse_domain_set(text: str) -> set[str]:
@@ -72,9 +88,59 @@ def read(name: str) -> set[str]:
     return canonical_rules(path, path.read_text(encoding="utf-8"))
 
 
+def summarize_comparison(current: set[str], candidate: set[str]) -> dict:
+    diff = compare(current, candidate)
+    return {**diff,
+            "only_current_count": len(diff["only_current"]),
+            "only_comparison_count": len(diff["only_comparison"]),
+            "only_current": diff["only_current"][:25],
+            "only_comparison": diff["only_comparison"][:25]}
+
+
+def cidr_comparison(current: set[str], candidate: set[str]) -> dict:
+    def collapse(rows):
+        networks = [ipaddress.ip_network(rule.split(",")[1]) for rule in rows]
+        return {net for version in (4, 6)
+                for net in ipaddress.collapse_addresses(n for n in networks if n.version == version)}
+
+    current_networks = collapse(current)
+    candidate_networks = collapse(candidate)
+    missing = sorted(str(net) for net in candidate_networks
+                     if net not in current_networks and not any(
+                         net.supernet(new_prefix=prefix) in current_networks for prefix in range(net.prefixlen)))
+    return {"current_rules": len(current_networks), "comparison_rules": len(candidate_networks),
+            "only_comparison_count": len(missing), "only_comparison": missing[:25]}
+
+
+def review_upstream(name: str, url: str, minimum: int, parse) -> dict:
+    parsed = parse(fetch(url))
+    if len(parsed) < minimum:
+        raise ValueError(f"unexpected source size: {len(parsed)} < {minimum}")
+    candidate = {f"{kind},{value}" for kind, value in parsed}
+    target = name.split(" / ")[0]
+    current = {",".join(rule.split(",")[:2]) for rule in read(target)}
+    if name == "ChinaCIDR":
+        current = {rule for rule in current if rule.startswith(("IP-CIDR,", "IP-CIDR6,"))}
+        report = cidr_comparison(current, candidate)
+    else:
+        report = summarize_comparison(current, candidate)
+    if name == "Proxy":
+        pinned = parse(fetch(PROXY_SOURCES["rabbit"]))
+        report["pinned_revision"] = PROXY_SOURCES["rabbit"]
+        report["raw_added_since_pin"] = len(parsed - pinned)
+        report["raw_removed_since_pin"] = len(pinned - parsed)
+    return {"status": "review_only", "url": url, **report}
+
+
 def main() -> None:
     directory = Path(os.environ["RULE_AUDIT_DIR"])
     results = {}
+    for name, (url, minimum, parse) in REVIEW_INPUTS.items():
+        try:
+            results[name] = review_upstream(name, url, minimum, parse)
+        except Exception as error:
+            results[name] = {"status": "comparison_unavailable", "url": url, "error_type": type(error).__name__}
+            print(f"::warning::{name} optional comparison unavailable ({type(error).__name__})")
     for name in ("NonCN", "Bybit", "N26"):
         try:
             if name == "NonCN":
@@ -98,7 +164,11 @@ def main() -> None:
     for name, result in results.items():
         detail = result["status"]
         if "only_current" in result:
-            detail += f"; current-only {len(result['only_current'])}, comparison-only {len(result['only_comparison'])}"
+            detail += f"; current-only {result.get('only_current_count', len(result['only_current']))}"
+        if "only_comparison" in result:
+            detail += f"; comparison-only {result.get('only_comparison_count', len(result['only_comparison']))}"
+        if "raw_added_since_pin" in result:
+            detail += f"; moving feed vs pin +{result['raw_added_since_pin']}/-{result['raw_removed_since_pin']}"
         lines.append(f"- {name}: {detail}")
     text = "\n".join(lines) + "\n"
     (directory / "supplemental-comparisons.md").write_text(text, encoding="utf-8")

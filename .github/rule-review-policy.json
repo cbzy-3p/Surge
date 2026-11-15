@@ -11,6 +11,10 @@
     "Rule/Apple.list",
     "Rule/GlobalMedia.list",
     "Rule/AppleDownload.list",
-    "Rule/iCloud.list"
-  ]
+    "Rule/iCloud.list",
+    "Rule/ChinaMedia.list"
+  ],
+  "reviewed_new_hashes": {
+    "Rule/AppStore.list": "e830241f4d18aec3a1243304998de031598650e5497b8d36fe1ef01426e532d8"
+  }
 }

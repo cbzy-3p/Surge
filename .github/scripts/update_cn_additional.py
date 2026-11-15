@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from source_health import record_source
+from source_health import body_lines, record_source
 import json
 import re
 import time
@@ -45,7 +45,7 @@ def normalize_domain(raw_line: str) -> str | None:
         return None
 
     upper = line.upper()
-    if upper.startswith("DOMAIN-SUFFIX,") or upper.startswith("DOMAIN,"):
+    if upper.startswith("DOMAIN-SUFFIX,"):
         line = line.split(",", 1)[1].strip()
 
     domain = line.lstrip(".").rstrip(".").lower()
@@ -141,6 +141,9 @@ def render_output(domains: list[str]) -> str:
 
 def main() -> None:
     source = fetch_source()
+    declared = re.search(r"^# Total Lines:\s*(\d+)(?:\s*\||\s*$)", source, re.MULTILINE)
+    if declared and int(declared.group(1)) != len(body_lines(source)):
+        raise RuntimeError("CN-Additional source does not match its declared line count")
     domains, invalid = convert(source)
     if invalid:
         raise RuntimeError(f"CN-Additional source contains {len(invalid)} invalid lines; previous files retained")
@@ -165,11 +168,6 @@ def main() -> None:
         print(f"updated CN-Additional.list with {len(domains)} domains")
 
     SNAPSHOT_PATH.write_text(render_snapshot(counts), encoding="utf-8", newline="\n")
-
-    if invalid:
-        print(f"Skipped {len(invalid)} invalid lines")
-        for line in invalid[:20]:
-            print(f"  {line}")
 
 
 if __name__ == "__main__":

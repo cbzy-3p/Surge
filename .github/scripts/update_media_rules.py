@@ -84,9 +84,37 @@ DOMAIN_RE = re.compile(
 )
 DOMAIN_LABEL_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")
 BLOCKED_EXACT_DOMAINS = {"7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe"}
-# Reviewed 2026-10-11: APNIC assigns this range to VNPT-VN; RIPEstat
-# reports origin AS45899. See .github/SOURCE-REVIEW.md for primary evidence.
-CHINA_CIDR_EXCLUSIONS = {("IP-CIDR", "14.167.176.0/20")}
+# Reviewed service domains with corroboration in the dedicated sources.
+REVIEWED_SUPPLEMENTS = {
+    "China": {("DOMAIN-SUFFIX", "10086.cn"), ("DOMAIN-SUFFIX", "189.cn")},
+    "GlobalMedia": {("DOMAIN-SUFFIX", "tiktokcdn-eu.com"), ("DOMAIN-SUFFIX", "ttwstatic.com")},
+}
+# Registry and routing evidence is recorded in SOURCE-REVIEW.md.
+CHINA_CIDR_EXCLUSIONS = {
+    ("IP-CIDR", "14.167.176.0/20"),
+    ("IP-CIDR", "103.131.194.0/23"),
+    ("IP-CIDR", "192.41.192.0/24"),
+    ("IP-CIDR", "202.12.30.0/24"),
+    ("IP-CIDR", "211.120.240.0/21"),
+}
+
+
+def exclude_reviewed_networks(rules: set[tuple[str, str]]) -> set[tuple[str, str]]:
+    """Subtract the reviewed ranges even when an upstream uses a parent prefix."""
+    result = set(rules)
+    for excluded_kind, excluded_value in sorted(CHINA_CIDR_EXCLUSIONS):
+        excluded = ipaddress.ip_network(excluded_value)
+        for kind, value in tuple(result):
+            if kind != excluded_kind:
+                continue
+            network = ipaddress.ip_network(value)
+            if not network.overlaps(excluded):
+                continue
+            result.remove((kind, value))
+            if excluded.subnet_of(network):
+                result.update((kind, str(part)) for part in network.address_exclude(excluded))
+    return result
+
 
 
 @record_source
@@ -347,9 +375,13 @@ def main() -> None:
             combined.update(rules)
             urls.append(url)
         if name == "ChinaCIDR":
-            for rule_type, value in sorted(combined & CHINA_CIDR_EXCLUSIONS):
-                print(f"::warning::ChinaCIDR excluded reviewed foreign prefix: {rule_type},{value}")
-            combined.difference_update(CHINA_CIDR_EXCLUSIONS)
+            if any(kind not in {"IP-CIDR", "IP-CIDR6"} for kind, _ in combined):
+                raise RuntimeError("ChinaCIDR contains non-CIDR rules")
+            filtered = exclude_reviewed_networks(combined)
+            if filtered != combined:
+                print("::warning::ChinaCIDR removed coverage of reviewed foreign prefixes")
+            combined = filtered
+        combined.update(REVIEWED_SUPPLEMENTS.get(name, set()))
         output = compact(combined)
         snapshot[f"{name}/output"] = len(output)
         outputs[name] = output, urls

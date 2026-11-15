@@ -27,7 +27,7 @@ from validate_rule_files import normalize_domain, strip_comment, validate_rule_l
 from check_rule_changes import canonical_rules
 
 ROOT = Path(__file__).resolve().parents[2]
-MANUAL = {"Novel", "One", "SafeW", "soulapp", "web3"}
+MANUAL = {"AppStore", "Novel", "One", "SafeW", "soulapp", "web3"}
 
 
 def configured_sources() -> dict:

@@ -86,3 +86,21 @@ Apple 与 GlobalMedia 的共享新增单独检查。相对固定基准新增共�
 多源按分类边界接入。CN-Additional 保留单一活动源，并与国内多源集合做语义比较；NonCN 与 Loyalsoldier 做相关数据比较；Bybit、N26 每次额外核对 V2Fly，保留原主源和备用逻辑。Novel、One、SafeW、Soul 和 Web3 按人工或实机证据维护。Rabbit 转发、Loyalsoldier/V2Fly 相关数据、Yuu 尚未证实的血缘和 Proxy 固定版本输入都会标注在来源清单中。新增可靠同分类来源时，先检查精确域名与后缀语义、差集、共享云范围及现有覆盖，再接入合并。
 
 遇到审查失败，先看该次附件的差集及原文，修正异常来源或核实有效新增，重新运行验证。确认内容后再更新固定基准。排查时应保留阈值和基准的审阅记录。
+
+## App Store 地区分流
+
+`AppStore.list` 是可选的商店目录与初始化规则，只收录精确主机名。
+启用时放在 Apple 总集及 Proxy、NonCN 等兜底规则前。已配置的 iCloud、应用与固件下载直连，以及购买和 Apple 账号鉴权的专项规则仍按现有策略走。
+
+```ini
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/AppStore.list,🇯🇵 日本,no-resolve
+```
+
+把 `🇯🇵 日本` 换成配置中实际存在的日本或香港策略组。
+Apple 官方确认 App Store 使用 `*.apps.apple.com` 和 `*.itunes.apple.com`，并确认 `apps.apple.com` 是商店链接入口。其余精确主机是待实机确认的目录、搜索及初始化候选。部分接口可能同时承担其他商店用途。
+该规则按域名分流，不会更改 Apple 账号国家或地区，也不保证改变应用可见性。使用 Surge 请求记录确认命中的主机和策略后，再扩展范围。
+购买、凭证校验和下载调度端点暂不纳入。
+
+- [Apple 官方企业网络端点说明](https://support.apple.com/101555)
+- [Apple 官方 App Store 链接说明](https://developer.apple.com/news/?id=06142019a)
+- [blackmatrix7 AppStore 分类](https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/AppStore/AppStore.list)
