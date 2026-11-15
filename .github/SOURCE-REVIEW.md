@@ -351,13 +351,14 @@ hash exception is removed.
 
 ## Focused source review, 2026-11-15
 
-AppStore is an independently subscribable, manually reviewed exact-host set.
-Apple documents the App Store domain families and apps.apple.com links but
-does not publish per-host storefront requirements. The remaining entries
-are scoped candidates pending device observation. Transaction, account,
-iCloud and download routing remain separate. The exact reviewed content hash
-allows this new file through the pinned baseline gate. Replace the hash
-exception when deliberately advancing the baseline to a commit with the file.
+AppStore is a curated subset of the existing AppleDownload app-package
+classification. It keeps only the exact iOS/iPadOS package host and its
+dedicated CDN alias. Storefront, accounts, purchase, dispatch, firmware,
+Mac packages, and shared apps.mzstatic.com are excluded. This narrower scope
+does not cover downloads served through an unlisted shared hostname. The
+exact reviewed content hash allows the new file through the pinned baseline
+gate. Remove the new-file hash when deliberately advancing the baseline
+to a commit that contains the file.
 
 Proxy continues to use the reviewed Rabbit-Spec revision. Its moving feed
 currently normalizes to 24,393 rules versus 7,034 at the pin (+18,649/-1,290).

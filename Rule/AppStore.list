@@ -1,10 +1,5 @@
-# NAME: App Store storefront routing
+# NAME: App Store iOS app package downloads
 # FORMAT: Surge Rule Set
-# RULE COUNT: 6
-# Exact Store bootstrap and catalog hosts. See Rule/README.md for evidence and limits.
-DOMAIN,amp-api-edge.apps.apple.com
-DOMAIN,amp-api-search-edge.apps.apple.com
-DOMAIN,amp-api.apps.apple.com
-DOMAIN,apps.apple.com
-DOMAIN,bag.itunes.apple.com
-DOMAIN,init.itunes.apple.com
+# RULE COUNT: 2
+DOMAIN,iosapps.itunes.apple.com
+DOMAIN,iosapps.itunes.g.aaplimg.com

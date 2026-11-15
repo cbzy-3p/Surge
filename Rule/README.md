@@ -87,20 +87,14 @@ Apple 与 GlobalMedia 的共享新增单独检查。相对固定基准新增共�
 
 遇到审查失败，先看该次附件的差集及原文，修正异常来源或核实有效新增，重新运行验证。确认内容后再更新固定基准。排查时应保留阈值和基准的审阅记录。
 
-## App Store 地区分流
+## App Store 安装包下载分流
 
-`AppStore.list` 是可选的商店目录与初始化规则，只收录精确主机名。
-启用时放在 Apple 总集及 Proxy、NonCN 等兜底规则前。已配置的 iCloud、应用与固件下载直连，以及购买和 Apple 账号鉴权的专项规则仍按现有策略走。
+`AppStore.list` 只匹配 iPhone、iPad 的 App 安装包下载主机及其专用 CDN 别名，使用两条精确域名规则。应用重新下载和更新若走同一主机也会命中。规则不包含商店页面、搜索、地区检测、购买、登录、下载调度、固件、系统更新、Mac App Store 或共享的 `apps.mzstatic.com`。
+
+如果还订阅了范围更宽的 `AppleDownload.list`，把下载专项放在它和 Apple 总集之前。以下示例沿用下载直连的策略，也可只给这些安装包主机指定其他策略。
 
 ```ini
-RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/AppStore.list,🇯🇵 日本,no-resolve
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/AppStore.list,DIRECT,no-resolve
 ```
 
-把 `🇯🇵 日本` 换成配置中实际存在的日本或香港策略组。
-Apple 官方确认 App Store 使用 `*.apps.apple.com` 和 `*.itunes.apple.com`，并确认 `apps.apple.com` 是商店链接入口。其余精确主机是待实机确认的目录、搜索及初始化候选。部分接口可能同时承担其他商店用途。
-该规则按域名分流，不会更改 Apple 账号国家或地区，也不保证改变应用可见性。使用 Surge 请求记录确认命中的主机和策略后，再扩展范围。
-购买、凭证校验和下载调度端点暂不纳入。
-
-- [Apple 官方企业网络端点说明](https://support.apple.com/101555)
-- [Apple 官方 App Store 链接说明](https://developer.apple.com/news/?id=06142019a)
-- [blackmatrix7 AppStore 分类](https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Surge/AppStore/AppStore.list)
+Surge 根据目标主机匹配，不能判断你是否刚按下下载按钮。下载流量如使用未收录的共享 CDN，将按后续规则处理。来源范围见 [AppleDownload-Sources.md](AppleDownload-Sources.md)。
