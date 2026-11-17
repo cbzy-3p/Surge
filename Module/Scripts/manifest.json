@@ -1,15 +1,15 @@
 {
   "https://github.com/sub-store-org/Sub-Store/releases/latest/download/cron-sync-artifacts.min.js": {
     "file": "504806e4bf45ae11edb2c8d90c283ae59fe9c86330a19d3d107c2f15d6b42a90.js",
-    "sha256": "d457fa853d9f3882a62f60ae9815e661e77de85b56c4d4706a62ff77713be90e"
+    "sha256": "b6888f7def18d423ee07b59ddf9f73575ac8947ee31dab972e6b2844fb370f33"
   },
   "https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js": {
     "file": "7ded59db32c0c77c33713693decff15c179879b2e8129bb690d0abf8766c8530.js",
-    "sha256": "8daf1eaa880ed7cc114af15ce00e2b8aa3bcda2b243c0f5bac6cf73e35056803"
+    "sha256": "cfdb6defefcfd0cbe8cf9f8f5a96cb544dc04c47232b2e87d1d05a4d41863e21"
   },
   "https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-1.min.js": {
     "file": "966e5950297fd9c8166f0e43d57592c7de94bf10e82e39e2b72d0ed4c78360a8.js",
-    "sha256": "7d7059ca5f39aee1aa3005150c08775249db73eae4f741f21fc3821a3c94d476"
+    "sha256": "5cbd1dcfa94fe1181f7727c01d88eeef211298dd9694a0fcdd79b5276482777d"
   },
   "https://raw.githubusercontent.com/7452323/QuantumultX/main/script/pornography/lzlukvca.js": {
     "file": "a6ab8a5ed84b8debaf6ee58f7e507bb7b11d2fae4594fb09323e424e26ea4c5b.js",
@@ -17,7 +17,7 @@
   },
   "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/Rewrite-Parser.beta.js": {
     "file": "1a270e11c684f5288821d32690ca285ea5fd4e95a1291d940fad341c991a8e77.js",
-    "sha256": "b95ef99a043c934ff2870b8f973e749ea36c52837e704afaa6c68b138af2e483"
+    "sha256": "dabd6874221878c1e89d86ac42244089e90cd7f37bba265df29af4a8909dcbbc"
   },
   "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/rule-parser.beta.js": {
     "file": "618342e21e814b712b18528990ca2ec91d722d101876dd88c86430471fd52607.js",
