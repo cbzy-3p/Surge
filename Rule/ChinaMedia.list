@@ -1,8 +1,8 @@
 # NAME: Multi-source-ChinaMedia
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-11-10 02:16:07 UTC
-# RULE COUNT: 852
+# UPDATED: 2026-11-25 07:21:16 UTC
+# RULE COUNT: 854
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/ChinaMedia.list
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ChinaMedia/ChinaMedia.list
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/category-media-cn.list
@@ -82,6 +82,8 @@ DOMAIN-SUFFIX,1.letvlive.com
 DOMAIN-SUFFIX,10jqka.com.cn
 DOMAIN-SUFFIX,17173.com
 DOMAIN-SUFFIX,17173cdn.com
+DOMAIN-SUFFIX,1y.com
+DOMAIN-SUFFIX,1ycdn.com
 DOMAIN-SUFFIX,2.letvlive.com
 DOMAIN-SUFFIX,21jingji.com
 DOMAIN-SUFFIX,2isbbess.cn

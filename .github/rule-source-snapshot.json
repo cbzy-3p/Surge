@@ -32,19 +32,19 @@
     "rabbit/Instagram.list": 75,
     "rabbit/TikTok.list": 61,
     "yuu/anthropic": 18,
-    "yuu/apple-music": 11,
+    "yuu/apple-music": 17,
     "yuu/apple-tvplus": 8,
     "yuu/binance": 45,
-    "yuu/category-cryptocurrency": 240,
-    "yuu/facebook": 395,
-    "yuu/github": 60,
-    "yuu/google": 741,
-    "yuu/instagram": 72,
+    "yuu/category-cryptocurrency": 241,
+    "yuu/facebook": 397,
+    "yuu/github": 66,
+    "yuu/google": 922,
+    "yuu/instagram": 74,
     "yuu/kingsoft": 45,
     "yuu/okx": 10,
     "yuu/openai": 24,
     "yuu/paypal": 245,
-    "yuu/tiktok": 39
+    "yuu/tiktok": 40
   },
   "version": 1
 }

@@ -80,6 +80,7 @@ class MediaRuleTests(unittest.TestCase):
             before = (target.read_bytes(), snapshot.read_bytes())
             with patch.object(MEDIA, "RULE_DIR", root), \
                  patch.object(MEDIA, "SNAPSHOT", snapshot), \
+                 patch.object(MEDIA, "REVIEWED_SUPPLEMENTS", {}), \
                  patch.object(MEDIA, "CONFIGS", {"AIGC": [("test", "https://example.com", "surge", 1)]}), \
                  patch.object(MEDIA, "fetch", return_value="DOMAIN-SUFFIX,new.example\n"):
                 with self.assertRaises(RuntimeError):

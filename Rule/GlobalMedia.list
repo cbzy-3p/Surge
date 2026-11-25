@@ -1,8 +1,8 @@
 # NAME: Multi-source-GlobalMedia
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-11-15 05:39:19 UTC
-# RULE COUNT: 3585
+# UPDATED: 2026-11-25 07:21:16 UTC
+# RULE COUNT: 3549
 # SOURCE: https://ruleset.skk.moe/List/non_ip/stream.conf
 # SOURCE: https://ruleset.skk.moe/List/ip/stream.conf
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/GlobalMedia.list
@@ -41,10 +41,8 @@ DOMAIN,hamifans.emome.net
 DOMAIN,himalaya-exchange.zendesk.com
 DOMAIN,hls-amt.itunes.apple.com
 DOMAIN,hls.itunes.apple.com
-DOMAIN,http-intake.logs.us5.datadoghq.com
 DOMAIN,hulu.com.c.footprint.net
 DOMAIN,hulu.map.fastly.net
-DOMAIN,ihgtelecom.brsserver.com.br
 DOMAIN,images-daznservices-com.cdn.ampproject.org
 DOMAIN,itvpnpmobile-a.akamaihd.net
 DOMAIN,ktpx.amazon.com
@@ -54,31 +52,12 @@ DOMAIN,news-events.apple.com
 DOMAIN,notebooklm.google.com
 DOMAIN,np-edge.itunes.apple.com
 DOMAIN,ocvideo.apple.com
-DOMAIN,ooklaserver.asbn.va.ogital.net
-DOMAIN,ooklaserver.atln.ga.ogital.net
-DOMAIN,ooklaserver.dlls.tx.ogital.net
 DOMAIN,play-edge.itunes.apple.com
 DOMAIN,prod-api.crackle.com
-DOMAIN,production-copilot-host-westus.webpubsub.azure.com
-DOMAIN,qoeookla-seat-01.sys.comcast.net
 DOMAIN,rpg.pic-imges.com
 DOMAIN,rthklive2-lh.akamaihd.net
-DOMAIN,speed.isrcomunicaciones.es
-DOMAIN,speedtest-din.rapidnet.co.in
-DOMAIN,speedtest-par.flowhardware.ch
-DOMAIN,speedtest-phoenix.resoundnetworks.com
-DOMAIN,speedtest.alpenhost.at
-DOMAIN,speedtest.bgsi.io
-DOMAIN,speedtest.dreamnetgigafiber.com
-DOMAIN,speedtest.internetarribes.es
-DOMAIN,speedtest.vel.as205941.net
-DOMAIN,speedtest.way2netbroadband.com
-DOMAIN,speedtest1-phnyazjv.as20055.net
-DOMAIN,speedtest2.honeybroadband.com
 DOMAIN,sydney.bing.com
-DOMAIN,tagging.conde.digital
 DOMAIN,uts-api.itunes.apple.com
-DOMAIN,velocidade.danieltechpro.com
 DOMAIN,vudu.com
 DOMAIN-SUFFIX,112263.com
 DOMAIN-SUFFIX,1917live.red
@@ -87,15 +66,10 @@ DOMAIN-SUFFIX,1prime.ru
 DOMAIN-SUFFIX,20thcenturystudios.com.au
 DOMAIN-SUFFIX,20thcenturystudios.com.br
 DOMAIN-SUFFIX,20thcenturystudios.jp
-DOMAIN-SUFFIX,3.km7ru2n2jhtfjurotvho91ulyl4gk1121v.cfd
-DOMAIN-SUFFIX,3m3vmyfg5ew8.8x3hooqfp5hme63yviqpece.cyou
-DOMAIN-SUFFIX,3wvn3zttj9jjr2t223b17y.75bg8nhzf4kngjg.cfd
 DOMAIN-SUFFIX,47gyosei.jp
 DOMAIN-SUFFIX,47news.jp
 DOMAIN-SUFFIX,4gtv.tv
 DOMAIN-SUFFIX,5itv.tv
-DOMAIN-SUFFIX,67bu6n1xpg38vtk141.1xulomppkrwcr8zni6yz.cfd
-DOMAIN-SUFFIX,6hrcl.rh2yexwirpw7guh1h6fy3e2twn8.cfd
 DOMAIN-SUFFIX,6park.com
 DOMAIN-SUFFIX,6parkbbs.com
 DOMAIN-SUFFIX,6parknews.com
@@ -122,7 +96,6 @@ DOMAIN-SUFFIX,adobedtm.com
 DOMAIN-SUFFIX,adventuresbydisney.com
 DOMAIN-SUFFIX,adx.promo
 DOMAIN-SUFFIX,afewmomentswith.com
-DOMAIN-SUFFIX,affectionparson.com
 DOMAIN-SUFFIX,afp.com
 DOMAIN-SUFFIX,afpforum.com
 DOMAIN-SUFFIX,agendaweek.com
@@ -417,6 +390,7 @@ DOMAIN-SUFFIX,cloudfront.net
 DOMAIN-SUFFIX,cmmedia.com.tw
 DOMAIN-SUFFIX,cna.com.tw
 DOMAIN-SUFFIX,cnbc.com
+DOMAIN-SUFFIX,cnbccouncils.com
 DOMAIN-SUFFIX,cnbcfm.com
 DOMAIN-SUFFIX,cnbeta.com
 DOMAIN-SUFFIX,cnbeta.com.tw
@@ -641,7 +615,6 @@ DOMAIN-SUFFIX,dtvce.com
 DOMAIN-SUFFIX,dw.com
 DOMAIN-SUFFIX,dzcdn.net
 DOMAIN-SUFFIX,e-hentai.org
-DOMAIN-SUFFIX,e1h5pn.b182z39mu43o4wujttoxlq2hmct9ub.cfd
 DOMAIN-SUFFIX,earngeek.com
 DOMAIN-SUFFIX,easttouch.com.hk
 DOMAIN-SUFFIX,eastweek.com.hk
@@ -663,7 +636,6 @@ DOMAIN-SUFFIX,ekhokavkaza.com
 DOMAIN-SUFFIX,electrek.co
 DOMAIN-SUFFIX,elite.com
 DOMAIN-SUFFIX,eluniverso.com
-DOMAIN-SUFFIX,embitterlorrycar.com
 DOMAIN-SUFFIX,enanyang.my
 DOMAIN-SUFFIX,encoretvb.com
 DOMAIN-SUFFIX,engadget.com
@@ -771,6 +743,7 @@ DOMAIN-SUFFIX,flatmates.com.au
 DOMAIN-SUFFIX,fls-na.amazon.com
 DOMAIN-SUFFIX,flxvpn.net
 DOMAIN-SUFFIX,fnlondon.com
+DOMAIN-SUFFIX,focusfeatures.com
 DOMAIN-SUFFIX,forbes.com
 DOMAIN-SUFFIX,forbesimg.com
 DOMAIN-SUFFIX,formula1.com
@@ -977,9 +950,7 @@ DOMAIN-SUFFIX,fxnetwork.com
 DOMAIN-SUFFIX,fxnetworks.com
 DOMAIN-SUFFIX,g-tvapp.com
 DOMAIN-SUFFIX,g1.com.br
-DOMAIN-SUFFIX,g28ri3nji.8kwmh8h5myqkf951t5.cfd
 DOMAIN-SUFFIX,gamer.com.tw
-DOMAIN-SUFFIX,gangwaynumberprivacy.com
 DOMAIN-SUFFIX,ganjing.com
 DOMAIN-SUFFIX,ganjing.world
 DOMAIN-SUFFIX,ganjingworld.com
@@ -1023,12 +994,9 @@ DOMAIN-SUFFIX,gooddaychicago.com
 DOMAIN-SUFFIX,googlevideo.com
 DOMAIN-SUFFIX,gorin.jp
 DOMAIN-SUFFIX,gotraffic.net
-DOMAIN-SUFFIX,grafana.com
-DOMAIN-SUFFIX,grafana.net
 DOMAIN-SUFFIX,grazie.ai
 DOMAIN-SUFFIX,grazie.aws.intellij.net
 DOMAIN-SUFFIX,green-box-tv.com
-DOMAIN-SUFFIX,grokbot.com
 DOMAIN-SUFFIX,gshow.com
 DOMAIN-SUFFIX,gshow.com.br
 DOMAIN-SUFFIX,gtv.org
@@ -1065,6 +1033,7 @@ DOMAIN-SUFFIX,hath.network
 DOMAIN-SUFFIX,hayabusa.dev
 DOMAIN-SUFFIX,hayabusa.io
 DOMAIN-SUFFIX,hayabusa.media
+DOMAIN-SUFFIX,hayu.com
 DOMAIN-SUFFIX,hbo.com
 DOMAIN-SUFFIX,hboasia.com
 DOMAIN-SUFFIX,hboasia1-i.akamaihd.net
@@ -1092,7 +1061,6 @@ DOMAIN-SUFFIX,headlinejobs.hk
 DOMAIN-SUFFIX,hentaiverse.org
 DOMAIN-SUFFIX,heraldsun.com.au
 DOMAIN-SUFFIX,herringnetwork.com
-DOMAIN-SUFFIX,hguv.hn3h5lwzrbwi82kwegwjnc2iw6.cfd
 DOMAIN-SUFFIX,himalaya.com
 DOMAIN-SUFFIX,himalaya.exchange
 DOMAIN-SUFFIX,hinet.net
@@ -1182,6 +1150,7 @@ DOMAIN-SUFFIX,ign.jp
 DOMAIN-SUFFIX,ignites.com
 DOMAIN-SUFFIX,ignitesasia.com
 DOMAIN-SUFFIX,igniteseurope.com
+DOMAIN-SUFFIX,illumination.com
 DOMAIN-SUFFIX,imkan.tv
 DOMAIN-SUFFIX,ind.sh
 DOMAIN-SUFFIX,indazn.com
@@ -1450,8 +1419,11 @@ DOMAIN-SUFFIX,nbcolympics.com
 DOMAIN-SUFFIX,nbcsports.com
 DOMAIN-SUFFIX,nbcsports.h-cdn.com
 DOMAIN-SUFFIX,nbcudigitaladops.com
+DOMAIN-SUFFIX,nbcumv.com
 DOMAIN-SUFFIX,nbcuni.com
+DOMAIN-SUFFIX,nbcunicareers.com
 DOMAIN-SUFFIX,nbcuniversal.com
+DOMAIN-SUFFIX,nbcuniversalprivacy.com
 DOMAIN-SUFFIX,nbys.tv
 DOMAIN-SUFFIX,nbys1.tv
 DOMAIN-SUFFIX,nbyy.tv
@@ -1609,12 +1581,10 @@ DOMAIN-SUFFIX,nytimes.com
 DOMAIN-SUFFIX,nytimg.com
 DOMAIN-SUFFIX,nytlog.com
 DOMAIN-SUFFIX,nytstyle.com
-DOMAIN-SUFFIX,o4bk.yl5t41964nw9v2gmc9i82w9xihweozouvi4.cfd
 DOMAIN-SUFFIX,oaistatic.com
 DOMAIN-SUFFIX,oaiusercontent.com
 DOMAIN-SUFFIX,oanencore.com
 DOMAIN-SUFFIX,oann.com
-DOMAIN-SUFFIX,obstinacysexist.com
 DOMAIN-SUFFIX,ocnttv.com
 DOMAIN-SUFFIX,oghost.com.br
 DOMAIN-SUFFIX,oglobo.com.br
@@ -1669,7 +1639,6 @@ DOMAIN-SUFFIX,placemyad.com.au
 DOMAIN-SUFFIX,players.brightcove.net
 DOMAIN-SUFFIX,playmation.com
 DOMAIN-SUFFIX,pluto.tv
-DOMAIN-SUFFIX,pml.ewqv6zcjlnw3hw.cfd
 DOMAIN-SUFFIX,pobeda.page
 DOMAIN-SUFFIX,polygon.com
 DOMAIN-SUFFIX,popo8.com
@@ -1724,7 +1693,6 @@ DOMAIN-SUFFIX,qobuz.ro
 DOMAIN-SUFFIX,qobuz.se
 DOMAIN-SUFFIX,qobuz.tv
 DOMAIN-SUFFIX,qobuz.us
-DOMAIN-SUFFIX,questionablequesting.com
 DOMAIN-SUFFIX,quicktake.video
 DOMAIN-SUFFIX,quobuz.com
 DOMAIN-SUFFIX,quobuz.fr
@@ -1895,11 +1863,9 @@ DOMAIN-SUFFIX,seattlespheres.com
 DOMAIN-SUFFIX,secretchina.com
 DOMAIN-SUFFIX,seiron-sankei.com
 DOMAIN-SUFFIX,sentry.io
-DOMAIN-SUFFIX,ser678uikl.xyz
 DOMAIN-SUFFIX,setn.com
 DOMAIN-SUFFIX,settv.com.tw
 DOMAIN-SUFFIX,severreal.org
-DOMAIN-SUFFIX,sgimage.netmarble.com
 DOMAIN-SUFFIX,sgpstatp.com
 DOMAIN-SUFFIX,sgr.com.br
 DOMAIN-SUFFIX,sharpdaily.tw
@@ -1965,7 +1931,6 @@ DOMAIN-SUFFIX,soundcloudmail.com
 DOMAIN-SUFFIX,soundofhope.eu
 DOMAIN-SUFFIX,soundofhope.kr
 DOMAIN-SUFFIX,soundofhope.org
-DOMAIN-SUFFIX,spacebattles.com
 DOMAIN-SUFFIX,spaceexplored.com
 DOMAIN-SUFFIX,spacely.com.au
 DOMAIN-SUFFIX,spaindisney.com
@@ -2021,7 +1986,6 @@ DOMAIN-SUFFIX,swentr.site
 DOMAIN-SUFFIX,syfy.com
 DOMAIN-SUFFIX,syhacked.com
 DOMAIN-SUFFIX,szabadeuropa.hu
-DOMAIN-SUFFIX,t.92b94jt6icqlrxmoipg.cfd
 DOMAIN-SUFFIX,taipeitimes.com
 DOMAIN-SUFFIX,taiwannews.com.tw
 DOMAIN-SUFFIX,talksport.com
@@ -2126,7 +2090,6 @@ DOMAIN-SUFFIX,townsvillebulletin.com.au
 DOMAIN-SUFFIX,tr.com
 DOMAIN-SUFFIX,trithucvn.net
 DOMAIN-SUFFIX,trithucvn.org
-DOMAIN-SUFFIX,ttt.cqzrlquec45klq.cfd
 DOMAIN-SUFFIX,ttvnw.net
 DOMAIN-SUFFIX,ttwstatic.com
 DOMAIN-SUFFIX,tubi.io
@@ -2164,28 +2127,36 @@ DOMAIN-SUFFIX,udn.com
 DOMAIN-SUFFIX,udn.com.tw
 DOMAIN-SUFFIX,udndata.com
 DOMAIN-SUFFIX,udnfunlife.com
+DOMAIN-SUFFIX,udxfpp.com
 DOMAIN-SUFFIX,ukraina.ru
 DOMAIN-SUFFIX,ulifestyle.com.hk
 DOMAIN-SUFFIX,umagazine.com.hk
 DOMAIN-SUFFIX,umsoplaneta.com
 DOMAIN-SUFFIX,umsoplaneta.com.br
+DOMAIN-SUFFIX,universalbeijingresort.com
+DOMAIN-SUFFIX,universalhorrorunleashed.com
 DOMAIN-SUFFIX,universalkids.com
+DOMAIN-SUFFIX,universalkidsresort.com
 DOMAIN-SUFFIX,universalorlando.com
+DOMAIN-SUFFIX,universalpictures.co.uk
 DOMAIN-SUFFIX,universalpictures.com
+DOMAIN-SUFFIX,universalpicturesathome.com
 DOMAIN-SUFFIX,universalpicturesinternational.com
+DOMAIN-SUFFIX,universalproductsexperiences.com
 DOMAIN-SUFFIX,universalstudioshollywood.com
+DOMAIN-SUFFIX,universalukproject.co.uk
 DOMAIN-SUFFIX,unwire.hk
+DOMAIN-SUFFIX,uphe.com
 DOMAIN-SUFFIX,upholdjustice.org
 DOMAIN-SUFFIX,uplynk.com
 DOMAIN-SUFFIX,upmedia.mg
 DOMAIN-SUFFIX,urduvoa.com
-DOMAIN-SUFFIX,uryiu.jjxhwow75cehgr7yhe4.cfd
 DOMAIN-SUFFIX,usanetwork.com
 DOMAIN-SUFFIX,usatoday.com
 DOMAIN-SUFFIX,usatodaynetworkservice.com
+DOMAIN-SUFFIX,usj.co.jp
 DOMAIN-SUFFIX,v.smtcdns.com
 DOMAIN-SUFFIX,v.smtcdns.net
-DOMAIN-SUFFIX,v2ex.co
 DOMAIN-SUFFIX,valor.com.br
 DOMAIN-SUFFIX,valoreconomico.com.br
 DOMAIN-SUFFIX,valorinveste.com
@@ -2272,7 +2243,6 @@ DOMAIN-SUFFIX,voxfieldguide.com
 DOMAIN-SUFFIX,voxmedia.com
 DOMAIN-SUFFIX,voxops.net
 DOMAIN-SUFFIX,vtvan.com
-DOMAIN-SUFFIX,w.1ecjbovmygj6ph8.cfd
 DOMAIN-SUFFIX,waa.tw
 DOMAIN-SUFFIX,wanokokorosoh.com
 DOMAIN-SUFFIX,want-media.com
@@ -2321,12 +2291,9 @@ DOMAIN-SUFFIX,wujieliulan.com
 DOMAIN-SUFFIX,wwwhuluplus.com
 DOMAIN-SUFFIX,x.ai
 DOMAIN-SUFFIX,xinsheng.net
-DOMAIN-SUFFIX,xml.proxywood-box.online
-DOMAIN-SUFFIX,xml.safesearchguard.com
 DOMAIN-SUFFIX,xn--c1acbl2abdlkab1og.xn--p1ai
 DOMAIN-SUFFIX,xuxaverso.com.br
 DOMAIN-SUFFIX,xwbo.com
-DOMAIN-SUFFIX,xxezsifdsivsa.site
 DOMAIN-SUFFIX,yb.uncn.jp
 DOMAIN-SUFFIX,ycombinator.com
 DOMAIN-SUFFIX,ydn.com.tw
@@ -2677,7 +2644,6 @@ IP-CIDR,103.27.148.0/22,no-resolve
 IP-CIDR,103.5.34.153/32,no-resolve
 IP-CIDR,103.87.204.0/22,no-resolve
 IP-CIDR,104.109.129.153/32,no-resolve
-IP-CIDR,104.251.176.0/22,no-resolve
 IP-CIDR,104.85.165.17/32,no-resolve
 IP-CIDR,105.187.240.196/31,no-resolve
 IP-CIDR,105.187.243.5/32,no-resolve
@@ -2733,7 +2699,6 @@ IP-CIDR,162.212.12.52/32,no-resolve
 IP-CIDR,162.220.138.2/32,no-resolve
 IP-CIDR,162.223.18.131/32,no-resolve
 IP-CIDR,164.113.254.234/32,no-resolve
-IP-CIDR,165.173.176.0/24,no-resolve
 IP-CIDR,167.142.14.130/32,no-resolve
 IP-CIDR,167.142.14.134/32,no-resolve
 IP-CIDR,167.142.14.138/32,no-resolve
@@ -3209,7 +3174,6 @@ IP-CIDR,40.129.34.175/32,no-resolve
 IP-CIDR,40.129.34.177/32,no-resolve
 IP-CIDR,40.133.138.47/32,no-resolve
 IP-CIDR,40.133.138.57/32,no-resolve
-IP-CIDR,43.240.60.0/22,no-resolve
 IP-CIDR,43.245.105.1/32,no-resolve
 IP-CIDR,43.245.105.11/32,no-resolve
 IP-CIDR,43.245.105.129/32,no-resolve

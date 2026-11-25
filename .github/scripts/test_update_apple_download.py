@@ -9,12 +9,12 @@ from validate_rule_files import validate_text
 
 class AppleDownloadTests(unittest.TestCase):
     def test_downloads_and_control_plane_are_separated(self):
-        for host in ("iosapps.itunes.apple.com", "osxapps.itunes.g.aaplimg.com",
-                     "appldnld.apple.com", "updates.cdn-apple.com",
-                     "apps.mzstatic.com", "swdownload.apple.com",
-                     "appldnld-lb.apple.com.akadns.net", "oscdn.origin-apple.com.akadns.net"):
+        for host in updater.DOWNLOAD_HOSTS | updater.REVIEWED_ALIASES:
             self.assertTrue(updater.is_download(host), host)
-        for host in ("apple.com", "cdn-apple.com", "itunes.apple.com", "apps.apple.com",
+        for host in ("osxapps.itunes.g.aaplimg.com", "apps.mzstatic.com", "swdownload.apple.com",
+                     "osrecovery.apple.com", "swcdn.apple.com", "oscdn.origin-apple.com.akadns.net",
+                     "child.iosapps.itunes.apple.com", "secure-appldnld.apple.com",
+                     "apple.com", "cdn-apple.com", "itunes.apple.com", "apps.apple.com",
                      "buy.itunes.apple.com", "bag.itunes.apple.com", "idmsa.apple.com",
                      "gs.apple.com", "icloud.com", "ocsp.apple.com", "akadns.net",
                      "updates.cdn-apple.com.evil.org", "download.evil.com",
@@ -62,7 +62,8 @@ class AppleDownloadTests(unittest.TestCase):
             rules, counts = updater.build({"rabbit": text})
         self.assertNotIn(("DOMAIN-SUFFIX", "apple.com"), rules)
         self.assertNotIn(("DOMAIN", "buy.itunes.apple.com"), rules)
-        self.assertTrue(updater.apple.covered_by_suffix("iosapps.itunes.apple.com", {v for k, v in rules if k == "DOMAIN-SUFFIX"}))
+        self.assertIn(("DOMAIN", "iosapps.itunes.apple.com"), rules)
+        self.assertTrue(all(kind == "DOMAIN" for kind, _ in rules))
         self.assertEqual(counts["rabbit/selected"], 1)
         self.assertEqual(validate_text(Path("AppleDownload.list"), updater.render(rules, "test"))["rules"], len(rules))
 

@@ -18,27 +18,19 @@ SOURCES = {key: value for key, value in apple.SOURCES.items() if key != "bm7_icl
 SOURCES["skk"] = "https://ruleset.skk.moe/List/domainset/apple_cdn.conf"
 MINIMUMS = {key: value for key, value in apple.MINIMUMS.items() if key != "bm7_icloud"}
 
-# App installation packages and OS/firmware payloads only. No store APIs,
-# update catalogs, developer tools, artwork, media, models or other asset hosts.
-DOWNLOAD_ROOTS = set("""
-iosapps.itunes.apple.com osxapps.itunes.apple.com apps.mzstatic.com
-iosapps.itunes.g.aaplimg.com osxapps.itunes.g.aaplimg.com
-appldnld.apple.com secure-appldnld.apple.com
-appldnld.g.aaplimg.com appldnld.apple.com.edgesuite.net
-updates.cdn-apple.com updates-http.cdn-apple.com
-oscdn.apple.com osrecovery.apple.com swcdn.apple.com
-swdownload.apple.com swcdn.g.aaplimg.com
-""".split())
-# Only reviewed payload aliases found in preferred sources are admitted.
-ALIAS_RE = re.compile(
-    r"^(?:appldnld(?:-lb)?|secure-appldnld|swcdn|swdownload|"
-    r"oscdn|osrecovery|updates(?:-http)?)\."
-    r"(?:apple\.com|origin-apple\.com|cdn-apple\.com)\.akadns\.net$"
-)
+# Match only reviewed hostnames. Apple also uses its update payload hosts
+# for carrier bundles; a hostname rule cannot distinguish files on one host.
+DOWNLOAD_HOSTS = {
+    "iosapps.itunes.apple.com", "iosapps.itunes.g.aaplimg.com",
+    "appldnld.apple.com", "updates.cdn-apple.com", "updates-http.cdn-apple.com",
+}
+REVIEWED_ALIASES = {
+    "updates.cdn-apple.com.akadns.net", "updates-http.cdn-apple.com.akadns.net",
+}
 
 
 def is_download(domain: str) -> bool:
-    return apple.covered_by_suffix(domain, DOWNLOAD_ROOTS) or bool(ALIAS_RE.fullmatch(domain))
+    return domain in DOWNLOAD_HOSTS or domain in REVIEWED_ALIASES
 
 
 def parse_source(name: str, text: str) -> set[tuple[str, str]]:
@@ -64,13 +56,15 @@ def parse_source(name: str, text: str) -> set[tuple[str, str]]:
 
 
 def build(texts: dict[str, str]) -> tuple[set[tuple[str, str]], dict[str, int]]:
-    rules = {("DOMAIN-SUFFIX", domain) for domain in DOWNLOAD_ROOTS}
+    rules = {("DOMAIN", domain) for domain in DOWNLOAD_HOSTS}
     counts = {}
     for name in SOURCES:
         parsed = parse_source(name, texts[name])
+        if name == "rabbit":
+            parsed = apple.filter_reviewed_rules(parsed, category="Apple")
         if len(parsed) < MINIMUMS[name]:
             raise RuntimeError(f"{name} source unexpectedly small: {len(parsed)}")
-        selected = {(kind, value) for kind, value in parsed
+        selected = {("DOMAIN", value) for kind, value in parsed
                     if kind in {"DOMAIN", "DOMAIN-SUFFIX"} and is_download(value)}
         counts[name] = len(parsed)
         counts[name + "/selected"] = len(selected)
@@ -88,7 +82,7 @@ def render(rules: set[tuple[str, str]], updated: str) -> str:
         f"# UPDATED: {updated}",
         f"# RULE COUNT: {len(rules)}",
         *[f"# SOURCE: {url}" for url in SOURCES.values()],
-        "# NOTE: App installation packages and firmware payloads only; see AppleDownload-Sources.md for shared CDN limits.",
+        "# NOTE: iOS/iPadOS app packages and mobile OS update payload hosts; see AppleDownload-Sources.md for shared CDN limits.",
         "", *[f"{kind},{domain}" for kind, domain in sorted(rules)], "",
     ])
 

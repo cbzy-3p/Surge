@@ -24,7 +24,7 @@ class AppleRuleTests(unittest.TestCase):
 
         def fetch(url):
             if url == APPLE.SOURCES["rabbit"]:
-                return excluded + corroborated
+                return excluded + corroborated + "DOMAIN-SUFFIX,apple.com\n"
             return "DOMAIN-SUFFIX,apple.com\n" + corroborated
 
         with tempfile.TemporaryDirectory() as directory:
@@ -37,7 +37,7 @@ class AppleRuleTests(unittest.TestCase):
                 APPLE.main()
             self.assertNotIn(excluded, target.read_text())
             self.assertIn(corroborated, target.read_text())
-            self.assertEqual(json.loads(snapshot.read_text())["counts"]["rabbit"], 2)
+            self.assertEqual(json.loads(snapshot.read_text())["counts"]["rabbit"], 1)
 
     def test_specialist_icloud_source_preserves_missing_general_domain(self):
         def fetch(url):

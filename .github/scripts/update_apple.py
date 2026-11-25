@@ -197,11 +197,11 @@ def main() -> None:
         "loyal": parse_surge(fetch(SOURCES["loyal"])),
         "yuu": parse_surge(fetch(SOURCES["yuu"])),
     }
+    fetched["rabbit"] = filter_reviewed_rules(fetched["rabbit"], category="Apple")
     counts = {name: len(rules) for name, rules in fetched.items()}
     for name, minimum in MINIMUMS.items():
         if counts[name] < minimum:
             raise RuntimeError(f"{name} source unexpectedly small: {counts[name]} < {minimum}")
-    fetched["rabbit"] = filter_reviewed_rules(fetched["rabbit"], category="Apple")
     rules = compact(set().union(*fetched.values()))
     counts["output"] = len(rules)
     validate_snapshot(load_snapshot(), counts)

@@ -1,10 +1,23 @@
 import unittest
+from unittest.mock import patch
 
 from check_supplemental_sources import compare, parse_domain_set, parse_related_rules
 from audit_source_inventory import configured_sources, source_kind
 
 
 class SupplementalSourceTests(unittest.TestCase):
+    def test_aigc_evidence_preserves_every_candidate(self):
+        import check_supplemental_sources as sources
+        candidate = {("DOMAIN", f"ai{i}.example") for i in range(40)}
+        with patch.object(sources, "fetch", return_value="fixture"), patch.object(
+            sources, "read", return_value={"DOMAIN,ai3.example"}
+        ):
+            result = sources.review_upstream("AIGC", "fixture", 1, lambda _: candidate)
+        self.assertEqual(result["covered_comparison"], ["DOMAIN,ai3.example"])
+        self.assertEqual(len(result["only_comparison"]), 39)
+        self.assertEqual(set(result["only_comparison"] + result["covered_comparison"]),
+                         {",".join(rule) for rule in candidate})
+
     def test_exact_domain_does_not_cover_suffix(self):
         result = compare({"DOMAIN-SUFFIX,example.com"}, {"DOMAIN,example.com"})
         self.assertEqual(result["only_current"], ["DOMAIN-SUFFIX,example.com"])

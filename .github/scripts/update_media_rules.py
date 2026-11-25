@@ -29,7 +29,7 @@ CONFIGS = {
     "AIGC": [
         ("skk-non-ip", f"{SKK}/non_ip/ai.conf", "surge", 20),
         ("skk-ip", f"{SKK}/ip/ai.conf", "surge", 5),
-        ("rabbit", f"{RABBIT}/AIGC.list", "surge", 100),
+        ("rabbit", "https://raw.githubusercontent.com/Rabbit-Spec/Surge/74d12aa17f926c12629bb1a55e58fb9a5c477a8a/Rules/AIGC.list", "surge", 100),
         ("conners", f"{CONNERS}/AI.list", "surge", 20),
         ("yuu", f"{YUU}/geosite/category-ai-!cn.list", "surge", 50),
     ],
@@ -54,7 +54,7 @@ CONFIGS = {
     "GlobalMedia": [
         ("skk-non-ip", f"{SKK}/non_ip/stream.conf", "surge", 100),
         ("skk-ip", f"{SKK}/ip/stream.conf", "surge", 15),
-        ("rabbit", f"{RABBIT}/GlobalMedia.list", "surge", 1_800),
+        ("rabbit", f"{RABBIT}/GlobalMedia.list", "surge", 1_500),
         ("bm7", f"{BM7}/GlobalMedia/GlobalMedia_All_No_Resolve.list", "surge", 2_000),
         ("yuu", f"{YUU}/geosite/category-media.list", "surge", 1_400),
     ],
@@ -86,6 +86,47 @@ DOMAIN_LABEL_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")
 BLOCKED_EXACT_DOMAINS = {"7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe"}
 # Reviewed service domains with corroboration in the dedicated sources.
 REVIEWED_SUPPLEMENTS = {
+    "AIGC": {
+        # Rabbit-Spec AIGC and Yuu518 geosite/google-gemini.list
+        ("DOMAIN", "antigravity-pa.googleapis.com"),
+        ("DOMAIN", "antigravity.googleapis.com"),
+        ("DOMAIN", "appsgenaiserver-pa.clients.google.com"),
+        ("DOMAIN", "appsgenaiserver-pa.googleapis.com"),
+        ("DOMAIN", "cloudaicompanion.googleapis.com"),
+        ("DOMAIN", "geminiweb-pa.clients.google.com"),
+        ("DOMAIN", "notebooklm-pa.googleapis.com"),
+        ("DOMAIN", "notebooklm.googleapis.com"),
+        ("DOMAIN-SUFFIX", "ai.studio"),
+        ("DOMAIN-SUFFIX", "aisandbox-pa.googleapis.com"),
+        ("DOMAIN-SUFFIX", "flow.google"),
+        ("DOMAIN-SUFFIX", "flow.google.com"),
+        ("DOMAIN-SUFFIX", "gemini.gstatic.com"),
+        ("DOMAIN-SUFFIX", "gemma.ai"),
+        ("DOMAIN-SUFFIX", "jules.google"),
+        ("DOMAIN-SUFFIX", "jules.google.com"),
+        ("DOMAIN-SUFFIX", "labstailwind.pa.googleapis.com"),
+        ("DOMAIN-SUFFIX", "notebook.google"),
+        ("DOMAIN-SUFFIX", "notebook.google.com"),
+        ("DOMAIN-SUFFIX", "opal.google"),
+        ("DOMAIN-SUFFIX", "opal.google.com"),
+        ("DOMAIN-SUFFIX", "robinfrontend-pa.googleapis.com"),
+        ("DOMAIN-SUFFIX", "stitch.withgoogle.com"),
+        # Rabbit-Spec AIGC and Yuu518 geosite/github-copilot.list
+        ("DOMAIN", "copilot-workspace.githubnext.com"),
+        ("DOMAIN", "copilotprodattachments.blob.core.windows.net"),
+        ("DOMAIN", "production-copilot-host-westus.webpubsub.azure.com"),
+        # Rabbit-Spec AIGC and Yuu518 geosite/perplexity.list
+        ("DOMAIN", "ppl-ai-file-upload.s3.amazonaws.com"),
+        ("DOMAIN-SUFFIX", "perplexity.com"),
+        # Rabbit-Spec AIGC and Yuu518 geosite/cursor.list
+        ("DOMAIN-SUFFIX", "cursorvm.com"),
+        # Rabbit-Spec AIGC and Yuu518 geosite/xai.list
+        ("DOMAIN-SUFFIX", "grokbot.com"),
+        # Rabbit-Spec AIGC and Yuu518 geosite/openai.list
+        ("DOMAIN", "openaiassets.blob.core.windows.net"),
+        ("DOMAIN-SUFFIX", "oaistatsig.com"),
+        ("DOMAIN-SUFFIX", "openai.org"),
+    },
     "China": {("DOMAIN-SUFFIX", "10086.cn"), ("DOMAIN-SUFFIX", "189.cn")},
     "GlobalMedia": {("DOMAIN-SUFFIX", "tiktokcdn-eu.com"), ("DOMAIN-SUFFIX", "ttwstatic.com")},
 }
@@ -367,11 +408,11 @@ def main() -> None:
         urls: list[str] = []
         for source_name, url, parser_name, minimum in sources:
             rules = fetched[(name, source_name)]
+            if (name, source_name) == ("GlobalMedia", "rabbit"):
+                rules = filter_reviewed_rules(rules)
             if len(rules) < minimum:
                 raise RuntimeError(f"{name}/{source_name} source unexpectedly small: {len(rules)} < {minimum}")
             snapshot[f"{name}/{source_name}"] = len(rules)
-            if (name, source_name) == ("GlobalMedia", "rabbit"):
-                rules = filter_reviewed_rules(rules)
             combined.update(rules)
             urls.append(url)
         if name == "ChinaCIDR":

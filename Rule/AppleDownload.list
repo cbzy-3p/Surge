@@ -1,31 +1,19 @@
 # NAME: Multi-source-AppleDownload
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-11-02 13:06:36 UTC
-# RULE COUNT: 18
+# UPDATED: 2026-11-25 07:19:49 UTC
+# RULE COUNT: 6
 # SOURCE: https://ruleset.skk.moe/List/domainset/apple_cdn.conf
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Apple/Apple_All_No_Resolve.list
 # SOURCE: https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Apple.list
 # SOURCE: https://raw.githubusercontent.com/ConnersHua/RuleGo/master/Surge/Ruleset/Extra/Apple/Apple.list
 # SOURCE: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/apple.txt
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/apple.list
-# NOTE: App installation packages and firmware payloads only; see AppleDownload-Sources.md for shared CDN limits.
+# NOTE: iOS/iPadOS app packages and mobile OS update payload hosts; see AppleDownload-Sources.md for shared CDN limits.
 
-DOMAIN-SUFFIX,appldnld.apple.com
-DOMAIN-SUFFIX,appldnld.apple.com.edgesuite.net
-DOMAIN-SUFFIX,appldnld.g.aaplimg.com
-DOMAIN-SUFFIX,apps.mzstatic.com
-DOMAIN-SUFFIX,iosapps.itunes.apple.com
-DOMAIN-SUFFIX,iosapps.itunes.g.aaplimg.com
-DOMAIN-SUFFIX,oscdn.apple.com
-DOMAIN-SUFFIX,oscdn.origin-apple.com.akadns.net
-DOMAIN-SUFFIX,osrecovery.apple.com
-DOMAIN-SUFFIX,osxapps.itunes.apple.com
-DOMAIN-SUFFIX,osxapps.itunes.g.aaplimg.com
-DOMAIN-SUFFIX,secure-appldnld.apple.com
-DOMAIN-SUFFIX,swcdn.apple.com
-DOMAIN-SUFFIX,swcdn.g.aaplimg.com
-DOMAIN-SUFFIX,swdownload.apple.com
-DOMAIN-SUFFIX,updates-http.cdn-apple.com
-DOMAIN-SUFFIX,updates-http.cdn-apple.com.akadns.net
-DOMAIN-SUFFIX,updates.cdn-apple.com
+DOMAIN,appldnld.apple.com
+DOMAIN,iosapps.itunes.apple.com
+DOMAIN,iosapps.itunes.g.aaplimg.com
+DOMAIN,updates-http.cdn-apple.com
+DOMAIN,updates-http.cdn-apple.com.akadns.net
+DOMAIN,updates.cdn-apple.com

@@ -386,3 +386,18 @@ current compacted output, so it is a comparison source. Subtract the five
 previously reviewed foreign ranges from all candidate coverage, including
 overlapping parent and child prefixes, before CIDR compaction. The earlier
 registry and routing evidence for these exclusions is recorded above.
+
+## Rabbit-Spec and AIGC review, 2026-11-25
+
+For Apple and GlobalMedia, compare counts after applying the reviewed
+exclusions. Replaying Rabbit-Spec revision 284920ce3a4333fee0b884fd9d80814d36305d7e
+gives the previous effective counts of 2138 and 1775. The moving feeds now
+contain 2086 and 1716 effective entries. The GlobalMedia minimum of 1500
+applies to the effective count. Both output change checks remain active.
+
+Keep Rabbit-Spec AIGC at the file revision available when the published AIGC
+output was generated. Its moving file expanded to 356 entries including
+shared endpoints such as aws.dev and api.msn.com. Compare the moving input
+in the daily evidence. The reviewed current AIGC hash covers one exact
+multi-source output after the IP feed changed (+33/-129 IPv4 prefixes).
+Future changes still undergo the usual review.

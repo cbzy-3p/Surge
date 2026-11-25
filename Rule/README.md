@@ -68,7 +68,7 @@ NonCN 拉取前校验旧文件，严格检查上游仅含 DOMAIN/DOMAIN-SUFFIX�
 
 ## Apple 下载
 
-`AppleDownload.list` 只分流 App Store / Mac App Store 安装包（含应用更新）及系统 OTA、固件、恢复系统的下载数据。商店页面、地区检测、账号、购买、下载调度、更新检测、媒体、图片、开发者工具及其他资源专用端点不纳入。放在 Apple 总集及兜底规则之前，推荐 DIRECT。已接入现有每日更新。固件 CDN 可能同时提供其他系统资源，域名规则无法按文件类型完全隔离，详见 [AppleDownload-Sources.md](AppleDownload-Sources.md)。
+`AppleDownload.list` 只分流 iPhone、iPad 的 App 安装包及移动系统更新下载主机。商店页面、地区检测、账号、购买、下载调度、更新检测、媒体、图片、开发者工具及其他资源专用端点不纳入。放在 Apple 总集及兜底规则之前，推荐 DIRECT。已接入现有每日更新。固件 CDN 可能同时提供其他系统资源，域名规则无法按文件类型完全隔离，详见 [AppleDownload-Sources.md](AppleDownload-Sources.md)。
 
 ```ini
 RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/AppleDownload.list,DIRECT,extended-matching

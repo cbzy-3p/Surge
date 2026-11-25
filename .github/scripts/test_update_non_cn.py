@@ -13,6 +13,21 @@ class NonCNTests(unittest.TestCase):
         self.assertIn('DOMAIN,exact.other.com\n', output)
         self.assertEqual(counts, {'source': 3, 'output': 2})
 
+    def test_upstream_regex_is_not_published_as_a_literal(self):
+        with patch.object(m, 'MINIMUM', 1):
+            output, counts = m.build('DOMAIN,example.com\nDOMAIN-REGEX,foo[0-9]\n')
+        self.assertEqual(counts, {'source': 1, 'output': 1})
+        self.assertNotIn('foo', output)
+
+    def test_exact_and_suffix_regex_keep_original_scope(self):
+        self.assertEqual(m.expand_regex(r'(^|\.)13mei[5-7]\.buzz$'),
+                         {('DOMAIN-SUFFIX', f'13mei{i}.buzz') for i in (5, 6, 7)})
+        self.assertEqual(m.expand_regex(r'^example\.(com|net)$'),
+                         {('DOMAIN', 'example.com'), ('DOMAIN', 'example.net')})
+        for pattern in (r'(^|\.)x.+\.com$', r'^x[0-9][0-9]\.com$',
+                        r'^x[9-a]\.com$', r'^x[7-2]\.com$'):
+            self.assertFalse(m.expand_regex(pattern))
+
     def test_unexpected_type_options_and_malformed_line_fail(self):
         for source in ['IP-CIDR,1.1.1.0/24', 'DOMAIN,example.com,no-resolve', '<html>']:
             with self.subTest(source=source), patch.object(m, 'MINIMUM', 1):

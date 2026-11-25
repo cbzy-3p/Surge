@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[2]
 LOYAL_PROXY = "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt"
 
 REVIEW_INPUTS = {
+    "AIGC": ("https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/AIGC.list", 100, parse_surge),
     "Proxy": ("https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Proxy.list", 6000, parse_proxy),
     "ChinaMedia": (f"{CONNERS}/Streaming/CN.list", 10, parse_surge),
     "GlobalMedia": (f"{CONNERS}/Streaming/!CN.list", 100, parse_surge),
@@ -119,7 +120,14 @@ def review_upstream(name: str, url: str, minimum: int, parse) -> dict:
     candidate = {f"{kind},{value}" for kind, value in parsed}
     target = name.split(" / ")[0]
     current = {",".join(rule.split(",")[:2]) for rule in read(target)}
-    if name == "ChinaCIDR":
+    if name == "AIGC":
+        # Preserve the full remainder for review. Other categories retain bounded samples.
+        report = compare(current, candidate)
+        report["covered_comparison"] = sorted(candidate - set(report["only_comparison"]))
+        report["only_comparison_count"] = len(report["only_comparison"])
+        report["only_current_count"] = len(report["only_current"])
+        report["only_current"] = report["only_current"][:25]
+    elif name == "ChinaCIDR":
         current = {rule for rule in current if rule.startswith(("IP-CIDR,", "IP-CIDR6,"))}
         report = cidr_comparison(current, candidate)
     else:

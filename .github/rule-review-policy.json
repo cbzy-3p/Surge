@@ -16,5 +16,9 @@
   ],
   "reviewed_new_hashes": {
     "Rule/AppStore.list": "de86234ac5d10932dba57e18741ef26c467cb859f31ea34f6e308d5c9a08bb37"
+  },
+  "reviewed_current_hashes": {
+    "Rule/AIGC.list": "4d8bdfa0e4db702081bd2ec07ff85afebdec279683fbeff3b297ae97d0baabb1",
+    "Rule/AppleDownload.list": "2557a2abe7ca993a1f973526e1206ae7a1d3a28c0e819465f01f331a4291d426"
   }
 }
