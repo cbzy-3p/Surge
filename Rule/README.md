@@ -52,6 +52,46 @@ DOMAIN-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/CN-Addition
 
 格式依据：[Surge DOMAIN-SET 官方说明](https://manual.nssurge.com/rules/domain.html#domain-set-file-format)。跨规则集重复保留，以支持独立引用和不同策略；需要单独分流的细分类规则应放在可能覆盖它的总集之前。
 
+## 推荐引用顺序
+
+Surge 自上而下匹配，命中即停止，规则集之间存在有意保留的交叉，顺序决定结果。原则是：越专项越靠前，域名规则先于 IP 规则，宽泛的代理总集与 IP 规则放最后。`DIRECT` 以外的策略名（`AI`、`Media`、`Proxy`）换成自己的策略组；其他专项规则（如 XiaoHongShu、douyin、XianYu、Alibaba、Crypto、PayPal）按其用途放进对应段落。
+
+```ini
+# 1. Apple：下载与 iCloud 先于 Apple 总集，也先于含 googleapis.com 的 Google / NonCN
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/AppStore.list,DIRECT,extended-matching,no-resolve
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/AppleDownload.list,DIRECT,extended-matching
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/iCloud.list,DIRECT,extended-matching,no-resolve
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/AppleIntelligence.list,AI,extended-matching,no-resolve
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/Apple.list,DIRECT,extended-matching,no-resolve
+# 2. AI：Claude 专项先于 AIGC；AIGC 已与 GlobalMedia 去重，但仍建议放在流媒体之前
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/Claude.list,AI,extended-matching,no-resolve
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/AIGC.list,AI,extended-matching,no-resolve
+# 3. 流媒体与海外服务：TikTok 先于 China，避免国际版 CDN 被国内规则直连
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/YouTube.list,Media,extended-matching,no-resolve
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/Netflix.list,Media,extended-matching,no-resolve
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/TikTok.list,Media,extended-matching,no-resolve
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/GlobalMedia.list,Media,extended-matching,no-resolve
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/Telegram/Telegram_All.list,Proxy,extended-matching,no-resolve
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/Google.list,Proxy,extended-matching,no-resolve
+# 4. 国内专项与国内总集
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/WeChat.list,DIRECT,extended-matching,no-resolve
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/China.list,DIRECT,extended-matching,no-resolve
+DOMAIN-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/CN-Additional.list,DIRECT,extended-matching,update-interval=86400
+# 5. 代理总集，最后才是 IP 类规则与兜底
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/Proxy.list,Proxy,extended-matching,no-resolve
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/NonCN.list,Proxy,extended-matching,no-resolve
+RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/ChinaCIDR.list,DIRECT,extended-matching,no-resolve
+GEOIP,CN,DIRECT
+FINAL,Proxy,dns-failed
+```
+
+示例中 iCloud 走 `DIRECT`。国区 iCloud 由云上贵州运营，不经过 Google；但在中国大陆使用非国区 Apple ID 时，iCloud 照片、云盘、备份与 iMessage 图片会经由 `content-storage-upload/download.googleapis.com` 传输，直连可能失败。遇到上传卡住或 iMessage 发图失败，把 `iCloud.list` 的策略改为代理，或在它前面单独为这两个域名指定代理：
+
+```ini
+DOMAIN-SUFFIX,content-storage-upload.googleapis.com,Proxy
+DOMAIN-SUFFIX,content-storage-download.googleapis.com,Proxy
+```
+
 ## MagicRule 迁移与更新检查
 
 bm7 的新入口为 https://magicrule.pages.dev/#/c/Surge 。目前 Kingsoft、GoogleVoice、OKX 已改为从目录解析对应 manifest，再获取完整文本产物，检查分类、数量和 SHA-256 后合并。三项迁移前后规则正文一致。其余分类继续使用原来源，待分类差异和清单一致性核实后迁移，不直接替换成目录页面或固定带版本的产物地址。详细检查结果见 `.github/magicrule-review.json`。
