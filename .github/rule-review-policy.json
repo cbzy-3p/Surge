@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "baseline_commit": "084bff0ad2b4cd39c5284380e58f37b04605fb0a",
+  "baseline_commit": "3fb356811ffef77fbf686c1a7bcb450103b6c2c4",
   "disjoint_pairs": [
     [
       "Apple.list",
@@ -14,12 +14,6 @@
     "Rule/iCloud.list",
     "Rule/ChinaMedia.list"
   ],
-  "reviewed_new_hashes": {
-    "Rule/AppStore.list": "de86234ac5d10932dba57e18741ef26c467cb859f31ea34f6e308d5c9a08bb37"
-  },
-  "reviewed_current_hashes": {
-    "Rule/AIGC.list": "4d8bdfa0e4db702081bd2ec07ff85afebdec279683fbeff3b297ae97d0baabb1",
-    "Rule/AppleDownload.list": "2557a2abe7ca993a1f973526e1206ae7a1d3a28c0e819465f01f331a4291d426",
-    "Rule/WeChat.list": "f1253f477142dce5173ff2725b9fa2d1e101ad16de93091542ee433ef6667026"
-  }
+  "reviewed_new_hashes": {},
+  "reviewed_current_hashes": {}
 }
