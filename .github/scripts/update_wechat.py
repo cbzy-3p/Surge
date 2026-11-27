@@ -47,6 +47,19 @@ def strip_comment(line: str) -> str:
     return line
 
 
+def ip_prefix_keyword_network(value: str) -> ipaddress.IPv4Network | None:
+    """Map an upstream keyword such as ``101.91.5`` to ``101.91.5.0/24``.
+
+    blackmatrix7 lists WeChat server prefixes as DOMAIN-KEYWORD substrings. As a
+    substring, ``101.91.5`` also matches 101.91.50-59.x, and every keyword is a
+    string scan on each request. A /24 IP-CIDR is the intended, exact match.
+    """
+    octets = value.strip().rstrip(".").split(".")
+    if len(octets) != 3 or not all(octet.isdigit() and len(octet) <= 3 and int(octet) <= 255 for octet in octets):
+        return None
+    return ipaddress.IPv4Network(".".join(str(int(octet)) for octet in octets) + ".0/24")
+
+
 def normalize_rule(line: str) -> str | None:
     line = strip_comment(line)
     if not line:
@@ -58,6 +71,8 @@ def normalize_rule(line: str) -> str | None:
     value = parts[1].strip()
     if not rule_type or not value:
         return None
+    if rule_type == "DOMAIN-KEYWORD" and (network := ip_prefix_keyword_network(value)):
+        return f"IP-CIDR,{network},no-resolve"
     if rule_type in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD"}:
         return f"{rule_type},{value.lower().rstrip('.')}"
     if rule_type in {"IP-CIDR", "IP-CIDR6"}:

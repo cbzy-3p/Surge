@@ -31,5 +31,11 @@ class WeChatRuleTests(unittest.TestCase):
         )
 
 
+    def test_ip_prefix_keywords_become_exact_slash_24(self):
+        self.assertEqual(UPDATE.normalize_rule("DOMAIN-KEYWORD,101.91.5"), "IP-CIDR,101.91.5.0/24,no-resolve")
+        self.assertEqual(UPDATE.normalize_rule("DOMAIN-KEYWORD,weixin"), "DOMAIN-KEYWORD,weixin")
+        self.assertEqual(UPDATE.normalize_rule("DOMAIN-KEYWORD,1.2.300"), "DOMAIN-KEYWORD,1.2.300")
+
+
 if __name__ == "__main__":
     unittest.main()
