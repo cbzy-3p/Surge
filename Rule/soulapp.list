@@ -1,4 +1,4 @@
-DOMAIN-KEYWORD,soul
+DOMAIN-KEYWORD,soulapp
 DOMAIN-KEYWORD,zztfly
 DOMAIN,api.map.baidu.com
 DOMAIN,xlog.jd.com
@@ -10,6 +10,12 @@ DOMAIN,vod-license-m.volccdn.com
 DOMAIN-SUFFIX,soulapp.cn
 DOMAIN-SUFFIX,soulapp.com
 DOMAIN-SUFFIX,soulapp-api.com
+DOMAIN-SUFFIX,soulapp-inc.cn
+DOMAIN-SUFFIX,soul-im.com
+DOMAIN-SUFFIX,soulsmile.cn
+DOMAIN-SUFFIX,soulfunny.cn
+DOMAIN-SUFFIX,soullaugh.cn
+DOMAIN-SUFFIX,soulfriendly.cn
 DOMAIN-SUFFIX,tnc3-alisc1.zijieapi.com
 DOMAIN-SUFFIX,upc.zztfly.com
 DOMAIN-SUFFIX,cdn-api-auth.zztfly.com

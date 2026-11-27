@@ -163,5 +163,28 @@ class MediaRuleTests(unittest.TestCase):
         self.assertEqual(MEDIA.parse_surge(f"DOMAIN,{watermark}\n"), set())
 
 
+class AIServiceSeparationTests(unittest.TestCase):
+    def test_globalmedia_drops_rules_owned_by_aigc(self):
+        ai = {
+            ("DOMAIN-SUFFIX", "openai.com"),
+            ("DOMAIN-KEYWORD", "claude"),
+            ("DOMAIN", "gemini.google.com"),
+        }
+        media = {
+            ("DOMAIN-SUFFIX", "netflix.com"),
+            ("DOMAIN-SUFFIX", "openai.com"),
+            ("DOMAIN", "cdn.openai.com"),
+            ("DOMAIN-SUFFIX", "claude.ai"),
+            ("DOMAIN-KEYWORD", "claude"),
+            ("DOMAIN", "gemini.google.com"),
+            ("DOMAIN-SUFFIX", "google.com"),
+            ("IP-CIDR", "1.2.3.0/24"),
+        }
+        self.assertEqual(
+            MEDIA.exclude_ai_services(media, ai),
+            {("DOMAIN-SUFFIX", "netflix.com"), ("DOMAIN-SUFFIX", "google.com"), ("IP-CIDR", "1.2.3.0/24")},
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -334,6 +334,27 @@ def compact(rules: set[tuple[str, str]]) -> set[tuple[str, str]]:
     return result
 
 
+def exclude_ai_services(media: set[tuple[str, str]], ai: set[tuple[str, str]]) -> set[tuple[str, str]]:
+    """Drop media rules the dedicated AIGC set already covers.
+
+    Upstream media collections bundle OpenAI, Claude, Gemini and their
+    dependencies. Keeping them in GlobalMedia sends AI traffic to the media
+    policy whenever GlobalMedia sits above AIGC, so AIGC owns them.
+    """
+    suffixes = {value for kind, value in ai if kind == "DOMAIN-SUFFIX"}
+    keywords = {value for kind, value in ai if kind == "DOMAIN-KEYWORD"}
+
+    def covered(rule: tuple[str, str]) -> bool:
+        kind, value = rule
+        if rule in ai:
+            return True
+        if kind in {"DOMAIN", "DOMAIN-SUFFIX"} and covering_suffix(value, suffixes):
+            return True
+        return kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD"} and any(word in value for word in keywords)
+
+    return {rule for rule in media if not covered(rule)}
+
+
 def load_snapshot() -> dict[str, int]:
     if not SNAPSHOT.exists():
         return {}
@@ -424,8 +445,12 @@ def main() -> None:
             combined = filtered
         combined.update(REVIEWED_SUPPLEMENTS.get(name, set()))
         output = compact(combined)
-        snapshot[f"{name}/output"] = len(output)
         outputs[name] = output, urls
+    if "AIGC" in outputs and "GlobalMedia" in outputs:
+        media, media_urls = outputs["GlobalMedia"]
+        outputs["GlobalMedia"] = exclude_ai_services(media, outputs["AIGC"][0]), media_urls
+    for name, (output, _urls) in outputs.items():
+        snapshot[f"{name}/output"] = len(output)
     validate_snapshot(load_snapshot(), snapshot)
     for name, (rules, urls) in outputs.items():
         write_if_changed(name, rules, urls)

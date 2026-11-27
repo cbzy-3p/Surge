@@ -30,6 +30,10 @@ RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/XianYu.list,D
 
 两份规则都额外收录 iCloud 借用的 Google Cloud 存储传输端点 `content-storage-upload.googleapis.com` 与 `content-storage-download.googleapis.com`（如 `gcs-us-00003.content-storage-upload.googleapis.com`），iCloud 照片、iCloud 云盘、备份及 iMessage 附件的上传下载会走这些主机，证书由 Apple 签发。上游来源尚未收录，作为已复核补充项随每日更新保留。`Google.list` 与 `NonCN.list` 含 `DOMAIN-SUFFIX,googleapis.com`，需把 iCloud/Apple 规则放在它们之前，否则这部分流量会被 Google 或代理策略先匹配。
 
+`GlobalMedia.list` 生成时会去掉 `AIGC.list` 已覆盖的条目（OpenAI、Claude、Gemini、Copilot 等及其依赖域名），上游媒体集合混入的 AI 服务不再随 GlobalMedia 走流媒体策略，两份规则的先后顺序不再影响 AI 分流。
+
+`soulapp.list` 不再使用宽泛的 `soul` 关键词，改为 `soulapp` 关键词加明确域名，避免误匹配 `mahjongsoul.com`、`soul-plus.net` 等无关域名。
+
 需要给 Claude 单独分流时，将 `Claude.list` 放在 `AIGC.list` 和 `Proxy.list` 前面。每日从 MagicRule、ConnersHua 和 Yuu518 的 Anthropic 分类合并，仅保留已核对的 Claude 域名和精确服务端点，适用于 Surge iOS。
 
 `AIGC.list`、`GlobalMedia.list` 和 `ChinaCIDR.list` 在分类相符时优先使用 SukkaW，再按分类补充 blackmatrix7、Rabbit-Spec、ConnersHua 和 Yuu518。YouTube、Netflix、ChinaMedia、China 等更细分类不使用 SukkaW 的宽泛集合硬凑，改由 blackmatrix7 建立分类边界，其他固定来源补充。China 以域名为主，ChinaCIDR 专门合并并压缩中国 IPv4、IPv6 网段。
