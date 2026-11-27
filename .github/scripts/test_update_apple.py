@@ -53,6 +53,8 @@ class AppleRuleTests(unittest.TestCase):
                 APPLE.main()
             self.assertIn("DOMAIN-SUFFIX,icloud.cn\n", target.read_text())
             self.assertEqual(json.loads(snapshot.read_text())["counts"]["bm7_icloud"], 1)
+            for host in ("content-storage-upload.googleapis.com", "content-storage-download.googleapis.com"):
+                self.assertIn(f"DOMAIN-SUFFIX,{host}\n", target.read_text())
 
     def test_icloud_source_failure_leaves_previous_files_intact(self):
         with tempfile.TemporaryDirectory() as directory:

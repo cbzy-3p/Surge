@@ -28,6 +28,15 @@ RULE_TYPES = {
     "DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD",
     "IP-CIDR", "IP-CIDR6", "IP-ASN", "USER-AGENT", "PROCESS-NAME",
 }
+# Reviewed iCloud transfer endpoints that no upstream source lists yet.
+# iCloud Photos, iCloud Drive, backups and iMessage attachments upload to and
+# download from Apple's dedicated Google Cloud Storage front ends, e.g.
+# gcs-us-00003.content-storage-upload.googleapis.com. These hosts present
+# Apple-issued certificates and are served by nsurlsessiond / cloudd.
+ICLOUD_STORAGE_SUPPLEMENTS = {
+    ("DOMAIN-SUFFIX", "content-storage-download.googleapis.com"),
+    ("DOMAIN-SUFFIX", "content-storage-upload.googleapis.com"),
+}
 DOMAIN_RE = re.compile(
     r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+"
     r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$"
@@ -182,6 +191,7 @@ def render(rules: set[tuple[str, str]], updated: str | None = None) -> str:
         f"# RULE COUNT: {len(rules)}",
         *[f"# SOURCE: {url}" for url in SOURCES.values()],
         "# NOTE: Sources are normalized, merged and deduplicated; the SKK watermark domain is excluded.",
+        "# NOTE: Reviewed iCloud transfer endpoints on Google Cloud Storage are included.",
         "",
     ]
     return "\n".join(header + body) + "\n"
@@ -202,7 +212,7 @@ def main() -> None:
     for name, minimum in MINIMUMS.items():
         if counts[name] < minimum:
             raise RuntimeError(f"{name} source unexpectedly small: {counts[name]} < {minimum}")
-    rules = compact(set().union(*fetched.values()))
+    rules = compact(set().union(*fetched.values(), ICLOUD_STORAGE_SUPPLEMENTS))
     counts["output"] = len(rules)
     validate_snapshot(load_snapshot(), counts)
     previous_text = TARGET.read_text(encoding="utf-8") if TARGET.exists() else ""

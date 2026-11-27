@@ -26,6 +26,15 @@ MINIMUMS = {
     "skk_apple": 2, "skk_private_relay": 5, "bm7": 40,
     "rabbit": 1, "conners": 1, "loyal": 0, "yuu": 1,
 }
+# Reviewed iCloud transfer endpoints that no upstream source lists yet.
+# iCloud Photos, iCloud Drive, backups and iMessage attachments upload to and
+# download from Apple's dedicated Google Cloud Storage front ends, e.g.
+# gcs-us-00003.content-storage-upload.googleapis.com. These hosts present
+# Apple-issued certificates and are served by nsurlsessiond / cloudd.
+ICLOUD_STORAGE_SUPPLEMENTS = {
+    ("DOMAIN-SUFFIX", "content-storage-download.googleapis.com"),
+    ("DOMAIN-SUFFIX", "content-storage-upload.googleapis.com"),
+}
 DOMAIN_RE = re.compile(
     r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+"
     r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$"
@@ -143,6 +152,7 @@ def render(rules: set[tuple[str, str]], updated: str | None = None) -> str:
         *[f"# SOURCE: {url}" for url in SOURCES.values()],
         "# NOTE: iCloud-specific entries are selected from Apple-wide source lists; general Apple domains are excluded.",
         "# NOTE: SukkaW Private Relay endpoints are included; broader suffix matches are compacted.",
+        "# NOTE: Reviewed iCloud transfer endpoints on Google Cloud Storage are included.",
         "",
     ]
     return "\n".join(header + body) + "\n"
@@ -165,7 +175,7 @@ def main() -> None:
     contributing = sum(count > 0 for count in counts.values())
     if contributing < 5:
         raise RuntimeError(f"too few iCloud sources contributed rules: {contributing}")
-    rules = compact(set().union(*fetched.values()))
+    rules = compact(set().union(*fetched.values(), ICLOUD_STORAGE_SUPPLEMENTS))
     if len(rules) < 20:
         raise RuntimeError(f"iCloud output unexpectedly small: {len(rules)}")
     counts["output"] = len(rules)

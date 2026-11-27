@@ -86,6 +86,24 @@ class ICloudRuleTests(unittest.TestCase):
             },
         )
 
+    def test_reviewed_google_storage_transfer_endpoints_are_included(self):
+        rules = {("DOMAIN-SUFFIX", f"x{i}.icloud.com") for i in range(30)}
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "iCloud.list"
+            snapshot = Path(directory) / "snapshot.json"
+            with patch.object(ICLOUD, "TARGET", target), \
+                 patch.object(ICLOUD, "SNAPSHOT", snapshot), \
+                 patch.object(ICLOUD, "MINIMUMS", {}), \
+                 patch.object(ICLOUD, "fetch", lambda url: ""), \
+                 patch.object(ICLOUD, "parse_surge", lambda *a, **kw: rules), \
+                 patch.object(ICLOUD, "parse_private_relay", return_value=set()), \
+                 patch("builtins.print"):
+                ICLOUD.main()
+            text = target.read_text()
+        self.assertIn("DOMAIN-SUFFIX,content-storage-upload.googleapis.com\n", text)
+        self.assertIn("DOMAIN-SUFFIX,content-storage-download.googleapis.com\n", text)
+        self.assertNotIn("DOMAIN-SUFFIX,googleapis.com\n", text)
+
     def test_render_declares_rule_count_and_fixed_sources(self):
         rendered = ICLOUD.render({("DOMAIN-SUFFIX", "icloud.com")}, "2026-01-02 03:04:05 UTC")
         self.assertIn("# RULE COUNT: 1\n", rendered)

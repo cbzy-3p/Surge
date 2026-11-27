@@ -1,8 +1,8 @@
 # NAME: Multi-source-iCloud
 # AUTHOR: cbzy-3p
 # FORMAT: Surge Rule Set
-# UPDATED: 2026-11-10 02:16:05 UTC
-# RULE COUNT: 63
+# UPDATED: 2026-11-27 08:07:47 UTC
+# RULE COUNT: 65
 # SOURCE: https://raw.githubusercontent.com/SukkaW/Surge/master/Source/non_ip/apple_services.conf
 # SOURCE: https://raw.githubusercontent.com/SukkaW/Surge/master/Source/domainset/icloud_private_relay.conf
 # SOURCE: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/iCloud/iCloud.list
@@ -12,6 +12,7 @@
 # SOURCE: https://raw.githubusercontent.com/Yuu518/Yuu-rules/rule-set/surge/geosite/apple.list
 # NOTE: iCloud-specific entries are selected from Apple-wide source lists; general Apple domains are excluded.
 # NOTE: SukkaW Private Relay endpoints are included; broader suffix matches are compacted.
+# NOTE: Reviewed iCloud transfer endpoints on Google Cloud Storage are included.
 
 DOMAIN,canary.mask.apple-dns.net
 DOMAIN,mask.apple-dns.net
@@ -22,6 +23,8 @@ DOMAIN-SUFFIX,appleicloud.cn
 DOMAIN-SUFFIX,applemx-icloud.com
 DOMAIN-SUFFIX,apzones.com
 DOMAIN-SUFFIX,cdn-apple.com
+DOMAIN-SUFFIX,content-storage-download.googleapis.com
+DOMAIN-SUFFIX,content-storage-upload.googleapis.com
 DOMAIN-SUFFIX,gc.apple.com
 DOMAIN-SUFFIX,icloud-apple.cn
 DOMAIN-SUFFIX,icloud-content.com
