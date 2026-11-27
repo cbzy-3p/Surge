@@ -32,7 +32,7 @@ RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/XianYu.list,D
 
 `GlobalMedia.list` 生成时会去掉 `AIGC.list` 已覆盖的条目（OpenAI、Claude、Gemini、Copilot 等及其依赖域名），上游媒体集合混入的 AI 服务不再随 GlobalMedia 走流媒体策略，两份规则的先后顺序不再影响 AI 分流。
 
-`soulapp.list` 不再使用宽泛的 `soul` 关键词，改为 `soulapp` 关键词加明确域名，避免误匹配 `mahjongsoul.com`、`soul-plus.net` 等无关域名。
+`WeChat.list` 把上游写成 `DOMAIN-KEYWORD,101.91.5` 这类 IP 前缀关键词转换为对应的 `/24` `IP-CIDR`，避免子串误匹配（如 101.91.50-59 段）并减少关键词扫描。`soulapp.list` 不再使用宽泛的 `soul` 关键词，改为 `soulapp` 关键词加明确域名，避免误匹配 `mahjongsoul.com`、`soul-plus.net` 等无关域名。
 
 需要给 Claude 单独分流时，将 `Claude.list` 放在 `AIGC.list` 和 `Proxy.list` 前面。每日从 MagicRule、ConnersHua 和 Yuu518 的 Anthropic 分类合并，仅保留已核对的 Claude 域名和精确服务端点，适用于 Surge iOS。
 

@@ -19,6 +19,7 @@
   },
   "reviewed_current_hashes": {
     "Rule/AIGC.list": "4d8bdfa0e4db702081bd2ec07ff85afebdec279683fbeff3b297ae97d0baabb1",
-    "Rule/AppleDownload.list": "2557a2abe7ca993a1f973526e1206ae7a1d3a28c0e819465f01f331a4291d426"
+    "Rule/AppleDownload.list": "2557a2abe7ca993a1f973526e1206ae7a1d3a28c0e819465f01f331a4291d426",
+    "Rule/WeChat.list": "f1253f477142dce5173ff2725b9fa2d1e101ad16de93091542ee433ef6667026"
   }
 }
