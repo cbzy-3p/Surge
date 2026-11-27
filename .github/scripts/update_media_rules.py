@@ -84,6 +84,40 @@ DOMAIN_RE = re.compile(
 )
 DOMAIN_LABEL_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")
 BLOCKED_EXACT_DOMAINS = {"7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe"}
+# Whole shared clouds and CDNs that blackmatrix7 GlobalMedia lists as bare
+# suffixes. Matching them sends every site and app hosted on AWS, CloudFront,
+# Akamai, Firebase, Limelight or BootstrapCDN to the media policy. Only the
+# bare suffix is dropped; service-specific hosts beneath it are kept.
+SHARED_INFRASTRUCTURE_SUFFIXES = {
+    "GlobalMedia": {
+        "akamaized.net", "amazonaws.com", "bootstrapcdn.com",
+        "cloudfront.net", "firebaseio.com", "llnwd.net",
+    },
+}
+# Hosts exposed once the bare CDN suffixes above are dropped that SukkaW
+# lists as ad or tracking endpoints. audio-ak-spotify-com.akamaized.net stays
+# covered by GlobalMedia's DOMAIN-KEYWORD,-spotify-com.
+REVIEWED_REJECT_EXCLUSIONS = {
+    "GlobalMedia": {
+        ("DOMAIN-SUFFIX", "audio-ak-spotify-com.akamaized.net"),
+        ("DOMAIN-SUFFIX", "d2wy8f7a9ursnm.cloudfront.net"),
+    },
+}
+# Regional or service-wide AWS endpoints (a whole region, all of S3 or API
+# Gateway in a region) are just as shared; bucket- or app-specific hosts stay.
+SHARED_AWS_ENDPOINT_RE = re.compile(
+    r"^(?:(?:s3|s3-[a-z0-9-]+|execute-api|cognito-identity|mobileanalytics)\.)?"
+    r"(?:[a-z]{2}(?:-gov)?-[a-z]+-\d\.)?amazonaws\.com$"
+)
+
+
+def is_shared_infrastructure(name: str, rule: tuple[str, str]) -> bool:
+    kind, value = rule
+    if kind not in {"DOMAIN", "DOMAIN-SUFFIX"} or name not in SHARED_INFRASTRUCTURE_SUFFIXES:
+        return False
+    if SHARED_AWS_ENDPOINT_RE.fullmatch(value):
+        return True
+    return kind == "DOMAIN-SUFFIX" and value in SHARED_INFRASTRUCTURE_SUFFIXES[name]
 # Reviewed service domains with corroboration in the dedicated sources.
 REVIEWED_SUPPLEMENTS = {
     "AIGC": {
@@ -443,6 +477,8 @@ def main() -> None:
             if filtered != combined:
                 print("::warning::ChinaCIDR removed coverage of reviewed foreign prefixes")
             combined = filtered
+        combined = {rule for rule in combined if not is_shared_infrastructure(name, rule)}
+        combined -= REVIEWED_REJECT_EXCLUSIONS.get(name, set())
         combined.update(REVIEWED_SUPPLEMENTS.get(name, set()))
         output = compact(combined)
         outputs[name] = output, urls

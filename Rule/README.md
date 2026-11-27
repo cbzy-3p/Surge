@@ -30,7 +30,7 @@ RULE-SET,https://raw.githubusercontent.com/cbzy-3p/Surge/main/Rule/XianYu.list,D
 
 两份规则都额外收录 iCloud 借用的 Google Cloud 存储传输端点 `content-storage-upload.googleapis.com` 与 `content-storage-download.googleapis.com`（如 `gcs-us-00003.content-storage-upload.googleapis.com`），iCloud 照片、iCloud 云盘、备份及 iMessage 附件的上传下载会走这些主机，证书由 Apple 签发。上游来源尚未收录，作为已复核补充项随每日更新保留。`Google.list` 与 `NonCN.list` 含 `DOMAIN-SUFFIX,googleapis.com`，需把 iCloud/Apple 规则放在它们之前，否则这部分流量会被 Google 或代理策略先匹配。
 
-`GlobalMedia.list` 生成时会去掉 `AIGC.list` 已覆盖的条目（OpenAI、Claude、Gemini、Copilot 等及其依赖域名），上游媒体集合混入的 AI 服务不再随 GlobalMedia 走流媒体策略，两份规则的先后顺序不再影响 AI 分流。
+`GlobalMedia.list` 生成时会去掉 `AIGC.list` 已覆盖的条目（OpenAI、Claude、Gemini、Copilot 等及其依赖域名），上游媒体集合混入的 AI 服务不再随 GlobalMedia 走流媒体策略，两份规则的先后顺序不再影响 AI 分流。同时去掉 blackmatrix7 媒体集合里整片的公共云与 CDN 后缀（`amazonaws.com`、`cloudfront.net`、`akamaized.net`、`firebaseio.com`、`llnwd.net`、`bootstrapcdn.com`）以及整个 AWS 区域或服务级端点（如 `us-west-2.amazonaws.com`），否则所有托管在这些平台上的网站和 App 都会被当成流媒体；各流媒体自己的具体主机（如 `abematv.akamaized.net`、具体的 CloudFront 分发）保留。
 
 `WeChat.list` 把上游写成 `DOMAIN-KEYWORD,101.91.5` 这类 IP 前缀关键词转换为对应的 `/24` `IP-CIDR`，避免子串误匹配（如 101.91.50-59 段）并减少关键词扫描。`soulapp.list` 不再使用宽泛的 `soul` 关键词，改为 `soulapp` 关键词加明确域名，避免误匹配 `mahjongsoul.com`、`soul-plus.net` 等无关域名。
 

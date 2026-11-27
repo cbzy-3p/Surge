@@ -186,5 +186,23 @@ class AIServiceSeparationTests(unittest.TestCase):
         )
 
 
+class SharedInfrastructureTests(unittest.TestCase):
+    def test_globalmedia_excludes_bare_shared_cloud_suffixes(self):
+        blocked = MEDIA.SHARED_INFRASTRUCTURE_SUFFIXES["GlobalMedia"]
+        for suffix in ("amazonaws.com", "cloudfront.net", "akamaized.net", "firebaseio.com"):
+            self.assertIn(suffix, blocked)
+        self.assertNotIn("nflximg.net", blocked)
+
+    def test_globalmedia_excludes_region_wide_aws_endpoints_only(self):
+        shared = lambda value: MEDIA.is_shared_infrastructure("GlobalMedia", ("DOMAIN-SUFFIX", value))
+        for value in ("amazonaws.com", "us-west-2.amazonaws.com", "s3-ap-southeast-1.amazonaws.com",
+                      "execute-api.us-east-1.amazonaws.com", "cognito-identity.us-east-1.amazonaws.com"):
+            self.assertTrue(shared(value), value)
+        for value in ("tidal-cms.s3.amazonaws.com", "abematv.akamaized.net", "d151l6v8er5bdm.cloudfront.net"):
+            self.assertFalse(shared(value), value)
+        self.assertFalse(MEDIA.is_shared_infrastructure("Netflix", ("DOMAIN-SUFFIX", "amazonaws.com")))
+        self.assertTrue(MEDIA.is_shared_infrastructure("GlobalMedia", ("DOMAIN", "s3-ap-southeast-1.amazonaws.com")))
+
+
 if __name__ == "__main__":
     unittest.main()
